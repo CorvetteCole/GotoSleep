@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="firstSlide">#9c27b0</color>
+    <color name="secondSlide">#3949ab</color>
+    <color name="thirdSlide">#4a148c</color>
+    <color name="fourthSlide">#263238</color>
 </resources>

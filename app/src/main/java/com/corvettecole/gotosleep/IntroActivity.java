@@ -29,6 +29,8 @@ public class IntroActivity extends AppIntro {
         firstSlide.setImageDrawable(R.drawable.ic_sleep);
         firstSlide.setBgColor(ContextCompat.getColor(this, R.color.firstSlide));
         firstSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
+        firstSlide.setDescTypefaceFontRes(R.font.product_sans_regular);
+
 
 
         SliderPage secondSlide = new SliderPage();
@@ -37,6 +39,7 @@ public class IntroActivity extends AppIntro {
         secondSlide.setImageDrawable(R.drawable.ic_alarm_clock);
         secondSlide.setBgColor(ContextCompat.getColor(this, R.color.secondSlide));
         secondSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
+        secondSlide.setDescTypefaceFontRes(R.font.product_sans_regular);
 
 
         SliderPage thirdSlide = new SliderPage();
@@ -45,22 +48,23 @@ public class IntroActivity extends AppIntro {
         thirdSlide.setImageDrawable(R.drawable.ic_copywriting);
         thirdSlide.setBgColor(ContextCompat.getColor(this, R.color.thirdSlide));
         thirdSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
+        thirdSlide.setDescTypefaceFontRes(R.font.product_sans_regular);
 
 
         SliderPage fourthSlide = new SliderPage();
         fourthSlide.setTitle("Let's do this.");
-        //fourthSlide.setDescription("");
+        fourthSlide.setDescription("Your new sleep schedule starts now");
         fourthSlide.setImageDrawable(R.drawable.ic_bed);
         fourthSlide.setBgColor(ContextCompat.getColor(this, R.color.fourthSlide));
         fourthSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
+        fourthSlide.setDescTypefaceFontRes(R.font.product_sans_regular);
 
-        setDoneTextTypeface(R.font.product_sans_regular);
+        setDoneTextTypeface(R.font.product_sans_bold);
         setColorTransitionsEnabled(true);
         addSlide(AppIntroFragment.newInstance(firstSlide));
         addSlide(AppIntroFragment.newInstance(secondSlide));
         addSlide(AppIntroFragment.newInstance(thirdSlide));
         addSlide(AppIntroFragment.newInstance(fourthSlide));
-
 
         // Hide Skip/Done button.
         showSkipButton(false);

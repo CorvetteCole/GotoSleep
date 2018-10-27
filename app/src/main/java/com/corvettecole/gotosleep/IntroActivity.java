@@ -33,7 +33,7 @@ public class IntroActivity extends AppIntro {
         SliderPage firstSlide = new SliderPage();
         firstSlide.setTitle("Welcome to Go to Sleep!");
         firstSlide.setDescription("It's time to fix your sleep schedule");
-        firstSlide.setImageDrawable(R.drawable.ic_timelapse_white_24dp);
+        firstSlide.setImageDrawable(R.drawable.ic_sleep);
         firstSlide.setBgColor(ContextCompat.getColor(this, R.color.firstSlide));
 
         SliderPage secondSlide = new SliderPage();
@@ -46,14 +46,14 @@ public class IntroActivity extends AppIntro {
         SliderPage thirdSlide = new SliderPage();
         thirdSlide.setTitle("Motivate yourself.");
         thirdSlide.setDescription("Set custom sleep reminders (and no vulgarity filter)");
-        thirdSlide.setImageDrawable(R.drawable.ic_list_white_24dp);
+        thirdSlide.setImageDrawable(R.drawable.ic_copywriting);
         thirdSlide.setBgColor(ContextCompat.getColor(this, R.color.thirdSlide));
 
 
         SliderPage fourthSlide = new SliderPage();
         fourthSlide.setTitle("Let's do this.");
         //fourthSlide.setDescription("");
-        fourthSlide.setImageDrawable(R.drawable.ic_airline_seat_individual_suite_white_24dp);
+        fourthSlide.setImageDrawable(R.drawable.ic_bed);
         fourthSlide.setBgColor(ContextCompat.getColor(this, R.color.fourthSlide));
 
 

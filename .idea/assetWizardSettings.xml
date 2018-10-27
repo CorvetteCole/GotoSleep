@@ -33,9 +33,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_airline_seat_individual_suite_white_24dp" />
-                            <entry key="sourceFile" value="D:\Downloads\alarm-clock.svg" />
+                            <entry key="outputName" value="ic_copywriting" />
+                            <entry key="sourceFile" value="D:\Downloads\copywriting.svg" />
                           </map>
                         </option>
                       </PersistentState>

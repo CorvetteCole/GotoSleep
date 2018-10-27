@@ -3,15 +3,24 @@ package com.corvettecole.gotosleep;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.DisplayCutout;
+import android.view.View;
+import android.view.WindowInsets;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
+import java.util.Objects;
+
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 public class IntroActivity extends AppIntro {
@@ -44,7 +53,7 @@ public class IntroActivity extends AppIntro {
 
         SliderPage thirdSlide = new SliderPage();
         thirdSlide.setTitle("Motivate yourself.");
-        thirdSlide.setDescription("Set custom sleep reminders (and no vulgarity filter)");
+        thirdSlide.setDescription("Set custom sleep reminders");
         thirdSlide.setImageDrawable(R.drawable.ic_copywriting);
         thirdSlide.setBgColor(ContextCompat.getColor(this, R.color.thirdSlide));
         thirdSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
@@ -69,6 +78,7 @@ public class IntroActivity extends AppIntro {
         // Hide Skip/Done button.
         showSkipButton(false);
         setProgressButtonEnabled(true);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
     }

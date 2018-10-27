@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#263238</color>
+    <color name="colorPrimaryDark">#000a12</color>
+    <color name="colorPrimaryLight">#4f5b62</color>
+
+    <color name="colorAccent">#ffffff</color>
+
+    <color name="accentPrimary">#fafafa</color>
+    <color name="accentPrimaryDark">#c7c7c7</color>
+    <color name="accentPrimaryLight">#ffffff</color>
 
     <color name="firstSlide">#9c27b0</color>
     <color name="secondSlide">#4a148c</color>
     <color name="thirdSlide">#1a237e</color>
     <color name="fourthSlide">#263238</color>
+
+    <color name="moonPrimary">#29b6f6</color>
+    <color name="moonPrimaryDark">#0086c3</color>
+    <color name="moonPrimaryLight">#73e8ff</color>
 
 </resources>

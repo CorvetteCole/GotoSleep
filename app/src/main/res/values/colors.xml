@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="firstSlide">#9c27b0</color>
-    <color name="secondSlide">#3949ab</color>
-    <color name="thirdSlide">#4a148c</color>
+    <color name="secondSlide">#4a148c</color>
+    <color name="thirdSlide">#1a237e</color>
     <color name="fourthSlide">#263238</color>
+
 </resources>

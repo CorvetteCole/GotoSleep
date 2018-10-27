@@ -2,21 +2,14 @@ package com.corvettecole.gotosleep;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
-import com.google.android.material.snackbar.Snackbar;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -31,16 +24,19 @@ public class IntroActivity extends AppIntro {
         // Just create a `SliderPage` and provide title, description, background and image.
         // AppIntro will do the rest.
         SliderPage firstSlide = new SliderPage();
-        firstSlide.setTitle("Welcome to Go to Sleep!");
+        firstSlide.setTitle("Welcome.");
         firstSlide.setDescription("It's time to fix your sleep schedule");
         firstSlide.setImageDrawable(R.drawable.ic_sleep);
         firstSlide.setBgColor(ContextCompat.getColor(this, R.color.firstSlide));
+        firstSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
+
 
         SliderPage secondSlide = new SliderPage();
         secondSlide.setTitle("Remind yourself.");
         secondSlide.setDescription("Set your bedtime and never lose track of time again");
         secondSlide.setImageDrawable(R.drawable.ic_alarm_clock);
         secondSlide.setBgColor(ContextCompat.getColor(this, R.color.secondSlide));
+        secondSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
 
 
         SliderPage thirdSlide = new SliderPage();
@@ -48,6 +44,7 @@ public class IntroActivity extends AppIntro {
         thirdSlide.setDescription("Set custom sleep reminders (and no vulgarity filter)");
         thirdSlide.setImageDrawable(R.drawable.ic_copywriting);
         thirdSlide.setBgColor(ContextCompat.getColor(this, R.color.thirdSlide));
+        thirdSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
 
 
         SliderPage fourthSlide = new SliderPage();
@@ -55,8 +52,9 @@ public class IntroActivity extends AppIntro {
         //fourthSlide.setDescription("");
         fourthSlide.setImageDrawable(R.drawable.ic_bed);
         fourthSlide.setBgColor(ContextCompat.getColor(this, R.color.fourthSlide));
+        fourthSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
 
-
+        setDoneTextTypeface(R.font.product_sans_regular);
         setColorTransitionsEnabled(true);
         addSlide(AppIntroFragment.newInstance(firstSlide));
         addSlide(AppIntroFragment.newInstance(secondSlide));

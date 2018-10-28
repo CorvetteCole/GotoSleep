@@ -6,8 +6,8 @@ android {
         applicationId "com.corvettecole.gotosleep"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.01"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -22,8 +22,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    //implementation "androidx.recyclerview:recyclerview:1.0.0"
+    //implementation "androidx.annotation:annotation:1.0.0"
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    //implementation "com.mikepenz:materialdrawer:6.1.1"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'

@@ -18,5 +18,6 @@
     <color name="moonPrimary">#29b6f6</color>
     <color name="moonPrimaryDark">#0086c3</color>
     <color name="moonPrimaryLight">#73e8ff</color>
+    <color name="transparent">#00FFFFFF</color>
 
 </resources>

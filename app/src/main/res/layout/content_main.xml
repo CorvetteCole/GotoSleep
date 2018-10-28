@@ -11,27 +11,6 @@
     tools:showIn="@layout/activity_main"
     android:id="@+id/content_main_layout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/product_sans_bold"
-
-        android:textColor="@color/accentPrimary"
-        android:shadowColor="@color/accentPrimaryDark"
-
-        android:shadowDx="2"
-        android:shadowDy="4"
-        android:shadowRadius="2"
-        android:text="Hello World!"
-
-        android:textSize="60sp"
-
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <ImageView
         android:id="@+id/moon"
         android:layout_width="100dp"
@@ -46,6 +25,119 @@
         app:srcCompat="@drawable/ic_moon"
         android:paddingBottom="2dp"
         android:paddingRight="1dp"/>
+
+    <TextView
+        android:id="@+id/hours"
+        android:layout_width="wrap_content"
+        android:layout_height="95dp"
+
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/product_sans_bold"
+
+        android:shadowColor="@color/accentPrimaryDark"
+        android:shadowDx="2"
+        android:shadowDy="4"
+        android:shadowRadius="2"
+
+        android:text="8 hours"
+
+        android:textColor="@color/accentPrimary"
+        android:textSize="80sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moon"/>
+
+    <TextView
+        android:id="@+id/minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="8dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/product_sans_bold"
+        android:shadowColor="@color/accentPrimaryDark"
+
+        android:shadowDx="2"
+        android:shadowDy="4"
+        android:shadowRadius="2"
+        android:text="44 minutes until bedtime"
+        android:textColor="@color/accentPrimary"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hours"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bedtimeSetButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+
+        android:fontFamily="@font/product_sans_regular"
+        android:text="Set Bedtime"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/accentPrimaryDark"
+        android:textSize="14sp"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minutes"
+        app:strokeColor="@color/colorPrimaryLight"
+        app:strokeWidth="1dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/settingsButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="@font/product_sans_regular"
+        android:includeFontPadding="true"
+        android:text="Settings"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/accentPrimaryDark"
+        android:textSize="14sp"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:strokeColor="@color/colorPrimaryLight"
+        app:strokeWidth="1dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/feedbackButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="@font/product_sans_regular"
+        android:includeFontPadding="true"
+        android:text="Feedback"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/accentPrimaryDark"
+        android:textSize="14sp"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:strokeColor="@color/colorPrimaryLight"
+        app:strokeWidth="1dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="210dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

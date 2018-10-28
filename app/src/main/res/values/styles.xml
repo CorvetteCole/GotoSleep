@@ -24,6 +24,15 @@
         <item name="android:statusBarColor">@color/ic_launcher_background</item>
     </style>
 
+    <style name="AppTheme.Settings" parent="AppTheme">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
 
+        <item name="android:colorAccent">@color/accentPrimaryLight</item>
+        <item name="android:textColor">@color/accentPrimary</item>
+        <item name="android:textColorSecondary">@color/accentPrimaryDark</item>
 
+    </style>
+    
 </resources>

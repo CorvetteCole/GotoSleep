@@ -2,4 +2,9 @@
     <string name="app_name">Go to Sleep!</string>
     <string name="action_settings">Settings</string>
     <string name="app_intro">Intro</string>
+    <string name="default_hours_string">% hours</string>
+    <string name="default_minutes_string">%% minutes until bedtime</string>
+    <string name="edit_bedtime">Edit Bedtime</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Feedback</string>
 </resources>

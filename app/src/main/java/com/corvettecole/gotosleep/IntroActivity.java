@@ -80,6 +80,7 @@ public class IntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         loadMainActivity();
+        finish();
         // Do something when users tap on Done button.
     }
 

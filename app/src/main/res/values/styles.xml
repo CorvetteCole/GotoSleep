@@ -29,7 +29,6 @@
         <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
 
-        <item name="android:colorAccent">@color/accentPrimaryLight</item>
         <item name="android:textColor">@color/accentPrimary</item>
         <item name="android:textColorSecondary">@color/accentPrimaryDark</item>
         <item name="android:fontFamily">@font/product_sans_regular</item>

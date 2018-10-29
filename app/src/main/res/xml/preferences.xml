@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="preferences">
     <PreferenceCategory
         android:title="General">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="x"
-            android:title="Placeholder X"
-            android:summary="Does X when you do Y"/>
+        <TimePickerPreference
+            android:key="pref_bedtime"
+            android:persistent="true"
+            android:summary="Choose when your bedtime is"
+            android:title="Bedtime"
+            app:pref_hourFormat="auto"
+            app:pref_pickerTime="19:35"
+            app:pref_summaryHasTime="Bedtime is: %s" />
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="y"
@@ -42,6 +47,5 @@
             android:key="persistentNotifs"
             android:title="Persistent Notifications"
             android:summary="Send notifications based on usage patterns (note, requires usage permission)"/>
-
     </PreferenceCategory>
 </PreferenceScreen>

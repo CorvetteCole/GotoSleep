@@ -24,10 +24,16 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     //implementation "androidx.recyclerview:recyclerview:1.0.0"
     //implementation "androidx.annotation:annotation:1.0.0"
+
     implementation 'androidx.preference:preference:1.0.0'
+    implementation 'com.takisoft.preferencex:preferencex:1.0.0'
+    implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.0.0'
+    implementation 'com.takisoft.preferencex:preferencex-datetimepicker:1.0.0'
+
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.android.billingclient:billing:1.2'
 
     //implementation "com.mikepenz:materialdrawer:6.1.1"
 

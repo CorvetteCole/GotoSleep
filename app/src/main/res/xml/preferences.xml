@@ -8,43 +8,41 @@
         <TimePickerPreference
             android:key="pref_bedtime"
             android:persistent="true"
-            android:summary="Choose when your bedtime is"
+            android:summary="Edit your bedtime"
             android:title="Bedtime"
             app:pref_hourFormat="auto"
             app:pref_pickerTime="19:35"
-            app:pref_summaryHasTime="Bedtime is: %s" />
+            app:pref_summaryHasTime="Bedtime is %s" />
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="y"
-            android:title="Placeholder Y"
-            android:summary="Illuminati confirmed"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Notifications">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="numNotifs"
+        <SeekBarPreference
+            android:key="pref_numNotifications"
             android:title="Notification Amount"
-            android:summary="Send x amount of notifications"/>
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="notifsDelay"
-            android:title="Notification Send Delay"
-            android:summary="send notifications every x minutes or some junk"/>
+            android:summary="Number of sleep reminder notifications to send"
+            android:max="10"
+            android:defaultValue="5" />
+        <SeekBarPreference
+            android:key="pref_notificationDelay"
+            android:title="Notification Delay"
+            android:summary="Delay between sleep notifications, in minutes"
+            android:max="30"
+            android:defaultValue="15" />
     </PreferenceCategory>
     <SwitchPreference
         android:defaultValue="false"
-        android:key="adsEnabled"
+        android:key="pref_adsEnabled"
         android:title="Enable ads"
         android:summary="Unlock premium options without paying by showing ads (ads will never be shown outside of the app) "/>
 
     <PreferenceCategory
         android:title="Premium"
-        android:dependency="adsEnabled">
+        android:dependency="pref_adsEnabled"
+        android:key="pref_premium">
         <SwitchPreference
-            android:defaultValue="true"
-            android:key="persistentNotifs"
+            android:defaultValue="false"
+            android:key="pref_smartNotifications"
             android:title="Persistent Notifications"
             android:summary="Send notifications based on usage patterns (note, requires usage permission)"/>
     </PreferenceCategory>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:key="preferences">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="preferences">
     <PreferenceCategory
         android:title="General">
         <SwitchPreference
@@ -27,12 +28,20 @@
             android:title="Notification Send Delay"
             android:summary="send notifications every x minutes or some junk"/>
     </PreferenceCategory>
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="adsEnabled"
+        android:title="Enable ads"
+        android:summary="Unlock premium options without paying by showing ads (ads will never be shown outside of the app) "/>
+
     <PreferenceCategory
-        android:title="Premium">
+        android:title="Premium"
+        android:dependency="adsEnabled">
         <SwitchPreference
             android:defaultValue="true"
             android:key="persistentNotifs"
             android:title="Persistent Notifications"
             android:summary="Send notifications based on usage patterns (note, requires usage permission)"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

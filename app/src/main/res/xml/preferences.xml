@@ -5,6 +5,7 @@
     android:key="preferences">
     <PreferenceCategory
         android:title="General">
+        <!--suppress AndroidElementNotAllowed -->
         <TimePickerPreference
             android:key="pref_bedtime"
             android:persistent="true"
@@ -13,37 +14,55 @@
             app:pref_hourFormat="auto"
             app:pref_pickerTime="19:35"
             app:pref_summaryHasTime="Bedtime is %s" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_autoDoNotDisturb"
+            android:title="Automatic Do Not Disturb"
+            android:summary="Enable Do Not Disturb at your bedtime (not including alarms)"/>
 
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Notifications">
-        <SeekBarPreference
-            android:key="pref_numNotifications"
-            android:title="Notification Amount"
-            android:summary="Number of sleep reminder notifications to send"
-            android:max="10"
-            android:defaultValue="5" />
-        <SeekBarPreference
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="pref_notificationsEnabled"
+            android:title="Enable Notifications"
+            android:summary="Enable/Disable sleep reminder notifications"/>
+        <EditTextPreference
+            android:dependency="pref_notificationsEnabled"
+            android:inputType="number"
             android:key="pref_notificationDelay"
             android:title="Notification Delay"
-            android:summary="Delay between sleep notifications, in minutes"
-            android:max="30"
-            android:defaultValue="15" />
+            android:summary="15 minute delay between sleep notifications"
+            android:maxLength="2"
+            android:defaultValue="15"
+            android:max="30"/>
+        <EditTextPreference
+            android:dependency="pref_notificationsEnabled"
+            android:inputType="number"
+            android:key="pref_numNotifications"
+            android:title="Notification Amount"
+            android:summary="2 sleep reminders will be sent"
+            android:maxLength="2"
+            android:defaultValue="2"
+            android:max="30"/>
+        <!--suppress AndroidElementNotAllowed -->
+
     </PreferenceCategory>
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="pref_adsEnabled"
-        android:title="Enable ads"
-        android:summary="Unlock premium options without paying by showing ads (ads will never be shown outside of the app) "/>
 
     <PreferenceCategory
         android:title="Premium"
-        android:dependency="pref_adsEnabled"
         android:key="pref_premium">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_adsEnabled"
+            android:title="Enable Advertisements"
+            android:summary="Unlock premium options without paying by showing ads (ads will never be shown outside of the app) "/>
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_smartNotifications"
             android:title="Persistent Notifications"
-            android:summary="Send notifications based on usage patterns (note, requires usage permission)"/>
+            android:summary="Send notifications based on usage patterns (note, requires usage permission)"
+            android:dependency="pref_adsEnabled"/>
     </PreferenceCategory>
 </PreferenceScreen>

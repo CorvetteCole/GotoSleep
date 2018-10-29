@@ -36,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private Button settingsButton;
     private Button feedBackButton;
     private Button editBedtimeButton;
-    private int[] bedtime;
+
+    private Calendar bedtimeCal;
 
     BroadcastReceiver _broadcastReceiver;
     private final SimpleDateFormat _sdfWatchTime = new SimpleDateFormat("HH:mm");
@@ -84,17 +85,30 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         loadPreferences();
+        if (isFirstStart){
+
+        }
         updateCountdown();
     }
 
     private void updateCountdown() {
         if (!isFirstStart){
-            //#TODO mess with some time stuff to display a different message when you are past your bedtime but also stop sometime the next day
             Calendar cal = Calendar.getInstance();
-            int hour = bedtime[0] - cal.get(Calendar.HOUR_OF_DAY);
-            hours.setText(hour + " hours");
-            int min = bedtime[1] - cal.get(Calendar.MINUTE);
-            minutes.setText(min + " minutes until bedtime");
+            long timeDelta = System.currentTimeMillis() - bedtimeCal.getTimeInMillis();
+            cal.setTimeInMillis(timeDelta);
+            int hour = cal.get(Calendar.HOUR_OF_DAY);
+            int min = cal.get(Calendar.MINUTE);
+            if (hour == 1){
+                hours.setText(hour + " hour");
+            } else {
+                hours.setText(hour + " hours");
+            }
+            if (timeDelta < 0) {
+                minutes.setText(min + " minutes until bedtime");
+            } else {
+                minutes.setText(min + " minutes past bedtime");
+            }
+            //#TODO add thing to make additional text show up underneath with like "get to bed"
         }
     }
 
@@ -201,8 +215,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");
-        bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
-        Log.d("MainActivity", Arrays.toString(bedtime));
+        bedtimeCal = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
 
     }
 
@@ -212,6 +225,14 @@ public class MainActivity extends AppCompatActivity {
         int bedtimeHour = Integer.parseInt(bedtime.substring(0, bedtime.indexOf(":")));
         int bedtimeMin = Integer.parseInt(bedtime.substring(bedtime.indexOf(":") + 1, bedtime.length()));
         return new int[]{bedtimeHour, bedtimeMin};
+    }
+
+    private Calendar getBedtimeCal (int[] bedtime){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, bedtime[0]);
+        calendar.set(Calendar.MINUTE, bedtime[1]);
+        return calendar;
     }
 
 

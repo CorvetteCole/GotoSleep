@@ -176,8 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     String subject = "Go to Sleep Feedback";
                     String bodyText = "Please explain your bug or feature suggestion thoroughly";
-                    String mailto = "mailto:bob@example.org" +
-                            "?cc=" + "alice@example.com" +
+                    String mailto = "mailto:corvettecole@gmail.com" +
                             "&subject=" + Uri.encode(subject) +
                             "&body=" + Uri.encode(bodyText);
 

@@ -46,9 +46,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/imageView12"
         app:layout_constraintTop_toTopOf="@+id/imageView14"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -58,9 +59,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/moon"
         app:layout_constraintEnd_toStartOf="@+id/imageView7"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -71,9 +73,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toStartOf="@+id/imageView10"
         app:layout_constraintTop_toBottomOf="@+id/imageView10"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/moon"
@@ -88,12 +91,12 @@
         android:paddingBottom="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_moon"/>
+        app:srcCompat="@drawable/ic_moon" />
 
     <TextView
         android:id="@+id/hours"
         android:layout_width="wrap_content"
-        android:layout_height="95dp"
+        android:layout_height="wrap_content"
 
         android:layout_marginTop="50dp"
         android:fontFamily="@font/product_sans_bold"
@@ -110,7 +113,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moon"/>
+        app:layout_constraintTop_toBottomOf="@+id/moon" />
 
     <TextView
         android:id="@+id/minutes"
@@ -160,8 +163,9 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/product_sans_regular"
@@ -174,29 +178,34 @@
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/bedtimeSetButton"
+        app:layout_constraintVertical_bias="1.0"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/feedbackButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/product_sans_regular"
         android:includeFontPadding="true"
         android:text="@string/feedback"
         android:textAlignment="center"
         android:textAllCaps="false"
+
         android:textColor="@color/accentPrimaryDark"
         android:textSize="20sp"
-
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/bedtimeSetButton"
+        app:layout_constraintVertical_bias="1.0"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -216,9 +225,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/imageView15"
         app:layout_constraintEnd_toStartOf="@+id/imageView14"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView8"
@@ -229,9 +239,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="@+id/moon"
         app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:layout_width="20dp"
@@ -240,9 +251,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/moon"
         app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView11"
@@ -253,9 +265,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toStartOf="@+id/moon"
         app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView9"
@@ -266,9 +279,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toStartOf="@+id/moon"
         app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView10"
@@ -279,9 +293,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/imageView9"
         app:layout_constraintEnd_toStartOf="@+id/imageView9"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -291,9 +306,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/moon"
         app:layout_constraintEnd_toEndOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView13"
@@ -304,9 +320,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/imageView11"
         app:layout_constraintEnd_toStartOf="@+id/imageView11"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:layout_width="20dp"
@@ -315,9 +332,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintStart_toEndOf="@+id/moon"
         app:layout_constraintTop_toBottomOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView12"
@@ -328,9 +346,10 @@
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
+        android:scaleType="fitXY"
         app:layout_constraintEnd_toStartOf="@+id/imageView13"
         app:layout_constraintTop_toBottomOf="@+id/imageView14"
-        app:srcCompat="@drawable/ic_star"/>
+        app:srcCompat="@drawable/ic_star" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

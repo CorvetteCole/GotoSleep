@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView sleepMessage;
 
     private boolean isFirstStart;
+    static int bedtimePastTrigger = 8;
 
     @Override
     public void onStart() {
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             int min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
             Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
 
-            if (hour >= 14){
+            if (hour >= bedtimePastTrigger){
                 difference = (difference - 86400000)*-1;
                 present = true;
                 day = (int) (difference / (1000*60*60*24));
@@ -296,8 +297,6 @@ public class MainActivity extends AppCompatActivity {
         bedtimeCal = getBedtimeCal(bedtime);
         bedtimeCal.set(Calendar.SECOND, 0);
     }
-
-
 
 
     private int[] parseBedtime(String bedtime){

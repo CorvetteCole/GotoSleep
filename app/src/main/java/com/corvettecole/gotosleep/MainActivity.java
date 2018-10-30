@@ -37,10 +37,11 @@ public class MainActivity extends AppCompatActivity {
     private Button feedBackButton;
     private Button editBedtimeButton;
 
+    private Calendar oldBedtimeCal;
     private Calendar bedtimeCal;
+    private int[] bedtime;
 
     BroadcastReceiver _broadcastReceiver;
-    private final SimpleDateFormat _sdfWatchTime = new SimpleDateFormat("HH:mm");
     private TextView hours;
     private TextView minutes;
 
@@ -93,20 +94,64 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateCountdown() {
         if (!isFirstStart){
-            Calendar cal = Calendar.getInstance();
-            long timeDelta = System.currentTimeMillis() - bedtimeCal.getTimeInMillis();
-            cal.setTimeInMillis(timeDelta);
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int min = cal.get(Calendar.MINUTE);
+            Calendar current = Calendar.getInstance();
+            current.setTimeInMillis(System.currentTimeMillis());
+
+            Date endDate;
+            Date startDate;
+            boolean present = false;
+            Calendar usedBedtime;
+
+
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+
+            startDate = bedtimeCal.getTime();
+            endDate = current.getTime();
+
+            long difference = endDate.getTime() - startDate.getTime();
+            if (difference < 0)
+            {
+                try {
+                    Date dateMax = simpleDateFormat.parse("24:00");
+                    Date dateMin = simpleDateFormat.parse("00:00");
+                    difference = (dateMax.getTime() - startDate.getTime()) + (endDate.getTime() - dateMin.getTime());
+                } catch (ParseException e){
+                    Log.e("UpdateCountdown", e + "");
+                }
+            }
+            int day = (int) (difference / (1000*60*60*24));
+            int hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
+            int min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
+            Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
+
+            if (hour >= 14){
+                difference = (difference - 86400000)*-1;
+                present = true;
+                day = (int) (difference / (1000*60*60*24));
+                hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
+                min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
+                Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
+            }
+
             if (hour == 1){
                 hours.setText(hour + " hour");
             } else {
                 hours.setText(hour + " hours");
             }
-            if (timeDelta < 0) {
-                minutes.setText(min + " minutes until bedtime");
+
+            if (present) {
+                if (min == 1){
+                    minutes.setText(min + " minute until bedtime");
+                } else {
+                    minutes.setText(min + " minutes until bedtime");
+                }
             } else {
-                minutes.setText(min + " minutes past bedtime");
+                if (min == 1){
+                    minutes.setText(min + " minute past bedtime");
+                } else {
+                    minutes.setText(min + " minutes past bedtime");
+                }
             }
             //#TODO add thing to make additional text show up underneath with like "get to bed"
         }
@@ -215,9 +260,17 @@ public class MainActivity extends AppCompatActivity {
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");
-        bedtimeCal = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
+        bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
+        setBedtimeCal();
 
     }
+
+    private void setBedtimeCal() {
+        Calendar current = Calendar.getInstance();
+        current.setTimeInMillis(System.currentTimeMillis());
+        bedtimeCal = getBedtimeCal(bedtime);
+    }
+
 
 
 

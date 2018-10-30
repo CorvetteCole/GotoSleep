@@ -1,67 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/colorPrimary"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:fitsSystemWindows="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main"
-    android:animateLayoutChanges="true">
+    tools:showIn="@layout/activity_main">
 
     <TextView
         android:id="@+id/sleepMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:fontFamily="@font/product_sans_bold"
-
         android:shadowColor="@color/accentPrimaryDark"
         android:shadowDx="4"
+
         android:shadowDy="4"
         android:shadowRadius="1"
         android:text="why aren't you sleeping?"
         android:textColor="@color/accentPrimary"
+
+
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
-        app:layout_constraintStart_toStartOf="parent"
         android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@+id/minutes"/>
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minutes" />
 
     <ImageView
         android:id="@+id/imageView15"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginBottom="88dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="@+id/imageView12"
-        app:layout_constraintTop_toTopOf="@+id/imageView14"
+        app:layout_constraintBottom_toBottomOf="@+id/moon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="65dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="34dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/moon"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
+        app:layout_constraintEnd_toStartOf="@+id/moon"
+        app:layout_constraintStart_toStartOf="@+id/moon"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
@@ -80,17 +85,19 @@
 
     <ImageView
         android:id="@+id/moon"
-        android:layout_width="100dp"
-        android:layout_height="100.177dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="80dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="10dp"
+        android:adjustViewBounds="true"
         android:background="@drawable/ic_moon_shadow"
-
+        android:cropToPadding="false"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="center"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        app:layout_constraintStart_toEndOf="@+id/imageView11"
         app:srcCompat="@drawable/ic_moon" />
 
     <TextView
@@ -98,32 +105,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="50dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/product_sans_bold"
 
         android:shadowColor="@color/accentPrimaryDark"
         android:shadowDx="4"
         android:shadowDy="4"
         android:shadowRadius="2"
-
         android:text="@string/default_hours_string"
 
         android:textColor="@color/accentPrimary"
         android:textSize="80sp"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moon" />
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@+id/minutes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/minutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginStart="8dp"
-
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="337dp"
+        android:layout_marginBottom="337dp"
         android:fontFamily="@font/product_sans_bold"
         android:shadowColor="@color/accentPrimaryDark"
 
@@ -133,18 +141,20 @@
         android:text="@string/default_minutes_string"
         android:textColor="@color/accentPrimary"
         android:textSize="30sp"
+        app:autoSizeMaxTextSize="100sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="2sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hours"/>
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bedtimeSetButton"
         style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:fontFamily="@font/product_sans_regular"
 
         android:text="@string/edit_bedtime"
@@ -156,16 +166,15 @@
         app:icon="@drawable/ic_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minutes"
+        app:layout_constraintTop_toTopOf="@+id/sleepMessage"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/product_sans_regular"
@@ -178,18 +187,15 @@
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/bedtimeSetButton"
-        app:layout_constraintVertical_bias="1.0"
         app:strokeColor="@color/colorPrimaryLight"
         app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/feedbackButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/product_sans_regular"
         android:includeFontPadding="true"
@@ -202,8 +208,6 @@
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/bedtimeSetButton"
-        app:layout_constraintVertical_bias="1.0"
         app:strokeColor="@color/colorPrimaryLight"
         app:strokeWidth="1dp" />
 
@@ -215,19 +219,20 @@
 
         app:layout_constraintGuide_percent=".5"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="38dp"
-        android:layout_marginBottom="45dp"
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:layout_marginTop="17dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/imageView15"
-        app:layout_constraintEnd_toStartOf="@+id/imageView14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
@@ -245,9 +250,10 @@
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="35dp"
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
@@ -258,50 +264,52 @@
 
     <ImageView
         android:id="@+id/imageView11"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="86dp"
-        android:layout_marginEnd="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="152dp"
+        android:layout_marginBottom="151dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/moon"
-        app:layout_constraintTop_toTopOf="@+id/moon"
+        app:layout_constraintBottom_toBottomOf="@+id/hours"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView9"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="18dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/moon"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="@+id/moon"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView10"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="24dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/imageView9"
-        app:layout_constraintEnd_toStartOf="@+id/imageView9"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
@@ -313,27 +321,28 @@
 
     <ImageView
         android:id="@+id/imageView13"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="62dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="46dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/imageView11"
-        app:layout_constraintEnd_toStartOf="@+id/imageView11"
+        app:layout_constraintStart_toStartOf="@+id/imageView14"
+        app:layout_constraintTop_toBottomOf="@+id/imageView14"
         app:srcCompat="@drawable/ic_star" />
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintStart_toEndOf="@+id/moon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/moon"
         app:srcCompat="@drawable/ic_star" />
 
@@ -341,14 +350,14 @@
         android:id="@+id/imageView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="63dp"
-        android:layout_marginEnd="72dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="55dp"
         android:background="@drawable/ic_star_shadow"
         android:paddingRight="1dp"
         android:paddingBottom="2dp"
         android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/imageView13"
-        app:layout_constraintTop_toBottomOf="@+id/imageView14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView15"
         app:srcCompat="@drawable/ic_star" />
 
 

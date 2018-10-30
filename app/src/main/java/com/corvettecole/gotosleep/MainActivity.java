@@ -143,15 +143,22 @@ public class MainActivity extends AppCompatActivity {
                 hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
                 min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
                 Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
-            }
+            }  else {  //this else statement is part of jank time fix
 
-            //weird bug where it is always one minute behind almost exactly. Not sure what I did
-            //wrong but this is a temp fix
-            //#TODO figure out why this is the way it is
-            min = min + 1;
-            if (min == 60){
-                min = 0;
-                hour = hour + 1;
+                //weird bug where it is always one minute behind almost exactly. Not sure what I did
+                //wrong but this is a temp fix
+
+            /*Update on weird time bug. It is only a minute behind when it is finding how far the
+            current time is PAST the bedtime. Otherwise it seems to be spot on. WTF????
+
+            Going to jank together some more fix
+             */
+                //#TODO figure out why this is the way it is
+                min = min + 1;
+                if (min == 60) {
+                    min = 0;
+                    hour = hour + 1;
+                }
             }
 
 
@@ -262,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                     String subject = "Go to Sleep Feedback";
                     String bodyText = "Please explain your bug or feature suggestion thoroughly";
                     String mailto = "mailto:corvettecole@gmail.com" +
-                            "&subject=" + Uri.encode(subject) +
+                            "?subject=" + Uri.encode(subject) +
                             "&body=" + Uri.encode(bodyText);
 
                     Intent emailIntent = new Intent(Intent.ACTION_SENDTO);

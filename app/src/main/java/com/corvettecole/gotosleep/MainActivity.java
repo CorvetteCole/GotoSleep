@@ -154,8 +154,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     minutes.setText(min + " minutes past bedtime");
                 }
-                editBedtimeButton.setVisibility(View.GONE);
-                sleepMessage.setVisibility(View.VISIBLE);
+                if (!isFirstStart && !isFirstStart) {
+                    sleepMessage.setVisibility(View.VISIBLE);
+                }
             }
         }
     }

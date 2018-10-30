@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     BroadcastReceiver _broadcastReceiver;
     private TextView hours;
     private TextView minutes;
+    private TextView sleepMessage;
 
     private boolean isFirstStart;
 
@@ -152,8 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     minutes.setText(min + " minutes past bedtime");
                 }
+                editBedtimeButton.setVisibility(View.GONE);
+                sleepMessage.setVisibility(View.VISIBLE);
             }
-            //#TODO add thing to make additional text show up underneath with like "get to bed"
         }
     }
 
@@ -200,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
             feedBackButton = findViewById(R.id.feedbackButton);
             hours = findViewById(R.id.hours);
             minutes = findViewById(R.id.minutes);
+            sleepMessage = findViewById(R.id.sleepMessage);
 
             //runs when the intro slides launch mainActivity again
             boolean isSecondStart = getPrefs.getBoolean("secondStart", true);

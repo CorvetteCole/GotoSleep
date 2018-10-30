@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
     <color name="colorPrimary">#263238</color>
     <color name="colorPrimaryDark">#000a12</color>
     <color name="colorPrimaryLight">#4f5b62</color>
@@ -15,6 +16,8 @@
     <color name="secondSlide">#4a148c</color>
     <color name="thirdSlide">#1a237e</color>
     <color name="fourthSlide">#263238</color>
+
+    <color name="preference_fallback_accent_color" tools:override="true">#29b6f6</color>
 
     <color name="moonPrimary">#29b6f6</color>
     <color name="moonPrimaryDark">#0086c3</color>

@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
             startDate = bedtimeCal.getTime();
             endDate = current.getTime();
 
+            Log.d("updateCountdown", bedtimeCal.getTime() + " bedtime");
+
             Log.d("updateCountdown", current.getTime() + " current time");
 
 
@@ -292,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar current = Calendar.getInstance();
         current.setTimeInMillis(System.currentTimeMillis());
         bedtimeCal = getBedtimeCal(bedtime);
+        bedtimeCal.set(Calendar.SECOND, 0);
     }
 
 

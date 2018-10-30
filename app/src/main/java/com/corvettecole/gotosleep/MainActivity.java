@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceive(Context ctx, Intent intent) {
                 if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
-                    Log.d("TTTTT", "this works");
                     updateCountdown();
                 }
             }
@@ -95,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateCountdown() {
         if (!isFirstStart){
+
             Calendar current = Calendar.getInstance();
             current.setTimeInMillis(System.currentTimeMillis());
 
@@ -107,8 +107,14 @@ public class MainActivity extends AppCompatActivity {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
+            Log.d("updateCountdown", current.get(Calendar.SECOND) + "");
+            current.set(Calendar.SECOND, 0);
+
             startDate = bedtimeCal.getTime();
             endDate = current.getTime();
+
+            Log.d("updateCountdown", current.getTime() + " current time");
+
 
             long difference = endDate.getTime() - startDate.getTime();
             if (difference < 0)
@@ -123,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
             }
             int day = (int) (difference / (1000*60*60*24));
             int hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
+            Log.d("updateCountdown", (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60) +" min");
             int min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
             Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
 
@@ -134,6 +141,17 @@ public class MainActivity extends AppCompatActivity {
                 min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
                 Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
             }
+
+            //weird bug where it is always one minute behind almost exactly. Not sure what I did
+            //wrong but this is a temp fix
+            //#TODO figure out why this is the way it is
+            min = min + 1;
+            if (min == 60){
+                min = 0;
+                hour = hour + 1;
+            }
+
+
 
             if (hour == 1){
                 hours.setText(hour + " hour");

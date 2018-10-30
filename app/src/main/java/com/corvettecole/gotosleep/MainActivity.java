@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     minutes.setText(min + " minutes until bedtime");
                 }
+                sleepMessage.setVisibility(View.INVISIBLE);
             } else {
                 if (min == 1){
                     minutes.setText(min + " minute past bedtime");

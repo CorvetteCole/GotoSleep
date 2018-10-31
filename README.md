@@ -14,8 +14,6 @@ Possibly make a separate layout and set that as the background of content_main? 
 
 -Add icon credits for app icon, intro icons
 
--Tap on main screen to hide/unhide buttons
-
 -AMOLED black theme
 
 -Make app notifications have a background color that matches the app background color (AMOLED black or

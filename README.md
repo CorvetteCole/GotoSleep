@@ -8,6 +8,12 @@ Possibly make a separate layout and set that as the background of content_main? 
 
 -Add in-app purchase to unlock premium category permanently
 
+-Add icon credits for app icon, intro icons
+
+-Tap on main screen to hide/unhide buttons
+
+-AMOLED black theme
+
 -Refactor preferences code to reduce dependence on 3rd party libraries
 
 -Add background themeing (maybe)

@@ -3,6 +3,8 @@
 # TODO
 -Add notifications with varying defualt non-vulgar go to sleep reminders and also some default vulgar reminders.
 
+-Notification amount setting should be changed to a menu with 1, 3, and 5 as options. Notification delay can remain a seekbar
+
 -Add ability to customize sleep reminders in premium options.
 
 -Fix main screen stars and moon so that they scale properly with device display size changes.

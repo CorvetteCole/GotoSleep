@@ -89,9 +89,6 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         loadPreferences();
-        if (isFirstStart){
-
-        }
         updateCountdown();
     }
 
@@ -289,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         startActivity(settings);
+                        editBedtimeButton.setVisibility(View.GONE);
                     }
                 });
                 SharedPreferences.Editor e = getPrefs.edit();
@@ -296,8 +294,6 @@ public class MainActivity extends AppCompatActivity {
                 e.putBoolean("secondStart", false);
                 //  Apply changes
                 e.apply();
-            } else {
-                editBedtimeButton.setVisibility(View.GONE);
             }
 
 

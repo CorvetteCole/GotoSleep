@@ -136,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
             int min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
             Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
 
+            int currentMin = current.get(Calendar.MINUTE);
+            int bedtimeMin = bedtimeCal.get(Calendar.MINUTE);
+
+            boolean isCountdownCorrect;
             if (hour >= bedtimePastTrigger){
                 difference = (difference - 86400000)*-1;
                 present = true;
@@ -143,23 +147,61 @@ public class MainActivity extends AppCompatActivity {
                 hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
                 min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
                 Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
-            }  else {  //this else statement is part of jank time fix
+
+                //#TODO remove this before final build
+                if (min + currentMin < 60){
+                    isCountdownCorrect = (min + currentMin == bedtimeMin);
+                } else if (min + currentMin == 60){
+                    isCountdownCorrect = (min + currentMin == 60);
+                } else {
+                    isCountdownCorrect = (min + currentMin - 60 == bedtimeMin);
+                }
+                if (isCountdownCorrect){
+                    Log.d("updateCountdown", "countdown min(" + min + ") + current min(" + currentMin + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
+                } else {
+                    Log.e("updateCountdown", "countdown min(" + min + ") + current min(" + currentMin + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
+                }
+
+            } else {
+                if (currentMin - min >= 0){
+                    isCountdownCorrect = (currentMin - min == bedtimeMin);
+                    Log.d("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
+                } else {
+                    isCountdownCorrect = (currentMin - min + 60 == bedtimeMin);
+                    Log.d("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
+                }
+                if (isCountdownCorrect) {
+                    Log.d("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
+                } else {
+                    Log.e("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
+                }
+            }
+
+
+            //Update, jank code may not be needed? It seems to be accurate
+
+            /*else {  //this else statement is part of jank time fix
 
                 //weird bug where it is always one minute behind almost exactly. Not sure what I did
                 //wrong but this is a temp fix
 
-            /*Update on weird time bug. It is only a minute behind when it is finding how far the
+            Update on weird time bug. It is only a minute behind when it is finding how far the
             current time is PAST the bedtime. Otherwise it seems to be spot on. WTF????
 
             Going to jank together some more fix
-             */
+
                 //#TODO figure out why this is the way it is
                 min = min + 1;
                 if (min == 60) {
                     min = 0;
                     hour = hour + 1;
                 }
-            }
+            }*/
+
+
+
+
+
 
 
 

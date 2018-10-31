@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.preference.PreferenceManager;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView hours;
     private TextView minutes;
     private TextView sleepMessage;
+    private View contentMain;
 
     private boolean isFirstStart;
     static int bedtimePastTrigger = 8;
@@ -275,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
             hours = findViewById(R.id.hours);
             minutes = findViewById(R.id.minutes);
             sleepMessage = findViewById(R.id.sleepMessage);
+            contentMain = findViewById(R.id.content_main_layout);
 
             //runs when the intro slides launch mainActivity again
             boolean isSecondStart = getPrefs.getBoolean("secondStart", true);
@@ -320,6 +323,19 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(emailIntent);
                     } catch (ActivityNotFoundException e) {
                         //TODO: Handle case where no email app is available
+                    }
+                }
+            });
+
+            contentMain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (settingsButton.getVisibility() == View.VISIBLE) {
+                        settingsButton.setVisibility(View.INVISIBLE);
+                        feedBackButton.setVisibility(View.INVISIBLE);
+                    } else {
+                        settingsButton.setVisibility(View.VISIBLE);
+                        feedBackButton.setVisibility(View.VISIBLE);
                     }
                 }
             });

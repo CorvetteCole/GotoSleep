@@ -19,6 +19,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat{
     final static String NOTIF_ENABLE_KEY = "pref_notificationEnabled";
     final static String BEDTIME_KEY = "pref_bedtime";
     final static String DND_KEY = "pref_autoDoNotDisturb";
+    final static String BUTTON_HIDE_KEY = "pref_buttonHide";
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {

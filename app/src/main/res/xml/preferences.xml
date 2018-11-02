@@ -19,6 +19,12 @@
             android:key="pref_autoDoNotDisturb"
             android:title="Automatic Do Not Disturb"
             android:summary="Enable Do Not Disturb at your bedtime (not including alarms)"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_buttonHide"
+            android:title="Tap to Hide"
+            android:summary="Tap anywhere on the main screen to hide the settings and feedback button"/>
+
 
     </PreferenceCategory>
     <PreferenceCategory

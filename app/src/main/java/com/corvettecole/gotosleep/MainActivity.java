@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean isFirstStart;
     static int bedtimePastTrigger = 8;
+    static boolean buttonHide = false;
 
     @Override
     public void onStart() {
@@ -323,18 +325,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            contentMain.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (settingsButton.getVisibility() == View.VISIBLE) {
-                        settingsButton.setVisibility(View.INVISIBLE);
-                        feedBackButton.setVisibility(View.INVISIBLE);
-                    } else {
-                        settingsButton.setVisibility(View.VISIBLE);
-                        feedBackButton.setVisibility(View.VISIBLE);
+            if (buttonHide) {
+                contentMain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (settingsButton.getVisibility() == View.VISIBLE) {
+                            settingsButton.setVisibility(View.INVISIBLE);
+                            feedBackButton.setVisibility(View.INVISIBLE);
+                        } else {
+                            settingsButton.setVisibility(View.VISIBLE);
+                            feedBackButton.setVisibility(View.VISIBLE);
+                        }
                     }
-                }
-            });
+                });
+            }
 
 
 
@@ -348,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");
         bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
+        buttonHide = settings.getBoolean(BUTTON_HIDE_KEY, false);
         setBedtimeCal();
 
     }

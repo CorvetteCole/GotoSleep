@@ -244,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
         //  Create a new boolean and preference and set it to true
         isFirstStart = getPrefs.getBoolean("firstStart", true);
+        isSecondStart = getPrefs.getBoolean("secondStart", true);
 
         //  If the activity has never started before...
         if (isFirstStart) {
@@ -266,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
 
             //  Apply changes
             e.apply();
+            //#TODO find out if this is needed, might make performance better if we just pause the main activity vs starting a new one
             finish();
         } else {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
@@ -280,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
             contentMain = findViewById(R.id.content_main_layout);
 
             //runs when the intro slides launch mainActivity again
-            isSecondStart = getPrefs.getBoolean("secondStart", true);
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
 
             if (isSecondStart) {

@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private View contentMain;
 
     private boolean isFirstStart;
+    private boolean isSecondStart;
     static int bedtimePastTrigger = 8;
     static boolean buttonHide = false;
 
@@ -279,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
             contentMain = findViewById(R.id.content_main_layout);
 
             //runs when the intro slides launch mainActivity again
-            boolean isSecondStart = getPrefs.getBoolean("secondStart", true);
+            isSecondStart = getPrefs.getBoolean("secondStart", true);
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
 
             if (isSecondStart) {
@@ -287,8 +288,11 @@ public class MainActivity extends AppCompatActivity {
                 editBedtimeButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(settings);
+                        //#TODO figure out a way to make editBedtimeButton go away smoother (maybe hide it or launch activity in a separate thread)
                         editBedtimeButton.setVisibility(View.GONE);
+                        editBedtimeButton.clearAnimation();
+                        startActivity(settings);
+
                     }
                 });
                 SharedPreferences.Editor e = getPrefs.edit();

@@ -18,7 +18,8 @@
             android:defaultValue="true"
             android:key="pref_autoDoNotDisturb"
             android:title="Automatic Do Not Disturb"
-            android:summary="Enable Do Not Disturb at your bedtime (not including alarms)"/>
+            android:summary="Enable Do Not Disturb at your bedtime (not including alarms)"
+            />
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_buttonHide"
@@ -33,7 +34,8 @@
             android:defaultValue="true"
             android:key="pref_notificationsEnabled"
             android:title="Enable Notifications"
-            android:summary="Enable/Disable sleep reminder notifications"/>
+            android:summary="Enable/Disable sleep reminder notifications"
+            android:enabled="true"/>
         <EditTextPreference
             android:dependency="pref_notificationsEnabled"
             android:inputType="number"
@@ -43,16 +45,17 @@
             android:maxLength="2"
             android:defaultValue="15"
             android:max="30"/>
-        <EditTextPreference
+        <!--suppress AndroidElementNotAllowed -->
+        <SimpleMenuPreference
             android:dependency="pref_notificationsEnabled"
-            android:inputType="number"
             android:key="pref_numNotifications"
             android:title="Notification Amount"
-            android:summary="2 sleep reminders will be sent"
-            android:maxLength="2"
-            android:defaultValue="2"
-            android:max="30"/>
-        <!--suppress AndroidElementNotAllowed -->
+            android:summary="%s"
+            android:defaultValue="1"
+            android:entries="@array/pref_list_entries"
+            android:entryValues="@array/pref_list_values"
+            />
+
 
     </PreferenceCategory>
 

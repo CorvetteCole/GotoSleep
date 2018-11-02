@@ -18,6 +18,7 @@
     <color name="fourthSlide">#263238</color>
 
     <color name="preference_fallback_accent_color" tools:override="true">#29b6f6</color>
+    <color name="preference_simple_menu_background">#263238</color>
 
     <color name="moonPrimary">#29b6f6</color>
     <color name="moonPrimaryDark">#0086c3</color>

@@ -172,7 +172,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sleepMessage"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp" />
+        app:strokeWidth="1dp"
+        android:visibility="gone"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"

@@ -325,20 +325,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            if (buttonHide) {
                 contentMain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (settingsButton.getVisibility() == View.VISIBLE) {
-                            settingsButton.setVisibility(View.INVISIBLE);
-                            feedBackButton.setVisibility(View.INVISIBLE);
-                        } else {
-                            settingsButton.setVisibility(View.VISIBLE);
-                            feedBackButton.setVisibility(View.VISIBLE);
-                        }
+                            if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
+                                settingsButton.setVisibility(View.INVISIBLE);
+                                feedBackButton.setVisibility(View.INVISIBLE);
+                            } else {
+                                settingsButton.setVisibility(View.VISIBLE);
+                                feedBackButton.setVisibility(View.VISIBLE);
+                            }
                     }
                 });
-            }
 
 
 

@@ -1,5 +1,9 @@
 package com.corvettecole.gotosleep;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +11,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +24,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +41,8 @@ import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_BEDTIME = 1;
+    static String BEDTIME_CHANNEL_ID = "bedtime";
     private static final int BACK_INTERVAL = 2000;
     private long backPressed;
     private Button settingsButton;
@@ -53,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSecondStart;
     static int bedtimePastTrigger = 8;
     static boolean buttonHide = false;
+    private final String TAG = "MainActivity";
+
+    static String[] notifications = new String[5];
 
     @Override
     public void onStart() {
@@ -93,6 +106,134 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         loadPreferences();
         updateCountdown();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
+        super.onCreate(savedInstanceState);
+        createNotificationChannel();
+        loadPreferences();
+
+        SharedPreferences getPrefs = PreferenceManager
+                .getDefaultSharedPreferences(getBaseContext());
+
+        //  Create a new boolean and preference and set it to true
+        isFirstStart = getPrefs.getBoolean("firstStart", true);
+        isSecondStart = getPrefs.getBoolean("secondStart", true);
+
+        //  If the activity has never started before...
+        if (isFirstStart) {
+
+            //  Launch app slide1
+            final Intent intro = new Intent(MainActivity.this, IntroActivity.class);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(intro);
+                }
+            });
+
+            //  Make a new preferences editor
+            SharedPreferences.Editor e = getPrefs.edit();
+
+            //  Edit preference to make it false because we don't want this to run again
+            e.putBoolean("firstStart", false);
+
+            //  Apply changes
+            e.apply();
+            //this is needed to stop weird back button stuff
+            finish();
+        } else {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+            setContentView(R.layout.activity_main);
+            settingsButton = findViewById(R.id.settingsButton);
+            editBedtimeButton = findViewById(R.id.bedtimeSetButton);
+            feedBackButton = findViewById(R.id.feedbackButton);
+            hours = findViewById(R.id.hours);
+            minutes = findViewById(R.id.minutes);
+            sleepMessage = findViewById(R.id.sleepMessage);
+            contentMain = findViewById(R.id.content_main_layout);
+
+            //runs when the intro slides launch mainActivity again
+            final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+
+            if (isSecondStart) {
+                editBedtimeButton.setVisibility(View.VISIBLE);
+                editBedtimeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(settings);
+                    }
+                });
+                SharedPreferences.Editor e = getPrefs.edit();
+                //  Edit preference to make it false because we don't want this to run again
+                e.putBoolean("secondStart", false);
+                //  Apply changes
+                e.apply();
+            }
+
+
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(settings);
+                }
+            });
+
+            feedBackButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String subject = "Go to Sleep Feedback";
+                    String bodyText = "Please explain your bug or feature suggestion thoroughly";
+                    String mailto = "mailto:corvettecole@gmail.com" +
+                            "?subject=" + Uri.encode(subject) +
+                            "&body=" + Uri.encode(bodyText);
+
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+                    emailIntent.setData(Uri.parse(mailto));
+                    try {
+                        startActivity(emailIntent);
+                    } catch (ActivityNotFoundException e) {
+                        //TODO: Handle case where no email app is available
+                    }
+                }
+            });
+
+                contentMain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
+                                settingsButton.setVisibility(View.INVISIBLE);
+                                feedBackButton.setVisibility(View.INVISIBLE);
+                            } else {
+                                settingsButton.setVisibility(View.VISIBLE);
+                                feedBackButton.setVisibility(View.VISIBLE);
+                            }
+                    }
+                });
+        }
+
+
+
+    }
+
+    private void setNotifications() {
+        Log.d(TAG, "Setting notification");
+        Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                REQUEST_CODE_BEDTIME, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCal.getTimeInMillis(), pendingIntent);
+        } else {
+            am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCal.getTimeInMillis(), pendingIntent);
+        }
+
+
     }
 
     private void updateCountdown() {
@@ -150,7 +291,9 @@ public class MainActivity extends AppCompatActivity {
                 min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
                 Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
 
-                //#TODO remove this before final build
+
+                //time debugging and jank code which probably isn't needed but I don't want to delete
+                //in case I have to debug it again.
                 if (min + currentMin < 60){
                     isCountdownCorrect = (min + currentMin == bedtimeMin);
                 } else if (min + currentMin == 60){
@@ -179,10 +322,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
+            /*
             //Update, jank code may not be needed? It seems to be accurate
 
-            /*else {  //this else statement is part of jank time fix
+            else {  //this else statement is part of jank time fix
 
                 //weird bug where it is always one minute behind almost exactly. Not sure what I did
                 //wrong but this is a temp fix
@@ -191,21 +334,12 @@ public class MainActivity extends AppCompatActivity {
             current time is PAST the bedtime. Otherwise it seems to be spot on. WTF????
 
             Going to jank together some more fix
-
-                //#TODO figure out why this is the way it is
                 min = min + 1;
                 if (min == 60) {
                     min = 0;
                     hour = hour + 1;
                 }
             }*/
-
-
-
-
-
-
-
 
             if (hour == 1){
                 hours.setText(hour + " hour");
@@ -233,153 +367,61 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
-        super.onCreate(savedInstanceState);
-        loadPreferences();
-
-        SharedPreferences getPrefs = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
-
-        //  Create a new boolean and preference and set it to true
-        isFirstStart = getPrefs.getBoolean("firstStart", true);
-        isSecondStart = getPrefs.getBoolean("secondStart", true);
-
-        //  If the activity has never started before...
-        if (isFirstStart) {
-
-            //  Launch app slide1
-            final Intent intro = new Intent(MainActivity.this, IntroActivity.class);
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(intro);
-                }
-            });
-
-            //  Make a new preferences editor
-            SharedPreferences.Editor e = getPrefs.edit();
-
-            //  Edit preference to make it false because we don't want this to run again
-            e.putBoolean("firstStart", false);
-
-            //  Apply changes
-            e.apply();
-            //#TODO find out if this is needed, might make performance better if we just pause the main activity vs starting a new one
-            finish();
-        } else {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-            setContentView(R.layout.activity_main);
-            settingsButton = findViewById(R.id.settingsButton);
-            editBedtimeButton = findViewById(R.id.bedtimeSetButton);
-            feedBackButton = findViewById(R.id.feedbackButton);
-            hours = findViewById(R.id.hours);
-            minutes = findViewById(R.id.minutes);
-            sleepMessage = findViewById(R.id.sleepMessage);
-            contentMain = findViewById(R.id.content_main_layout);
-
-            //runs when the intro slides launch mainActivity again
-            final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
-
-            if (isSecondStart) {
-                editBedtimeButton.setVisibility(View.VISIBLE);
-                editBedtimeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //#TODO figure out a way to make editBedtimeButton go away smoother (maybe hide it or launch activity in a separate thread)
-                        editBedtimeButton.setVisibility(View.GONE);
-                        editBedtimeButton.clearAnimation();
-                        startActivity(settings);
-
-                    }
-                });
-                SharedPreferences.Editor e = getPrefs.edit();
-                //  Edit preference to make it false because we don't want this to run again
-                e.putBoolean("secondStart", false);
-                //  Apply changes
-                e.apply();
-            }
-
-
-            settingsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(settings);
-                }
-            });
-
-            feedBackButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String subject = "Go to Sleep Feedback";
-                    String bodyText = "Please explain your bug or feature suggestion thoroughly";
-                    String mailto = "mailto:corvettecole@gmail.com" +
-                            "?subject=" + Uri.encode(subject) +
-                            "&body=" + Uri.encode(bodyText);
-
-                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                    emailIntent.setData(Uri.parse(mailto));
-                    try {
-                        startActivity(emailIntent);
-                    } catch (ActivityNotFoundException e) {
-                        //TODO: Handle case where no email app is available
-                    }
-                }
-            });
-
-                contentMain.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                            if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
-                                settingsButton.setVisibility(View.INVISIBLE);
-                                feedBackButton.setVisibility(View.INVISIBLE);
-                            } else {
-                                settingsButton.setVisibility(View.VISIBLE);
-                                feedBackButton.setVisibility(View.VISIBLE);
-                            }
-                    }
-                });
-
-
-
-        }
-
-
-
-    }
-
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");
         bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
+
+
+        //Shouldn't need this code actually, will just load this in notification receiver
+        //#TODO if custom notifications are not enabled (ads not enabled and in app purchase not purchased), use default notifications
+        //should load sfwNotifications and if the pref doesn't exist, should set default
+        for (int i = 0; i < notifications.length; i++){
+            notifications[i] = settings.getString("pref_notification" + (i+1), "");
+        }
+        for (String notification : notifications){
+            Log.d(TAG, notification);
+        }
+
         buttonHide = settings.getBoolean(BUTTON_HIDE_KEY, false);
         setBedtimeCal();
-
+        setNotifications();
     }
 
     private void setBedtimeCal() {
-        Calendar current = Calendar.getInstance();
-        current.setTimeInMillis(System.currentTimeMillis());
         bedtimeCal = getBedtimeCal(bedtime);
         bedtimeCal.set(Calendar.SECOND, 0);
     }
 
 
-    private int[] parseBedtime(String bedtime){
+    static int[] parseBedtime(String bedtime){
         int bedtimeHour = Integer.parseInt(bedtime.substring(0, bedtime.indexOf(":")));
         int bedtimeMin = Integer.parseInt(bedtime.substring(bedtime.indexOf(":") + 1, bedtime.length()));
         return new int[]{bedtimeHour, bedtimeMin};
     }
 
-    private Calendar getBedtimeCal (int[] bedtime){
+    static Calendar getBedtimeCal (int[] bedtime){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, bedtime[0]);
         calendar.set(Calendar.MINUTE, bedtime[1]);
         return calendar;
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(BEDTIME_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 

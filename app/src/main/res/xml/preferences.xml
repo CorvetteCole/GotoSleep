@@ -67,11 +67,49 @@
             android:key="pref_adsEnabled"
             android:title="Enable Advertisements"
             android:summary="Unlock premium options without paying by showing ads (ads will never be shown outside of the app) "/>
+        <PreferenceScreen
+            android:key="pref_customNotifications_category"
+            android:title="Custom Notifications">
+            <EditTextPreference
+                android:inputType="text"
+                android:key="pref_notification1"
+                android:title="Notification 1"
+                android:defaultValue="@string/notification1"
+                android:summary="@string/notification1"/>
+            <EditTextPreference
+                android:inputType="text"
+                android:key="pref_notification2"
+                android:title="Notification 2"
+                android:defaultValue="@string/notification2"
+                android:summary="@string/notification2"/>
+            <EditTextPreference
+                android:inputType="text"
+                android:key="pref_notification3"
+                android:title="Notification 3"
+                android:defaultValue="@string/notification3"
+                android:summary="@string/notification3"/>
+            <EditTextPreference
+                android:inputType="text"
+                android:key="pref_notification4"
+                android:title="Notification 4"
+                android:defaultValue="@string/notification4"
+                android:summary="@string/notification4"/>
+            <EditTextPreference
+                android:inputType="text"
+                android:key="pref_notification5"
+                android:title="Notification 5"
+                android:defaultValue="@string/notification5"
+                android:summary="@string/notification5"/>
+        </PreferenceScreen>
+
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_smartNotifications"
             android:title="Persistent Notifications"
             android:summary="Send notifications based on usage patterns (note, requires usage permission)"
             android:dependency="pref_adsEnabled"/>
+
+
+
     </PreferenceCategory>
 </PreferenceScreen>

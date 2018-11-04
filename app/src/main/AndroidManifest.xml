@@ -30,6 +30,9 @@
         <activity android:name=".SettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Settings"/>
+        <receiver
+            android:name=".BedtimeNotificationReceiver"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
     </manifest>

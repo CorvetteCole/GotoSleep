@@ -221,6 +221,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNotifications() {
+        //#TODO only trigger if notifications toggle is enabled
+
         Log.d(TAG, "Setting notification");
         Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
 

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -37,6 +39,7 @@ dependencies {
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.android.billingclient:billing:1.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     //implementation "com.mikepenz:materialdrawer:6.1.1"
 

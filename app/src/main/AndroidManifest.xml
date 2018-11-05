@@ -3,7 +3,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.corvettecole.gotosleep">
 
-    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
         android:allowBackup="true"
@@ -19,6 +19,7 @@
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -26,12 +27,13 @@
             android:name=".IntroActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Intro"/>
-        <activity android:name=".SettingsActivity"
-
+        <activity
+            android:name=".SettingsActivity"
             android:theme="@style/AppTheme.Settings"/>
+
         <receiver
             android:name=".BedtimeNotificationReceiver"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
-    </manifest>
+</manifest>

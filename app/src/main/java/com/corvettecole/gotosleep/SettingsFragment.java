@@ -3,19 +3,17 @@ package com.corvettecole.gotosleep;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.system.Os;
 import android.util.Log;
 
-import com.takisoft.preferencex.PreferenceFragmentCompat;
+import com.android.billingclient.api.BillingClient;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 
 
-public class SettingsFragment extends BasePreferenceFragmentCompat {
+public class SettingsFragment extends BasePreferenceFragmentCompat{
 
     final static String NOTIF_DELAY_KEY = "pref_notificationDelay";
     final static String NOTIF_AMOUNT_KEY = "pref_numNotifications";
@@ -30,6 +28,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
     final static String NOTIFICATION_5_KEY = "pref_notification5";
     final static String CUSTOM_NOTIFICATIONS_KEY = "pref_customNotifications_category";
     final static String ADS_ENABLED_KEY = "pref_adsEnabled";
+    final static String ADVANCED_PURCHASED_KEY = "advanced_options_purchased";
+    private boolean advancedOptionsPurchased;
+    private boolean enableAdvancedOptions;
+    private boolean adsEnabled;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
@@ -39,11 +41,38 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
 
 
         Log.d("PREFERENCES", rootKey + " ");
-        if (!(rootKey + " ").equals("pref_customNotifications_category ")) {
-        /*#TODO check if premium unlock has been purchased. If so, enable premium category, set adsEnabled to false, and disable ads pref
-        getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
-        getPreferenceScreen().findPreference("pref_premium").setEnabled(true);
-        */
+        if //(!(rootKey + " ").equals("pref_customNotifications_category ")) {
+                (rootKey == null){
+
+
+            advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
+            adsEnabled = sharedPreferences.getBoolean(ADS_ENABLED_KEY, false);
+
+            if (advancedOptionsPurchased) {
+                getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
+                getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
+                sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
+            } else {
+                final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
+                advancedPurchasePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        Log.d("Settings", "purchase was clicked!!!");
+
+
+
+
+                        return false;
+                    }
+                });
+
+            }
+
+
+
+            enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
+
+
 
             Preference bedtime = this.findPreference(BEDTIME_KEY);
             bedtime.setSummary("Bedtime is " + sharedPreferences.getString(BEDTIME_KEY, "19:35"));
@@ -51,14 +80,18 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
             final Preference customNotificationsPref = this.findPreference(CUSTOM_NOTIFICATIONS_KEY);
 
-            customNotificationsPref.setEnabled(sharedPreferences.getBoolean(ADS_ENABLED_KEY, false));
+
+            customNotificationsPref.setEnabled(enableAdvancedOptions);
+
 
             adsEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //if enable ads is switched off, set premium options to false;
-                    if (!(boolean) newValue) {
+                    adsEnabled = (boolean)newValue;
+                    enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
+                    if ((!(boolean) newValue) && (!enableAdvancedOptions)) {
                         sharedPreferences.edit().putBoolean("pref_smartNotifications", false).apply();
                         customNotificationsPref.setEnabled(false);
                     } else {
@@ -158,6 +191,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
         return this;
         // or you can return the parent fragment if it's handling the screen navigation,
         // however, in that case you need to traverse to the implementing parent fragment
+    }
+
+    @Override
+    public void onResume(){
+        Log.d("settings", "onResume called!");
+        super.onResume();
     }
 
 }

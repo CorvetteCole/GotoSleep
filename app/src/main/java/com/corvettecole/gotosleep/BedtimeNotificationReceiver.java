@@ -23,9 +23,11 @@ import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
 import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
 import static com.corvettecole.gotosleep.MainActivity.notifications;
 import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
+import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 
 public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
@@ -33,11 +35,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     private Calendar bedtime;
     private int numNotifications;
     private int notificationDelay;
+    private boolean adsEnabled;
+    private boolean advancedOptionsPurchased;
     final String TAG = "bedtimeNotifReceiver";
     private int currentNotification;
     static final int ONE_DAY_MILLIS = 86400000;
-
-    //#TODO maybe instead of calculating time differences to figure out what number a notification is, set flags in sharedprefs so they are independent of when they are triggered by the android OS
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
     @Override
@@ -47,16 +49,26 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
         numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
+        adsEnabled = settings.getBoolean(ADS_ENABLED_KEY, false);
+        advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
 
         currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
 
-        //#TODO if custom notifications are not enabled (ads not enabled and in app purchase not purchased), use default notifications
-        for (int i = 0; i < notifications.length; i++) {
-            notifications[i] = settings.getString("pref_notification" + (i + 1), "");
+        if (adsEnabled || advancedOptionsPurchased) {
+            for (int i = 0; i < notifications.length; i++) {
+                notifications[i] = settings.getString("pref_notification" + (i + 1), "");
+            }
+            for (String notification : notifications) {
+                Log.d(TAG, notification);
+            }
+        } else {
+            notifications[0] = context.getResources().getString(R.string.notification1);
+            notifications[1] = context.getResources().getString(R.string.notification2);
+            notifications[2] = context.getResources().getString(R.string.notification3);
+            notifications[3] = context.getResources().getString(R.string.notification4);
+            notifications[4] = context.getResources().getString(R.string.notification5);
         }
-        for (String notification : notifications) {
-            Log.d(TAG, notification);
-        }
+
 
 
 

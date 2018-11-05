@@ -15,29 +15,25 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.preference.PreferenceManager;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
-import java.util.TimeZone;
 
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
+import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
@@ -55,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private Button feedBackButton;
     private Button editBedtimeButton;
 
-    private Calendar oldBedtimeCal;
     private Calendar bedtimeCal;
     private int[] bedtime;
 
@@ -76,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private int currentNotification;
     private int numNotifications;
     private int notificationDelay;
+
+    private BillingClient mBillingClient;
+    private boolean advancedOptionsPurchased;
 
     @Override
     public void onStart() {
@@ -400,25 +398,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d("MainActivity", "Load Preferences Ran");
         bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
 
-
-
-        //Shouldn't need this code actually, will just load this in notification receiver
-        //#TODO if custom notifications are not enabled (ads not enabled and in app purchase not purchased), use default notifications
-        //should load sfwNotifications and if the pref doesn't exist, should set default
-        for (int i = 0; i < notifications.length; i++){
-            notifications[i] = settings.getString("pref_notification" + (i+1), "");
-        }
-        for (String notification : notifications){
-            Log.d(TAG, notification);
-        }
-
         buttonHide = settings.getBoolean(BUTTON_HIDE_KEY, false);
         notificationsEnabled = settings.getBoolean(NOTIF_ENABLE_KEY, true);
         bedtimeCal = getBedtimeCal(bedtime);
         currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
         numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
-
+        advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
+        if (!advancedOptionsPurchased){
+            checkInAppPurchases();
+        }
 
         setNotifications();
     }
@@ -457,6 +446,11 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void checkInAppPurchases(){
+        //some code
+    
     }
 
 

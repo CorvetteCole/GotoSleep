@@ -1,7 +1,6 @@
 package com.corvettecole.gotosleep;
 
 import android.app.AlarmManager;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -11,7 +10,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,7 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import static android.content.Context.ALARM_SERVICE;
 import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
@@ -38,7 +35,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     private int notificationDelay;
     final String TAG = "bedtimeNotifReceiver";
     private int currentNotification = 0;
-    private final int ONE_DAY_MILLIS = 86400000;
+    static final int ONE_DAY_MILLIS = 86400000;
+    private boolean shouldSetNextNotification = true;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -60,9 +58,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         //check for more info
         showNotification(context, notificationContent[0], notificationContent[1]);
 
-        if (currentNotification < numNotifications) {
+        if (currentNotification < numNotifications && shouldSetNextNotification) {
             setNextNotification(context, currentNotification);
-        } else if (currentNotification == numNotifications){
+        } else if (currentNotification == numNotifications || !shouldSetNextNotification){
             setNextDayNotification(context, 1);
         }
     }
@@ -123,12 +121,32 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         int totalMin = (hour * 60) + min;
 
         currentNotification = totalMin / notificationDelay;
+        float currentNotificationTemp = (float)totalMin/notificationDelay;
+        if (currentNotificationTemp < 1.3){
+            currentNotification = 1;
+        } else if (currentNotificationTemp > 1.7 && currentNotificationTemp < 2.3){
+            currentNotification = 2;
+        } else if (currentNotificationTemp > 2.7 && currentNotificationTemp < 3.3){
+            currentNotification = 3;
+        } else if (currentNotificationTemp > 3.7 && currentNotificationTemp < 4.3){
+            currentNotification = 4;
+        } else if (currentNotificationTemp > 4.7 && currentNotificationTemp < 5.3){
+            currentNotification = 5;
+        }
+
+
+
         Log.d(TAG, "currentNotification: " + currentNotification);
 
-        if (currentNotification == 1) {
-            return new String[]{notifications[currentNotification - 1], "It is your bedtime!"};
+        if (currentNotification <= numNotifications) {
+            if (currentNotification == 1) {
+                return new String[]{notifications[currentNotification - 1], "It is your bedtime!"};
+            } else {
+                return new String[]{notifications[currentNotification - 1], "It is " + totalMin + " past your bedtime!"};
+            }
         } else {
-            return new String[]{notifications[currentNotification - 1], "It is " + totalMin + " past your bedtime!"};
+            shouldSetNextNotification = false;
+            return new String[]{notifications[0], "Time to head to bed."};
         }
     }
 

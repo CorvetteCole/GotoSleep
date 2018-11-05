@@ -36,8 +36,10 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
 
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     static int bedtimePastTrigger = 8;
     static boolean buttonHide = false;
     private final String TAG = "MainActivity";
+    private boolean notificationsEnabled;
 
     static String[] notifications = new String[5];
 
@@ -221,21 +224,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNotifications() {
-        //#TODO only trigger if notifications toggle is enabled
+        if (notificationsEnabled) {
+            Calendar bedtimeCalendar = getBedtimeCal(bedtime);
 
-        Log.d(TAG, "Setting notification");
-        Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
+            if (bedtimeCalendar.getTimeInMillis() < System.currentTimeMillis()){
+                bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
+            }
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                REQUEST_CODE_BEDTIME, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCal.getTimeInMillis(), pendingIntent);
+            Log.d(TAG, "bedtime calendar: " + bedtimeCalendar.getTimeInMillis() + " more: " + bedtimeCalendar.getTime());
+            Log.d(TAG, "Current time: " + System.currentTimeMillis());
+            Log.d(TAG, "Setting notification at: " + bedtimeCalendar.getTimeInMillis() + " more: " + bedtimeCalendar.getTime());
+            Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                    REQUEST_CODE_BEDTIME, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
+            } else {
+                am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
+            }
         } else {
-            am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCal.getTimeInMillis(), pendingIntent);
+            Log.d(TAG, "setNotifications: " + notificationsEnabled);
         }
-
-
     }
 
     private void updateCountdown() {
@@ -291,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                 day = (int) (difference / (1000*60*60*24));
                 hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
                 min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
-                Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
+                Log.i("updateCountdown","Days: " + day + " Hours: "+ hour + ", Mins: " + min);
 
 
                 //time debugging and jank code which probably isn't needed but I don't want to delete
@@ -375,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
         bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
 
 
+
         //Shouldn't need this code actually, will just load this in notification receiver
         //#TODO if custom notifications are not enabled (ads not enabled and in app purchase not purchased), use default notifications
         //should load sfwNotifications and if the pref doesn't exist, should set default
@@ -386,14 +398,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         buttonHide = settings.getBoolean(BUTTON_HIDE_KEY, false);
-        setBedtimeCal();
+        notificationsEnabled = settings.getBoolean(NOTIF_ENABLE_KEY, true);
+        bedtimeCal = getBedtimeCal(bedtime);
+
+
         setNotifications();
     }
 
-    private void setBedtimeCal() {
-        bedtimeCal = getBedtimeCal(bedtime);
-        bedtimeCal.set(Calendar.SECOND, 0);
-    }
 
 
     static int[] parseBedtime(String bedtime){
@@ -403,10 +414,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static Calendar getBedtimeCal (int[] bedtime){
+        String TAG = "getBedtimeCal";
+        Log.d(TAG, "bedtime[0], bedtime[1] " + bedtime[0] + "," + bedtime[1]);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        //calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, bedtime[0]);
         calendar.set(Calendar.MINUTE, bedtime[1]);
+        calendar.set(Calendar.SECOND, 0);
         return calendar;
     }
 

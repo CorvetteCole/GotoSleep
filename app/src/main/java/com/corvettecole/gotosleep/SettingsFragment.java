@@ -19,7 +19,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
 
     final static String NOTIF_DELAY_KEY = "pref_notificationDelay";
     final static String NOTIF_AMOUNT_KEY = "pref_numNotifications";
-    final static String NOTIF_ENABLE_KEY = "pref_notificationEnabled";
+    final static String NOTIF_ENABLE_KEY = "pref_notificationsEnabled";
     final static String BEDTIME_KEY = "pref_bedtime";
     final static String DND_KEY = "pref_autoDoNotDisturb";
     final static String BUTTON_HIDE_KEY = "pref_buttonHide";

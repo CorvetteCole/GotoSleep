@@ -48,7 +48,7 @@ import static java.lang.Math.abs;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_BEDTIME = 1;
-    static String BEDTIME_CHANNEL_ID = "bedtime";
+    static String BEDTIME_CHANNEL_ID = "bedtimeNotifications";
     private static final int BACK_INTERVAL = 2000;
     private long backPressed;
     private Button settingsButton;
@@ -451,6 +451,7 @@ public class MainActivity extends AppCompatActivity {
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(BEDTIME_CHANNEL_ID, name, importance);
             channel.setDescription(description);
+            channel.setSound(null, null);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);

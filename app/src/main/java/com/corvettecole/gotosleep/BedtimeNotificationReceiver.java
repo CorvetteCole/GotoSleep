@@ -59,7 +59,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         showNotification(context, notificationContent[0], notificationContent[1]);
 
         if (currentNotification < numNotifications && shouldSetNextNotification) {
-            setNextNotification(context, currentNotification);
+            setNextNotification(context, 12);
         } else if (currentNotification == numNotifications || !shouldSetNextNotification){
             setNextDayNotification(context, 1);
         }
@@ -152,7 +152,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
     public void setNextNotification(Context context, int REQUEST_CODE_BEDTIME) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis() + notificationDelay);
+        calendar.setTimeInMillis(System.currentTimeMillis() + notificationDelay * 60000);
         Log.d(TAG, "Setting notification");
 
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);

@@ -135,7 +135,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             if (currentNotification == 1) {
                 return new String[]{notifications[currentNotification - 1], "Time to head to bed."};
             } else {
-                return new String[]{notifications[currentNotification - 1], "It is " + totalMin + " past your bedtime!"};
+                return new String[]{notifications[currentNotification - 1], "It is " + totalMin + " minutes past your bedtime!"};
             }
     }
 

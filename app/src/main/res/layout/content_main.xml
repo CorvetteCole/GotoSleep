@@ -40,9 +40,8 @@
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minutes" />
+        app:layout_constraintTop_toBottomOf="@+id/minutes"/>
 
 
     <TextView
@@ -82,6 +81,7 @@
         android:layout_marginBottom="8dp"
 
         android:fontFamily="@font/product_sans_bold"
+        android:maxLines="1"
         android:shadowColor="@color/accentPrimaryDark"
         android:shadowDx="4"
         android:shadowDy="4"
@@ -89,14 +89,12 @@
         android:text="@string/default_minutes_string"
         android:textColor="@color/accentPrimary"
         android:textSize="30sp"
-        android:maxLines="1"
         app:autoSizeMaxTextSize="100sp"
         app:autoSizeMinTextSize="12sp"
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 

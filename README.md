@@ -1,13 +1,9 @@
 # GotoSleep
 
 # TODO
--Make notifications vibrate/make sound
-
--Add notification action to stop next notifications (like a "I'm going to sleep") type option
+-Add smart "I'm going to sleep" button where edit bedtime button appears that will appear 1 hour before your bedtime. When clicked it will enable do not disturb and reset next notification to tomorrow
 
 -Add automatic do not disturb. After the last notification or user clicking the im going to sleep button DnD will be enabled.
-
--Implement smart feature in to existing notifications (will stop notifying users to go to sleep if they stop using their phone)
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
 

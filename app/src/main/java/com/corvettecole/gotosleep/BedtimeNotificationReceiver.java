@@ -34,13 +34,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     private int numNotifications;
     private int notificationDelay;
     final String TAG = "bedtimeNotifReceiver";
-    private int currentNotification = 0;
+    private int currentNotification;
     static final int ONE_DAY_MILLIS = 86400000;
-    private boolean shouldSetNextNotification = true;
-    private long firstNotif;
-    private final String FIRST_NOTIF_KEY = "first_notification_time";
-    private final String IS_FIRST_NOTIF_KEY = "first_notification_boolean";
-    private boolean isFirstNotif;
+
+    //#TODO maybe instead of calculating time differences to figure out what number a notification is, set flags in sharedprefs so they are independent of when they are triggered by the android OS
+    static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -49,13 +47,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
         numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
-        isFirstNotif = settings.getBoolean(IS_FIRST_NOTIF_KEY, true);
-        firstNotif = settings.getLong(FIRST_NOTIF_KEY, bedtime.getTimeInMillis());
-        if (isFirstNotif){
-            firstNotif = System.currentTimeMillis();
-            settings.edit().putLong(FIRST_NOTIF_KEY, firstNotif).apply();
-            settings.edit().putBoolean(IS_FIRST_NOTIF_KEY, false).apply();
-        }
+
+        currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
+
         //#TODO if custom notifications are not enabled (ads not enabled and in app purchase not purchased), use default notifications
         for (int i = 0; i < notifications.length; i++) {
             notifications[i] = settings.getString("pref_notification" + (i + 1), "");
@@ -64,14 +58,17 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             Log.d(TAG, notification);
         }
 
+
+
         String[] notificationContent = getNotificationContent();
         //check for more info
         showNotification(context, notificationContent[0], notificationContent[1]);
 
-        if (currentNotification < numNotifications && shouldSetNextNotification) {
+        if (currentNotification < numNotifications) {
             setNextNotification(context, 12);
-        } else if (currentNotification == numNotifications || !shouldSetNextNotification){
-            settings.edit().putBoolean(IS_FIRST_NOTIF_KEY, true).apply();
+            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
+        } else if (currentNotification == numNotifications){
+            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
             setNextDayNotification(context, 1);
         }
     }
@@ -96,8 +93,6 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     public String[] getNotificationContent() {
         Calendar current = Calendar.getInstance();
         current.setTimeInMillis(System.currentTimeMillis());
-        Calendar firstNotifCal = Calendar.getInstance();
-        firstNotifCal.setTimeInMillis(firstNotif);
 
         Date endDate;
         Date startDate;
@@ -133,82 +128,21 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
         int totalMin = (hour * 60) + min;
 
-        getCurrentNotification();
 
         Log.d(TAG, "currentNotification: " + currentNotification);
 
-        if (currentNotification <= numNotifications) {
+
             if (currentNotification == 1) {
                 return new String[]{notifications[currentNotification - 1], "Time to head to bed."};
             } else {
                 return new String[]{notifications[currentNotification - 1], "It is " + totalMin + " past your bedtime!"};
             }
-        } else {
-            shouldSetNextNotification = false;
-            return new String[]{notifications[0], "Time to head to bed."};
-        }
-    }
-
-    public void getCurrentNotification(){
-        Calendar current = Calendar.getInstance();
-        current.setTimeInMillis(System.currentTimeMillis());
-
-        Calendar firstNotifCal = Calendar.getInstance();
-        firstNotifCal.setTimeInMillis(firstNotif);
-
-        Date endDate;
-        Date startDate;
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-
-        Log.d(TAG, current.get(Calendar.SECOND) + "");
-        current.set(Calendar.SECOND, 0);
-
-        startDate = firstNotifCal.getTime();
-        endDate = current.getTime();
-
-        Log.d(TAG, firstNotifCal.getTime() + " first notification time");
-
-        Log.d(TAG, current.getTime() + " current time");
-
-
-        long difference = endDate.getTime() - startDate.getTime();
-        if (difference < 0) {
-            try {
-                Date dateMax = simpleDateFormat.parse("24:00");
-                Date dateMin = simpleDateFormat.parse("00:00");
-                difference = (dateMax.getTime() - startDate.getTime()) + (endDate.getTime() - dateMin.getTime());
-            } catch (ParseException e) {
-                Log.e(TAG, e + "");
-            }
-        }
-        int day = (int) (difference / (1000 * 60 * 60 * 24));
-        int hour = (int) ((difference - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
-        Log.d(TAG, (difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (1000 * 60) + " min");
-        int min = (int) (difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (1000 * 60);
-        Log.i(TAG, "(getCurrentNotif) Days: " + day + " Hours: " + hour + ", Mins: " + min);
-
-        int totalMin = (hour * 60) + min;
-
-        currentNotification = totalMin / notificationDelay;
-        float currentNotificationTemp = (float)totalMin/notificationDelay;
-        if (currentNotificationTemp < 1.3){
-            currentNotification = 1;
-        } else if (currentNotificationTemp >= 1.6 && currentNotificationTemp <= 2.4){
-            currentNotification = 2;
-        } else if (currentNotificationTemp >= 2.6 && currentNotificationTemp <= 3.4){
-            currentNotification = 3;
-        } else if (currentNotificationTemp >= 3.6 && currentNotificationTemp <= 4.4){
-            currentNotification = 4;
-        } else if (currentNotificationTemp >= 4.6 && currentNotificationTemp <= 5.4){
-            currentNotification = 5;
-        }
     }
 
     public void setNextNotification(Context context, int REQUEST_CODE_BEDTIME) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + notificationDelay * 60000);
-        Log.d(TAG, "Setting notification");
+        Log.d(TAG, "Setting next notification in " + notificationDelay + " minutes");
 
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 
@@ -225,7 +159,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     public void setNextDayNotification(Context context, int REQUEST_CODE_BEDTIME){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
-        Log.d(TAG, "Setting notification");
+        Log.d(TAG, "Setting notification for tomorrow");
 
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 

@@ -36,10 +36,14 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.TimeZone;
 
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
+import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean notificationsEnabled;
 
     static String[] notifications = new String[5];
+    private int currentNotification;
+    private int numNotifications;
+    private int notificationDelay;
 
     @Override
     public void onStart() {
@@ -229,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
 
             if (bedtimeCalendar.getTimeInMillis() < System.currentTimeMillis()){
                 bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
+            }
+
+            int errorMargin = 30;
+            if (currentNotification != 1){
+                if (abs(System.currentTimeMillis() - bedtimeCal.getTimeInMillis()) > ((notificationDelay * numNotifications + errorMargin) * 60000 )){
+                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+                    currentNotification = 1;
+                }
             }
 
             Log.d(TAG, "bedtime calendar: " + bedtimeCalendar.getTimeInMillis() + " more: " + bedtimeCalendar.getTime());
@@ -400,6 +415,9 @@ public class MainActivity extends AppCompatActivity {
         buttonHide = settings.getBoolean(BUTTON_HIDE_KEY, false);
         notificationsEnabled = settings.getBoolean(NOTIF_ENABLE_KEY, true);
         bedtimeCal = getBedtimeCal(bedtime);
+        currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
+        numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
+        notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
 
 
         setNotifications();

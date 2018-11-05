@@ -1,6 +1,12 @@
 # GotoSleep
 
 # TODO
+-Make notifications vibrate/make sound
+
+-Implement smart feature in to existing notifications (will stop notifying users to go to sleep if they stop using their phone)
+
+-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
+
 -Add in-app purchase to unlock premium category permanently
 
 -Add admob in-app purchases BE CAREFUL NOT TO REVEAL PRIVATE KEY INFO IN GITHUB REPO

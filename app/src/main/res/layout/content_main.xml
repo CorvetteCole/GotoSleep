@@ -7,10 +7,15 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/colorPrimary"
+
     android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
+
+    <include
+        layout="@layout/background"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/sleepMessage"
@@ -39,68 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/minutes" />
 
-    <ImageView
-        android:id="@+id/imageView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="88dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/moon"
-        app:layout_constraintEnd_toStartOf="@+id/imageView14"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_star" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="34dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/moon"
-        app:layout_constraintStart_toStartOf="@+id/moon"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="28dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/imageView10"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/moon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="10dp"
-        android:adjustViewBounds="true"
-        android:background="@drawable/ic_moon_shadow"
-        android:cropToPadding="false"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:srcCompat="@drawable/ic_moon" />
 
     <TextView
         android:id="@+id/hours"
@@ -226,162 +170,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="172dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_star" />
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="@+id/moon"
-        app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/moon"
-        app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="152dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="151dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="@+id/hours"
-        app:layout_constraintEnd_toStartOf="@+id/moon"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="18dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/moon"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="157dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginBottom="28dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/moon"
-        app:layout_constraintEnd_toEndOf="@+id/moon"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="62dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/imageView11"
-        app:layout_constraintStart_toStartOf="@+id/imageView14"
-        app:layout_constraintTop_toBottomOf="@+id/imageView14"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="137dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:layout_constraintTop_toBottomOf="@+id/moon"
-        app:srcCompat="@drawable/ic_star" />
-
-    <ImageView
-        android:id="@+id/imageView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="55dp"
-        android:layout_marginEnd="72dp"
-        android:background="@drawable/ic_star_shadow"
-        android:paddingRight="1dp"
-        android:paddingBottom="2dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toStartOf="@+id/imageView13"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView15"
-        app:srcCompat="@drawable/ic_star" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

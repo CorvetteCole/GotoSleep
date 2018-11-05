@@ -25,4 +25,7 @@
     <color name="moonPrimaryLight">#73e8ff</color>
     <color name="transparent">#00FFFFFF</color>
 
+    <color name="starPrimary">#bdbdbd</color>
+    <color name="starAccent">#8d8d8d</color>
+
 </resources>

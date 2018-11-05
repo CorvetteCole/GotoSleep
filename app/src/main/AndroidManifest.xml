@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme"
         tools:node="replace">
         <activity
-            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Launcher">
@@ -28,7 +27,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Intro"/>
         <activity android:name=".SettingsActivity"
-            android:screenOrientation="portrait"
+
             android:theme="@style/AppTheme.Settings"/>
         <receiver
             android:name=".BedtimeNotificationReceiver"

@@ -23,8 +23,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClientStateListener;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +41,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 import static java.lang.Math.abs;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
     private static final int REQUEST_CODE_BEDTIME = 1;
     static String BEDTIME_CHANNEL_ID = "bedtimeNotifications";
@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
     private int numNotifications;
     private int notificationDelay;
 
-    private BillingClient mBillingClient;
     private boolean advancedOptionsPurchased;
+    private BillingProcessor bp;
 
     @Override
     public void onStart() {
@@ -120,6 +120,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
+        bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
+        bp.initialize();
+        bp.loadOwnedPurchasesFromGoogle();
+
         createNotificationChannel();
         loadPreferences();
 
@@ -129,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
         //  Create a new boolean and preference and set it to true
         isFirstStart = getPrefs.getBoolean("firstStart", true);
         isSecondStart = getPrefs.getBoolean("secondStart", true);
+
+
 
         //  If the activity has never started before...
         if (isFirstStart) {
@@ -406,7 +413,8 @@ public class MainActivity extends AppCompatActivity {
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
         advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
         if (!advancedOptionsPurchased){
-            checkInAppPurchases();
+            advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
+            settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
         }
 
         setNotifications();
@@ -448,13 +456,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkInAppPurchases(){
-        //some code
-    
+    @Override
+    public void onProductPurchased(String productId, TransactionDetails details) {
+
     }
 
+    @Override
+    public void onPurchaseHistoryRestored() {
 
+    }
 
+    @Override
+    public void onBillingError(int errorCode, Throwable error) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
 
 
 }

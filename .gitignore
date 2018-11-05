@@ -8,3 +8,6 @@
 /build
 /captures
 .externalNativeBuild
+app/src/main/res/values/license_key.xml
+app/src/main/res/values/license.xml
+app/src/main/res/values/license.xml

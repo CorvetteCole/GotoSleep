@@ -36,7 +36,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
     implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.android.billingclient:billing:1.2'
+
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
     //implementation "com.mikepenz:materialdrawer:6.1.1"
 

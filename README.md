@@ -1,6 +1,8 @@
 # GotoSleep
 
 # TODO
+First Release Feature Locked:
+
 -Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours.
 
 -Investigate bug where turning off ads on 5.0 and possibly above does not disable the persistent notifications option.
@@ -18,6 +20,9 @@
 -Add admob advertisements BE CAREFUL NOT TO REVEAL PRIVATE KEY INFO IN GITHUB REPO
 
 -Add credits for app icon, intro icons, open source libraries, etc
+
+
+Next Major Version Features:
 
 -AMOLED black theme option (maybe in premium category? idk)
 

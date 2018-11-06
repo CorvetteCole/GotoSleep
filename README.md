@@ -19,6 +19,9 @@ First Release Feature Locked:
 
 -Add credits for app icon, intro icons, open source libraries, etc
 
+-Add app shortcut for go to sleep early feature
+
+
 
 Next Major Version Features:
 

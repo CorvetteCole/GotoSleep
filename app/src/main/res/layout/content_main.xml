@@ -131,7 +131,6 @@
         android:textColor="@color/accentPrimaryDark"
         android:textSize="20sp"
         app:cornerRadius="15dp"
-        app:icon="@drawable/ic_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sleepMessage"

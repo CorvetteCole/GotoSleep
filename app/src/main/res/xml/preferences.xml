@@ -62,17 +62,16 @@
     <PreferenceCategory
         android:title="Advanced Options"
         android:key="pref_advanced_options">
-        <PreferenceScreen
-            android:key="pref_advanced_purchase"
-            android:title="Unlock Advanced Options Ad-Free"
-            android:summary="Support me and unlock all advanced options without advertisements for life">
-
-        </PreferenceScreen>
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_adsEnabled"
             android:title="Enable Advertisements"
             android:summary="Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) "/>
+        <PreferenceScreen
+            android:key="pref_advanced_purchase"
+            android:title="Unlock Advanced Options Ad-Free"
+            android:summary="Support me and unlock all advanced options without advertisements for life">
+        </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_customNotifications_category"
             android:title="Custom Notifications"

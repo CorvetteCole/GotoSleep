@@ -1,19 +1,21 @@
 package com.corvettecole.gotosleep;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.takisoft.preferencex.PreferenceCategory;
 import com.takisoft.preferencex.PreferenceFragmentCompat;
 
+import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroupAdapter;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.RecyclerView;
 
-abstract class BasePreferenceFragmentCompat extends PreferenceFragmentCompat {
+public abstract class BasePreferenceFragmentCompat extends PreferenceFragmentCompat {
     @Override
     protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
         return new PreferenceGroupAdapter(preferenceScreen) {

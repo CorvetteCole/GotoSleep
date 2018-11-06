@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 
 
-class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
+public class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
 
     final static String NOTIF_DELAY_KEY = "pref_notificationDelay";
     final static String NOTIF_AMOUNT_KEY = "pref_numNotifications";
@@ -56,7 +56,7 @@ class SettingsFragment extends BasePreferenceFragmentCompat implements BillingPr
 
             if (advancedOptionsPurchased) {
                 getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
-                getPreferenceScreen().findPreference("pref_adsEnabled").setSummary("Ads are disabled, thank you for supporting me!");
+                getPreferenceScreen().findPreference("pref_adsEnabled").setSummary("Ads are disabled, thank you for your support.");
                 getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
                 getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
                 getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);

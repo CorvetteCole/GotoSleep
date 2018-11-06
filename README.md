@@ -7,15 +7,13 @@ First Release Feature Locked:
 
 -Refactor settingsFragment code (things are called way more often than they need to be).
 
+-Refactor variables regarding request codes for alarms and notifications. Notification request codes are particularly important since they let you dismiss and interact with notifications in different classes.
+
 -Investigate code to detect when a purchase has been refunded and disable the in-app purchase option.
 
--Add smart "I'm going to sleep" button where edit bedtime button appears that will appear 1 hour before your bedtime. When clicked it will enable do not disturb and reset next notification to tomorrow.
+-Add smart "I'm going to sleep" button where edit bedtime button appears that will appear 1 hour before your bedtime. When clicked it will enable do not disturb
 
 -Add separate moon icon that is the right size for the notifications
-
--Add automatic do not disturb. After the last notification or user clicking the im going to sleep button DnD will be enabled.
-
--Add notification button. If you click the "I'm going to sleep" button or whatever it will be called on the notification it will stop notifications, enable do not disturb mode, set next notification to tomorrow, and maybe turn off the device screen.
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
 

@@ -7,9 +7,7 @@
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
 
--Add in-app purchase to unlock premium category permanently
-
--Add admob in-app purchases BE CAREFUL NOT TO REVEAL PRIVATE KEY INFO IN GITHUB REPO
+-Add admob advertisements BE CAREFUL NOT TO REVEAL PRIVATE KEY INFO IN GITHUB REPO
 
 -Add credits for app icon, intro icons, open source libraries, etc
 

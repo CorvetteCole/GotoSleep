@@ -62,11 +62,7 @@
     <PreferenceCategory
         android:title="Advanced Options"
         android:key="pref_advanced_options">
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="pref_adsEnabled"
-            android:title="Enable Advertisements"
-            android:summary="Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) "/>
+
         <PreferenceScreen
             android:key="pref_advanced_purchase"
             android:title="Unlock Advanced Options Ad-Free"
@@ -113,6 +109,11 @@
             android:key="pref_smartNotifications"
             android:title="Persistent Notifications"
             android:summary="Send notifications based on usage patterns (note, requires usage permission)"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_adsEnabled"
+            android:title="Enable Advertisements"
+            android:summary="Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) "/>
 
 
 

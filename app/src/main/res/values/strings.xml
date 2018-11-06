@@ -12,9 +12,10 @@
     <string name="channel_description">Bedtime notifications remind you around your bedtime to go to sleep.</string>
 
 
-    <string name="notification1">Time to sleep.</string>
+    <string name="notification1">Time to sleep</string>
     <string name="notification2">Why are you still awake?</string>
     <string name="notification3">Are you seriously still on your phone?</string>
-    <string name="notification4">You should be sleeping.</string>
-    <string name="notification5">You\'re gonna regret this.</string>
+    <string name="notification4">You should be sleeping</string>
+    <string name="notification5">You\'re gonna regret this</string>
+    <string name="sleep_message">why aren\'t you sleeping?</string>
 </resources>

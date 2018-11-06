@@ -31,13 +31,13 @@ import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY
 
 public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
-    final int reqCode = 8;
+    private final int reqCode = 8;
     private Calendar bedtime;
     private int numNotifications;
     private int notificationDelay;
     private boolean adsEnabled;
     private boolean advancedOptionsPurchased;
-    final String TAG = "bedtimeNotifReceiver";
+    private final String TAG = "bedtimeNotifReceiver";
     private int currentNotification;
     static final int ONE_DAY_MILLIS = 86400000;
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
@@ -85,7 +85,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    public void showNotification(Context context, String title, String content) {
+    private void showNotification(Context context, String title, String content) {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, reqCode, intent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, BEDTIME_CHANNEL_ID)
@@ -103,7 +103,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
     }
 
-    public String[] getNotificationContent() {
+    private String[] getNotificationContent() {
         Calendar current = Calendar.getInstance();
         current.setTimeInMillis(System.currentTimeMillis());
 
@@ -152,7 +152,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             }
     }
 
-    public void setNextNotification(Context context, int REQUEST_CODE_BEDTIME) {
+    private void setNextNotification(Context context, int REQUEST_CODE_BEDTIME) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + notificationDelay * 60000);
         Log.d(TAG, "Setting next notification in " + notificationDelay + " minutes");
@@ -169,7 +169,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    public void setNextDayNotification(Context context, int REQUEST_CODE_BEDTIME){
+    private void setNextDayNotification(Context context, int REQUEST_CODE_BEDTIME){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
         Log.d(TAG, "Setting notification for tomorrow");

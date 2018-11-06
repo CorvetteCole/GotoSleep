@@ -13,10 +13,9 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceScreen;
 
 
-public class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
+class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
 
     final static String NOTIF_DELAY_KEY = "pref_notificationDelay";
     final static String NOTIF_AMOUNT_KEY = "pref_numNotifications";
@@ -57,9 +56,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             if (advancedOptionsPurchased) {
                 getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
+                getPreferenceScreen().findPreference("pref_adsEnabled").setSummary("Ads are disabled, thank you for supporting me!");
                 getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
-                sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
-                customNotificationsPref.setEnabled(true);
+                getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
+                getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
                 getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
                 getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
             } else {
@@ -213,6 +213,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             advancedOptionsPurchased = true;
             getPreferenceManager().getSharedPreferences().edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
             getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
+            getPreferenceScreen().findPreference("pref_adsEnabled").setSummary("Ads are disabled, thank you for supporting me!");
             getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
             getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
             getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);

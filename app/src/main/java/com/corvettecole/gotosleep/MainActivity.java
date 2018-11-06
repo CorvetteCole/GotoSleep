@@ -30,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
@@ -44,7 +45,7 @@ import static java.lang.Math.abs;
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
     private static final int REQUEST_CODE_BEDTIME = 1;
-    static String BEDTIME_CHANNEL_ID = "bedtimeNotifications";
+    static final String BEDTIME_CHANNEL_ID = "bedtimeNotifications";
     private static final int BACK_INTERVAL = 2000;
     private long backPressed;
     private Button settingsButton;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private Calendar bedtimeCal;
     private int[] bedtime;
 
-    BroadcastReceiver _broadcastReceiver;
+    private BroadcastReceiver _broadcastReceiver;
     private TextView hours;
     private TextView minutes;
     private TextView sleepMessage;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         _broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context ctx, Intent intent) {
-                if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
+                if (Objects.requireNonNull(intent.getAction()).compareTo(Intent.ACTION_TIME_TICK) == 0) {
                     updateCountdown();
                 }
             }
@@ -278,7 +279,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             Date endDate;
             Date startDate;
             boolean present = false;
-            Calendar usedBedtime;
 
 
 
@@ -306,11 +306,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     Log.e("UpdateCountdown", e + "");
                 }
             }
-            int day = (int) (difference / (1000*60*60*24));
-            int hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
-            Log.d("updateCountdown", (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60) +" min");
-            int min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
-            Log.i("updateCountdown","Days: " + day + " Hours: "+hour+", Mins: "+min);
+            int day = (int)(difference / (1000*60*60*24));
+            int hour = (int)((difference - (1000*60*60*24*day)) / (1000*60*60));
+            int min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
+            Log.i("updateCountdown","Days: " + day + " Hours: "+ hour+", Mins: "+ min);
 
             int currentMin = current.get(Calendar.MINUTE);
             int bedtimeMin = bedtimeCal.get(Calendar.MINUTE);
@@ -319,9 +318,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             if (hour >= bedtimePastTrigger){
                 difference = (difference - 86400000)*-1;
                 present = true;
-                day = (int) (difference / (1000*60*60*24));
-                hour = (int) ((difference - (1000*60*60*24*day)) / (1000*60*60));
-                min = (int) (difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (1000*60);
+                day = (int)(difference / (1000*60*60*24));
+                hour = (int)((difference - (1000*60*60*24*day)) / (1000*60*60));
+                min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
                 Log.i("updateCountdown","Days: " + day + " Hours: "+ hour + ", Mins: " + min);
 
 

@@ -1,7 +1,6 @@
 package com.corvettecole.gotosleep;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -14,7 +13,7 @@ import androidx.preference.PreferenceScreen;
 import androidx.preference.PreferenceViewHolder;
 import androidx.recyclerview.widget.RecyclerView;
 
-public abstract class BasePreferenceFragmentCompat extends PreferenceFragmentCompat {
+abstract class BasePreferenceFragmentCompat extends PreferenceFragmentCompat {
     @Override
     protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
         return new PreferenceGroupAdapter(preferenceScreen) {

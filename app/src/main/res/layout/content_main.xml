@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/colorPrimary"
 
     android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -29,7 +28,7 @@
 
         android:shadowDy="4"
         android:shadowRadius="1"
-        android:text="why aren't you sleeping?"
+        android:text="@string/sleep_message"
         android:textColor="@color/accentPrimary"
 
 

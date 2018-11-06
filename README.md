@@ -5,7 +5,7 @@ First Release Feature Locked:
 
 -Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours.
 
--Investigate bug where turning off ads on 5.0 and possibly above does not disable the persistent notifications option.
+-Refactor settingsFragment code (things are called way more often than they need to be).
 
 -Investigate code to detect when a purchase has been refunded and disable the in-app purchase option.
 

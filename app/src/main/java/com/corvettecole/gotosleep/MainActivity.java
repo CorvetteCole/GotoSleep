@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 hours.setText(hour + " hours");
             }
 
-            if (present && editBedtimeButton.getVisibility() == View.GONE && hour <= 1){
+            if (present && editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 90){
                 enableSleepmodeButton.setVisibility(View.VISIBLE);
             } else {
                 enableSleepmodeButton.setVisibility(View.GONE);

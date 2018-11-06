@@ -11,8 +11,6 @@ First Release Feature Locked:
 
 -Investigate code to detect when a purchase has been refunded and disable the in-app purchase option.
 
--Add smart "I'm going to sleep" button where edit bedtime button appears that will appear 1 hour before your bedtime. When clicked it will enable do not disturb
-
 -Add separate moon icon that is the right size for the notifications
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)

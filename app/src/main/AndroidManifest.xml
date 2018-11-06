@@ -4,6 +4,7 @@
           package="com.corvettecole.gotosleep">
 
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:allowBackup="true"
@@ -32,6 +33,8 @@
         <receiver
             android:name=".BedtimeNotificationReceiver"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <receiver android:name=".AutoDoNotDisturbReceiver"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
     </manifest>

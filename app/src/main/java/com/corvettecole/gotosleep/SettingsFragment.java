@@ -1,5 +1,7 @@
 package com.corvettecole.gotosleep;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -47,21 +49,22 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             bp = new BillingProcessor(getContext(), getResources().getString(R.string.license_key), this);
             bp.initialize();
 
-
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
             final Preference customNotificationsPref = this.findPreference(CUSTOM_NOTIFICATIONS_KEY);
+            final Preference autoDnDPref = this.findPreference(DND_KEY);
 
             advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
             adsEnabled = sharedPreferences.getBoolean(ADS_ENABLED_KEY, false);
 
             if (advancedOptionsPurchased) {
-                getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
-                getPreferenceScreen().findPreference("pref_adsEnabled").setSummary("Ads are disabled, thank you for your support.");
-                getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
-                getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
-                getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
-                getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
-                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
+               adsEnabledPref.setEnabled(false);
+               adsEnabledPref.setSummary("Ads are disabled, thank you for your support.");
+
+               getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
+               getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
+               getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
+               getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
+               getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
             } else {
                 final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
                 advancedPurchasePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -112,6 +115,22 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
                 this.findPreference(DND_KEY).setSummary("Android 6.0 (Marshmallow) and up required");
+                //# TODO add else if to check if user device is an LG G4. If so, disable option with reason
+            } else {
+                autoDnDPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                        NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+                        // Check if the notification policy access has been granted for the app.
+                        if ((boolean) newValue && mNotificationManager != null && !mNotificationManager.isNotificationPolicyAccessGranted()) {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                            startActivity(intent);
+                        }
+                        return true;
+                    }
+                });
             }
 
             final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);

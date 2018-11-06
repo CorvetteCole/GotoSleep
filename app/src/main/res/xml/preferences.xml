@@ -15,10 +15,10 @@
             app:pref_pickerTime="19:35"
             app:pref_summaryHasTime="Bedtime is %s" />
         <SwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="pref_autoDoNotDisturb"
             android:title="Automatic Do Not Disturb"
-            android:summary="Enable Do Not Disturb at your bedtime (not including alarms)"
+            android:summary="Enable Do Not Disturb 2 minutes after your last bedtime reminder or when you press the Enable Sleep Mode button (does not silence alarms)"
             />
         <SwitchPreference
             android:defaultValue="false"

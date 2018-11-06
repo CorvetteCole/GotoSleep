@@ -25,21 +25,25 @@ import static com.corvettecole.gotosleep.MainActivity.notifications;
 import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
 import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 
 public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
-    private final int reqCode = 8;
+    static final long ONE_MINUTE_MILLIS = 60000;
+    static int DnD_delay = 2; //in minutes
+    static final int notificationReqCode = 8;
     private Calendar bedtime;
     private int numNotifications;
     private int notificationDelay;
     private boolean adsEnabled;
     private boolean advancedOptionsPurchased;
+    private boolean autoDND;
     private final String TAG = "bedtimeNotifReceiver";
     private int currentNotification;
-    static final int ONE_DAY_MILLIS = 86400000;
+    static final long ONE_DAY_MILLIS = 86400000;
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
     @Override
@@ -51,6 +55,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
         adsEnabled = settings.getBoolean(ADS_ENABLED_KEY, false);
         advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
+        autoDND = settings.getBoolean(DND_KEY, false);
 
         currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
 
@@ -82,12 +87,35 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         } else if (currentNotification == numNotifications){
             settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
             setNextDayNotification(context, 1);
+            enableDoNotDisturb(context, 7);
+        }
+    }
+
+    private void enableDoNotDisturb(Context context, int REQUEST_CODE_DND){
+        if (autoDND) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis() + (ONE_MINUTE_MILLIS * DnD_delay));
+            Log.d(TAG, "Setting auto DND for 2 minutes from now: " + calendar.getTime());
+
+            Intent intent1 = new Intent(context, AutoDoNotDisturbReceiver.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                    REQUEST_CODE_DND, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            } else {
+                am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            }
         }
     }
 
     private void showNotification(Context context, String title, String content) {
         Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, reqCode, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationReqCode, intent, 0);
+        Intent snoozeIntent = new Intent(context, AutoDoNotDisturbReceiver.class);
+        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 11, snoozeIntent, 0);
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, BEDTIME_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_moon)
                 .setContentTitle(title)
@@ -96,10 +124,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColorized(true)
-                .setColor(context.getResources().getColor(R.color.moonPrimary));
+                .setColor(context.getResources().getColor(R.color.moonPrimary))
+                .addAction(R.drawable.ic_moon, "Enable Sleep Mode", snoozePendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(reqCode, mBuilder.build());
+        notificationManager.notify(notificationReqCode, mBuilder.build());
 
     }
 

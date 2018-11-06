@@ -119,6 +119,27 @@
         android:visibility="gone"/>
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/enableSleepModeButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/product_sans_regular"
+
+        android:text="@string/enable_sleep_mode"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/accentPrimaryDark"
+        android:textSize="20sp"
+        app:cornerRadius="15dp"
+        app:icon="@drawable/ic_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sleepMessage"
+        app:strokeColor="@color/colorPrimaryLight"
+        app:strokeWidth="1dp"
+        android:visibility="gone"/>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"

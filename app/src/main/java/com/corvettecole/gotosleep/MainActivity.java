@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private TextView hours;
     private TextView minutes;
     private TextView sleepMessage;
+    private Button enableSleepmodeButton;
     private View contentMain;
 
     private boolean isFirstStart;
@@ -172,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             minutes = findViewById(R.id.minutes);
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
+            enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
 
             //runs when the intro slides launch mainActivity again
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
@@ -196,6 +198,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 @Override
                 public void onClick(View view) {
                     startActivity(settings);
+                }
+            });
+
+            enableSleepmodeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent snoozeIntent = new Intent(getApplicationContext(), AutoDoNotDisturbReceiver.class);
+                    //PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 11, snoozeIntent, 0);
+                    startActivity(snoozeIntent);
                 }
             });
 
@@ -324,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 Log.i("updateCountdown","Days: " + day + " Hours: "+ hour + ", Mins: " + min);
 
 
+
                 //time debugging and jank code which probably isn't needed but I don't want to delete
                 //in case I have to debug it again.
                 if (min + currentMin < 60){
@@ -375,8 +387,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             if (hour == 1){
                 hours.setText(hour + " hour");
+
             } else {
                 hours.setText(hour + " hours");
+            }
+
+            if (present && editBedtimeButton.getVisibility() == View.GONE && hour <= 1){
+                enableSleepmodeButton.setVisibility(View.VISIBLE);
+            } else {
+                enableSleepmodeButton.setVisibility(View.GONE);
             }
 
             if (present) {

@@ -95,9 +95,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //if enable ads is switched off, set premium options to false;
-                    adsEnabled = (boolean)newValue;
-                    enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
-                    if ((!(boolean) newValue) && (!enableAdvancedOptions)) {
+                    if ((!(boolean) newValue) && (!advancedOptionsPurchased)) {
                         sharedPreferences.edit().putBoolean("pref_smartNotifications", false).apply();
                         customNotificationsPref.setEnabled(false);
                     } else {

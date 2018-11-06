@@ -205,8 +205,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 @Override
                 public void onClick(View v) {
                     Intent snoozeIntent = new Intent(getApplicationContext(), AutoDoNotDisturbReceiver.class);
-                    //PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 11, snoozeIntent, 0);
-                    startActivity(snoozeIntent);
+                    PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 11, snoozeIntent, 0);
+                    try {
+                        snoozePendingIntent.send();
+                    } catch (PendingIntent.CanceledException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 

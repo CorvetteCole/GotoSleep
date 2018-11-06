@@ -87,6 +87,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             Preference bedtime = this.findPreference(BEDTIME_KEY);
             bedtime.setSummary("Bedtime is " + sharedPreferences.getString(BEDTIME_KEY, "19:35"));
 
+            getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(enableAdvancedOptions);
             customNotificationsPref.setEnabled(enableAdvancedOptions);
 
 
@@ -97,8 +98,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                     //if enable ads is switched off, set premium options to false;
                     if ((!(boolean) newValue) && (!advancedOptionsPurchased)) {
                         sharedPreferences.edit().putBoolean("pref_smartNotifications", false).apply();
+                        getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(false);
                         customNotificationsPref.setEnabled(false);
                     } else {
+                        getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
                         customNotificationsPref.setEnabled(true);
                     }
 

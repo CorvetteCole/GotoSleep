@@ -67,7 +67,6 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 advancedPurchasePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        Log.d("Settings", "purchase was clicked!!!");
                         bp.purchase(getActivity(), "go_to_sleep_advanced");
 
 

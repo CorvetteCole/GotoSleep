@@ -412,10 +412,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
         advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
-        if (!advancedOptionsPurchased){
-            advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
-            settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
-        }
+
+        advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
+        settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
 
         setNotifications();
     }

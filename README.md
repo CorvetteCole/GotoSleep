@@ -23,6 +23,8 @@ First Release Feature Locked:
 
 -Add prompt to rate the app after it has been opened like 15 times or something
 
+-Make edit bedtime button disappear after returning from settings for the first time
+
 
 
 Next Major Version Features:

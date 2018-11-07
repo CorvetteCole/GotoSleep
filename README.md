@@ -9,7 +9,7 @@ First Release Feature Locked:
 
 -Refactor variables regarding request codes for alarms and notifications. Notification request codes are particularly important since they let you dismiss and interact with notifications in different classes.
 
--Investigate code to detect when a purchase has been refunded and disable the in-app purchase option.
+-Investigate code to detect when a purchase has been refunded and disable the advanced options.
 
 -Add separate moon icon that is the right size for the notifications
 

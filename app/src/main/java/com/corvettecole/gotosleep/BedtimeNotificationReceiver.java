@@ -115,7 +115,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationReqCode, intent, 0);
         Intent snoozeIntent = new Intent(context, AutoDoNotDisturbReceiver.class);
         PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 11, snoozeIntent, 0);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // Check if the notification policy access has been granted for the app.
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, BEDTIME_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_moon)
                 .setContentTitle(title)
@@ -124,10 +126,13 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setColorized(true)
-                .setColor(context.getResources().getColor(R.color.moonPrimary))
-                .addAction(R.drawable.ic_moon, "Enable Sleep Mode", snoozePendingIntent);
+                .setColor(context.getResources().getColor(R.color.moonPrimary));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (notificationManager.isNotificationPolicyAccessGranted()){
+            mBuilder.addAction(R.drawable.ic_moon, "I'm Going to Sleep", snoozePendingIntent);
+            }
+        }
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(notificationReqCode, mBuilder.build());
 
     }

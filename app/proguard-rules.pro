@@ -22,3 +22,7 @@
 
 
 -keep class com.android.vending.billing.**
+
+-keep public class com.google.android.gms.ads.**{
+   public *;
+}

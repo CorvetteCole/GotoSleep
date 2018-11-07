@@ -17,11 +17,13 @@ First Release Feature Locked:
 
 -Add admob advertisements BE CAREFUL NOT TO REVEAL PRIVATE KEY INFO IN GITHUB REPO
 
--Add credits for app icon, intro icons, open source libraries, etc
+-Add credits for app icon, intro icons, open source libraries, etc. Perhaps replace the Feedback button with Help or Info or About and have that open to a new activity?. Maybe add a 3rd button called About
 
 -Add app shortcut for go to sleep early feature
 
 -Add separate content_main layout for devices with a low DPI so that the text background looks right
+
+-Add prompt to rate the app after it has been opened like 15 times or something
 
 
 

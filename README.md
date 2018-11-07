@@ -15,8 +15,6 @@ First Release Feature Locked:
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
 
--Add admob advertisements BE CAREFUL NOT TO REVEAL PRIVATE KEY INFO IN GITHUB REPO
-
 -Add credits for app icon, intro icons, open source libraries, etc. Perhaps replace the Feedback button with Help or Info or About and have that open to a new activity?. Maybe add a 3rd button called About
 
 -Add app shortcut for go to sleep early feature

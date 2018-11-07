@@ -24,10 +24,10 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/product_sans_bold"
         android:shadowColor="@color/accentPrimaryDark"
-        android:shadowDx="4"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2"
 
-        android:shadowDy="4"
-        android:shadowRadius="1"
         android:text="@string/sleep_message"
         android:textColor="@color/accentPrimary"
 
@@ -53,9 +53,6 @@
         android:fontFamily="@font/product_sans_bold"
         android:shadowColor="@color/accentPrimaryDark"
         android:shadowDx="4"
-
-
-
         android:shadowDy="4"
         android:shadowRadius="2"
         android:text="@string/default_hours_string"
@@ -69,6 +66,7 @@
         app:layout_constraintBottom_toTopOf="@+id/minutes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:maxLines="1"
         />
 
     <TextView
@@ -82,9 +80,9 @@
         android:fontFamily="@font/product_sans_bold"
         android:maxLines="1"
         android:shadowColor="@color/accentPrimaryDark"
-        android:shadowDx="4"
-        android:shadowDy="4"
-        android:shadowRadius="1"
+        android:shadowDx="3"
+        android:shadowDy="3"
+        android:shadowRadius="2"
         android:text="@string/default_minutes_string"
         android:textColor="@color/accentPrimary"
         android:textSize="30sp"

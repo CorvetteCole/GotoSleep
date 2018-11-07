@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private boolean advancedOptionsPurchased;
     private BillingProcessor bp;
 
+    private NotificationManager notificationManager;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -119,6 +121,42 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     @Override
+    public void onProductPurchased(String productId, TransactionDetails details) {
+
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, Throwable error) {
+
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (bp != null) {
+            bp.release();
+        }
+        super.onDestroy();
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
@@ -126,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
         bp.initialize();
         bp.loadOwnedPurchasesFromGoogle();
+        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         createNotificationChannel();
         loadPreferences();
@@ -211,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     } catch (PendingIntent.CanceledException e) {
                         e.printStackTrace();
                     }
+                    enableSleepmodeButton.setVisibility(View.GONE);
                 }
             });
 
@@ -285,143 +325,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    private void updateCountdown() {
-        if (!isFirstStart){
-
-            Calendar current = Calendar.getInstance();
-            current.setTimeInMillis(System.currentTimeMillis());
-
-            Date endDate;
-            Date startDate;
-            boolean present = false;
-
-
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-
-            Log.d("updateCountdown", current.get(Calendar.SECOND) + "");
-            current.set(Calendar.SECOND, 0);
-
-            startDate = bedtimeCal.getTime();
-            endDate = current.getTime();
-
-            Log.d("updateCountdown", bedtimeCal.getTime() + " bedtime");
-
-            Log.d("updateCountdown", current.getTime() + " current time");
-
-
-            long difference = endDate.getTime() - startDate.getTime();
-            if (difference < 0)
-            {
-                try {
-                    Date dateMax = simpleDateFormat.parse("24:00");
-                    Date dateMin = simpleDateFormat.parse("00:00");
-                    difference = (dateMax.getTime() - startDate.getTime()) + (endDate.getTime() - dateMin.getTime());
-                } catch (ParseException e){
-                    Log.e("UpdateCountdown", e + "");
-                }
-            }
-            int day = (int)(difference / (1000*60*60*24));
-            int hour = (int)((difference - (1000*60*60*24*day)) / (1000*60*60));
-            int min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
-            Log.i("updateCountdown","Days: " + day + " Hours: "+ hour+", Mins: "+ min);
-
-            int currentMin = current.get(Calendar.MINUTE);
-            int bedtimeMin = bedtimeCal.get(Calendar.MINUTE);
-
-            boolean isCountdownCorrect;
-            if (hour >= bedtimePastTrigger){
-                difference = (difference - 86400000)*-1;
-                present = true;
-                day = (int)(difference / (1000*60*60*24));
-                hour = (int)((difference - (1000*60*60*24*day)) / (1000*60*60));
-                min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
-                Log.i("updateCountdown","Days: " + day + " Hours: "+ hour + ", Mins: " + min);
-
-
-
-                //time debugging and jank code which probably isn't needed but I don't want to delete
-                //in case I have to debug it again.
-                if (min + currentMin < 60){
-                    isCountdownCorrect = (min + currentMin == bedtimeMin);
-                } else if (min + currentMin == 60){
-                    isCountdownCorrect = (min + currentMin == 60);
-                } else {
-                    isCountdownCorrect = (min + currentMin - 60 == bedtimeMin);
-                }
-                if (isCountdownCorrect){
-                    Log.d("updateCountdown", "countdown min(" + min + ") + current min(" + currentMin + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
-                } else {
-                    Log.e("updateCountdown", "countdown min(" + min + ") + current min(" + currentMin + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
-                }
-
-            } else {
-                if (currentMin - min >= 0){
-                    isCountdownCorrect = (currentMin - min == bedtimeMin);
-                    Log.d("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
-                } else {
-                    isCountdownCorrect = (currentMin - min + 60 == bedtimeMin);
-                    Log.d("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
-                }
-                if (isCountdownCorrect) {
-                    Log.d("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
-                } else {
-                    Log.e("updateCountdown", "current min(" + currentMin + ") - countdown min(" + min + ") = bedtime min(" + bedtimeMin + ")? " + isCountdownCorrect);
-                }
-            }
-
-            /*
-            //Update, jank code may not be needed? It seems to be accurate
-
-            else {  //this else statement is part of jank time fix
-
-                //weird bug where it is always one minute behind almost exactly. Not sure what I did
-                //wrong but this is a temp fix
-
-            Update on weird time bug. It is only a minute behind when it is finding how far the
-            current time is PAST the bedtime. Otherwise it seems to be spot on. WTF????
-
-            Going to jank together some more fix
-                min = min + 1;
-                if (min == 60) {
-                    min = 0;
-                    hour = hour + 1;
-                }
-            }*/
-
-            if (hour == 1){
-                hours.setText(hour + " hour");
-
-            } else {
-                hours.setText(hour + " hours");
-            }
-
-            if (present && editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 90){
-                enableSleepmodeButton.setVisibility(View.VISIBLE);
-            } else {
-                enableSleepmodeButton.setVisibility(View.GONE);
-            }
-
-            if (present) {
-                if (min == 1){
-                    minutes.setText(min + " minute until bedtime");
-                } else {
-                    minutes.setText(min + " minutes until bedtime");
-                }
-                sleepMessage.setVisibility(View.INVISIBLE);
-            } else {
-                if (min == 1){
-                    minutes.setText(min + " minute past bedtime");
-                } else {
-                    minutes.setText(min + " minutes past bedtime");
-                }
-                if (editBedtimeButton.getVisibility() != View.VISIBLE) {
-                    sleepMessage.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-    }
-
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");
@@ -477,40 +380,92 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
+    private void updateCountdown() {
+        if (!isFirstStart){
 
-    }
+            Calendar current = Calendar.getInstance();
+            current.setTimeInMillis(System.currentTimeMillis());
 
-    @Override
-    public void onPurchaseHistoryRestored() {
+            Date endDate;
+            Date startDate;
+            boolean present = false;
 
-    }
 
-    @Override
-    public void onBillingError(int errorCode, Throwable error) {
 
-    }
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-    @Override
-    public void onBillingInitialized() {
+            Log.d("updateCountdown", current.get(Calendar.SECOND) + "");
+            current.set(Calendar.SECOND, 0);
 
-    }
+            startDate = bedtimeCal.getTime();
+            endDate = current.getTime();
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("updateCountdown", bedtimeCal.getTime() + " bedtime");
+
+            Log.d("updateCountdown", current.getTime() + " current time");
+
+
+            long difference = endDate.getTime() - startDate.getTime();
+            if (difference < 0)
+            {
+                try {
+                    Date dateMax = simpleDateFormat.parse("24:00");
+                    Date dateMin = simpleDateFormat.parse("00:00");
+                    difference = (dateMax.getTime() - startDate.getTime()) + (endDate.getTime() - dateMin.getTime());
+                } catch (ParseException e){
+                    Log.e("UpdateCountdown", e + "");
+                }
+            }
+            int day = (int)(difference / (1000*60*60*24));
+            int hour = (int)((difference - (1000*60*60*24*day)) / (1000*60*60));
+            int min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
+            Log.i("updateCountdown","Days: " + day + " Hours: "+ hour+", Mins: "+ min);
+
+            int currentMin = current.get(Calendar.MINUTE);
+            int bedtimeMin = bedtimeCal.get(Calendar.MINUTE);
+
+            boolean isCountdownCorrect;
+            if (hour >= bedtimePastTrigger) {
+                difference = (difference - 86400000) * -1;
+                present = true;
+                day = (int) (difference / (1000 * 60 * 60 * 24));
+                hour = (int) ((difference - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
+                min = Math.round((difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (float) (1000 * 60));
+                Log.i("updateCountdown", "Days: " + day + " Hours: " + hour + ", Mins: " + min);
+            }
+
+            if (hour == 1){
+                hours.setText(hour + " hour");
+
+            } else {
+                hours.setText(hour + " hours");
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (present && editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 90 && notificationManager.isNotificationPolicyAccessGranted() && notificationManager.getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_ALARMS){
+                    enableSleepmodeButton.setVisibility(View.VISIBLE);
+                } else if (enableSleepmodeButton.getVisibility() != View.GONE) {
+                    enableSleepmodeButton.setVisibility(View.GONE);
+                }
+            }
+
+            if (present) {
+                if (min == 1){
+                    minutes.setText(min + " minute until bedtime");
+                } else {
+                    minutes.setText(min + " minutes until bedtime");
+                }
+                sleepMessage.setVisibility(View.INVISIBLE);
+            } else {
+                if (min == 1){
+                    minutes.setText(min + " minute past bedtime");
+                } else {
+                    minutes.setText(min + " minutes past bedtime");
+                }
+                if (editBedtimeButton.getVisibility() != View.VISIBLE) {
+                    sleepMessage.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
-
-    @Override
-    public void onDestroy() {
-        if (bp != null) {
-            bp.release();
-        }
-        super.onDestroy();
-    }
-
-
 }

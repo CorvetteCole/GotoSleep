@@ -130,13 +130,14 @@
         android:textAllCaps="false"
         android:textColor="@color/accentPrimaryDark"
         android:textSize="20sp"
+        android:visibility="gone"
         app:cornerRadius="15dp"
+        app:icon="@drawable/ic_do_not_disturb_on_white_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sleepMessage"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"
-        android:visibility="gone"/>
+        app:strokeWidth="1dp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"

@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp.loadOwnedPurchasesFromGoogle();
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        MobileAds.initialize(this, getResources().getString(R.string.admob_key));
+        MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
 
         createNotificationChannel();
         loadPreferences();
@@ -397,6 +397,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if (adsEnabled) {
             adView.setVisibility(View.VISIBLE);
             AdRequest adRequest = new AdRequest.Builder().build();
+
             adView.loadAd(adRequest);
         } else {
 

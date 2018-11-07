@@ -16,7 +16,7 @@
         tools:node="replace">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_key"/>
+            android:value="@string/admob_test_key"/>
         <meta-data android:name="com.google.android.gms.version"
                    android:value="@integer/google_play_services_version" />
         <activity android:name="com.google.android.gms.ads.AdActivity"

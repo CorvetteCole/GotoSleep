@@ -21,6 +21,8 @@ First Release Feature Locked:
 
 -Add app shortcut for go to sleep early feature
 
+-Add separate content_main layout for devices with a low DPI so that the text background looks right
+
 
 
 Next Major Version Features:

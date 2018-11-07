@@ -25,6 +25,9 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +37,7 @@ import java.util.Objects;
 
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
+import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private boolean isFirstStart;
     private boolean isSecondStart;
+    private boolean adsEnabled;
     static int bedtimePastTrigger = 8;
     static boolean buttonHide = false;
     private final String TAG = "MainActivity";
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private BillingProcessor bp;
 
     private NotificationManager notificationManager;
+    private AdView adView;
 
     @Override
     public void onStart() {
@@ -118,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         super.onResume();
         loadPreferences();
         updateCountdown();
+        enableDisableAds();
     }
 
     @Override
@@ -166,6 +173,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp.loadOwnedPurchasesFromGoogle();
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        MobileAds.initialize(this, getResources().getString(R.string.admob_key));
+
         createNotificationChannel();
         loadPreferences();
 
@@ -205,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             setContentView(R.layout.activity_main);
+            adView = findViewById(R.id.adView);
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
             feedBackButton = findViewById(R.id.feedbackButton);
@@ -213,6 +223,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
             enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
+
+            enableDisableAds();
 
             //runs when the intro slides launch mainActivity again
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
@@ -337,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
         advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
+        adsEnabled = settings.getBoolean(ADS_ENABLED_KEY, false);
 
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
@@ -377,6 +390,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void enableDisableAds(){
+        if (adsEnabled) {
+            adView.setVisibility(View.VISIBLE);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        } else {
+
+            adView.setVisibility(View.GONE);
         }
     }
 

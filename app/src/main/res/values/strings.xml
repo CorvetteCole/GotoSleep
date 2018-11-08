@@ -19,4 +19,7 @@
     <string name="notification5">You\'re gonna regret this</string>
     <string name="sleep_message">why aren\'t you sleeping?</string>
     <string name="enable_sleep_mode">Go to Sleep Early</string>
+
+    <string name="shortcut_short">Sleep Mode</string>
+    <string name="shortcut_long">I\'m going to sleep</string>
 </resources>

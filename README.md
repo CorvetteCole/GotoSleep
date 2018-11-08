@@ -1,7 +1,7 @@
 # GotoSleep
 
 # TODO
-##First Release Feature Locked TODO:
+## First Release Feature Locked TODO:
 
 -Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours.
 
@@ -27,7 +27,7 @@
 
 
 
-##Next Major Version Features (not confirmed):
+## Next Major Version Features (not confirmed):
 
 -AMOLED black theme option (maybe in premium category? idk)
 

@@ -8,7 +8,7 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.notificationReqCode;
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NOTIFICATION_REQUEST_CODE;
 
 public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
     @Override
@@ -19,6 +19,6 @@ public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
             mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS);
             Toast.makeText(context, "Enabled DnD... Go to sleep!", Toast.LENGTH_SHORT).show();
         }
-        mNotificationManager.cancel(notificationReqCode);
+        mNotificationManager.cancel(NOTIFICATION_REQUEST_CODE);
     }
 }

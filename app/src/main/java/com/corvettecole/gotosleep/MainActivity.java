@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
 import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
@@ -48,7 +49,6 @@ import static java.lang.Math.abs;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
-    private static final int REQUEST_CODE_BEDTIME = 1;
     static final String BEDTIME_CHANNEL_ID = "bedtimeNotifications";
     private static final int BACK_INTERVAL = 2000;
     private long backPressed;
@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private NotificationManager notificationManager;
     private AdView adView;
+
+    private boolean adsLoaded = false;
 
     @Override
     public void onStart() {
@@ -124,7 +126,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         super.onResume();
         loadPreferences();
         updateCountdown();
-        enableDisableAds();
+        if (!adsLoaded) {
+            enableDisableAds();
+        }
     }
 
     @Override
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp.loadOwnedPurchasesFromGoogle();
         notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
+
 
         createNotificationChannel();
         loadPreferences();
@@ -211,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //this is needed to stop weird back button stuff
             finish();
         } else {
+            MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             setContentView(R.layout.activity_main);
@@ -325,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
-                    REQUEST_CODE_BEDTIME, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                    FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);

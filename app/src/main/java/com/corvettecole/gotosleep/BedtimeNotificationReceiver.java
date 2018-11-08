@@ -32,9 +32,16 @@ import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY
 
 public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
+    static final int FIRST_NOTIFICATION_ALARM_REQUEST_CODE = 1;
+    static final int NOTIFICATION_REQUEST_CODE = 2;
+    static final int DO_NOT_DISTURB_REQUEST_CODE = 3;
+    static final int DO_NOT_DISTURB_ALARM_REQUEST_CODE = 4;
+    static final int NEXT_NOTIFICATION_ALARM_REQUEST_CODE = 5;
+    static final int LAUNCH_APP_REQUEST_CODE = 6;
+
+
     static final long ONE_MINUTE_MILLIS = 60000;
     static int DnD_delay = 2; //in minutes
-    static final int notificationReqCode = 8;
     private Calendar bedtime;
     private int numNotifications;
     private int notificationDelay;
@@ -82,16 +89,16 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         showNotification(context, notificationContent[0], notificationContent[1]);
 
         if (currentNotification < numNotifications) {
-            setNextNotification(context, 12);
+            setNextNotification(context);
             settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
         } else if (currentNotification == numNotifications){
             settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-            setNextDayNotification(context, 1);
-            enableDoNotDisturb(context, 7);
+            setNextDayNotification(context);
+            enableDoNotDisturb(context);
         }
     }
 
-    private void enableDoNotDisturb(Context context, int REQUEST_CODE_DND){
+    private void enableDoNotDisturb(Context context){
         if (autoDND) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis() + (ONE_MINUTE_MILLIS * DnD_delay));
@@ -100,7 +107,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             Intent intent1 = new Intent(context, AutoDoNotDisturbReceiver.class);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    REQUEST_CODE_DND, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                    DO_NOT_DISTURB_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
@@ -112,9 +119,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
     private void showNotification(Context context, String title, String content) {
         Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationReqCode, intent, 0);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, LAUNCH_APP_REQUEST_CODE, intent, 0);
         Intent snoozeIntent = new Intent(context, AutoDoNotDisturbReceiver.class);
-        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, 11, snoozeIntent, 0);
+
+        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, DO_NOT_DISTURB_REQUEST_CODE, snoozeIntent, 0);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Check if the notification policy access has been granted for the app.
@@ -133,7 +142,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             }
         }
 
-        notificationManager.notify(notificationReqCode, mBuilder.build());
+        notificationManager.notify(NOTIFICATION_REQUEST_CODE, mBuilder.build());
 
     }
 
@@ -167,13 +176,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 Log.e(TAG, e + "");
             }
         }
-        int day = (int) (difference / (1000 * 60 * 60 * 24));
-        int hour = (int) ((difference - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
-        Log.d(TAG, (difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (1000 * 60) + " min");
-        int min = (int) (difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (1000 * 60);
-        Log.i(TAG, "Days: " + day + " Hours: " + hour + ", Mins: " + min);
-
-        int totalMin = (hour * 60) + min;
+        int min = Math.round(difference/60000); //divide time in milliseconds by 60 000 to get minutes
 
 
         Log.d(TAG, "currentNotification: " + currentNotification);
@@ -182,11 +185,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             if (currentNotification == 1) {
                 return new String[]{notifications[currentNotification - 1], "Time to head to bed."};
             } else {
-                return new String[]{notifications[currentNotification - 1], "It is " + totalMin + " minutes past your bedtime!"};
+                return new String[]{notifications[currentNotification - 1], "It is " + min + " minutes past your bedtime!"};
             }
     }
 
-    private void setNextNotification(Context context, int REQUEST_CODE_BEDTIME) {
+    private void setNextNotification(Context context) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + notificationDelay * 60000);
         Log.d(TAG, "Setting next notification in " + notificationDelay + " minutes");
@@ -194,7 +197,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                REQUEST_CODE_BEDTIME, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                NEXT_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
@@ -203,7 +206,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    private void setNextDayNotification(Context context, int REQUEST_CODE_BEDTIME){
+    private void setNextDayNotification(Context context){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
         Log.d(TAG, "Setting notification for tomorrow");
@@ -211,7 +214,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                REQUEST_CODE_BEDTIME, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+                FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

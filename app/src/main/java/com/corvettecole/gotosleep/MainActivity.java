@@ -451,10 +451,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             int min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
             Log.i("updateCountdown","Days: " + day + " Hours: "+ hour+", Mins: "+ min);
 
-            int currentMin = current.get(Calendar.MINUTE);
-            int bedtimeMin = bedtimeCal.get(Calendar.MINUTE);
-
-            boolean isCountdownCorrect;
             if (hour >= bedtimePastTrigger) {
                 difference = (difference - 86400000) * -1;
                 present = true;
@@ -463,6 +459,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 min = Math.round((difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (float) (1000 * 60));
                 Log.i("updateCountdown", "Days: " + day + " Hours: " + hour + ", Mins: " + min);
             }
+
+            if (min == 60){  //because minutes are being rounded for accuracy reasons, this is needed to correct for minor errors
+                min = 0;
+                hour++;
+            }
+
 
             if (hour == 1){
                 hours.setText(hour + " hour");

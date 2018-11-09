@@ -37,22 +37,15 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private boolean advancedOptionsPurchased;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
-    private boolean isAutoDoNotDisturbEnabled;
     private BillingProcessor bp;
     private NotificationManager mNotificationManager;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.preferences, rootKey);
+
         final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
         mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        isAutoDoNotDisturbEnabled = sharedPreferences.getBoolean(DND_KEY, false);
-        if (isAutoDoNotDisturbEnabled) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                sharedPreferences.edit().putBoolean(DND_KEY, !mNotificationManager.isNotificationPolicyAccessGranted()).apply();
-            }
-        }
-
-        setPreferencesFromResource(R.xml.preferences, rootKey);
 
 
         Log.d("PREFERENCES", rootKey + " ");

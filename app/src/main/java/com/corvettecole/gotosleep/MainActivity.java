@@ -42,6 +42,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private AdView adView;
 
     private boolean adsLoaded = false;
+    private boolean isAutoDoNotDisturbEnabled;
 
     @Override
     public void onStart() {
@@ -355,6 +357,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
         advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
         adsEnabled = settings.getBoolean(ADS_ENABLED_KEY, false);
+        isAutoDoNotDisturbEnabled = settings.getBoolean(DND_KEY, false);
+        if (isAutoDoNotDisturbEnabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                settings.edit().putBoolean(DND_KEY, !notificationManager.isNotificationPolicyAccessGranted()).apply();
+            }
+        }
 
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();

@@ -3,7 +3,7 @@
 # TODO
 ## First Release Feature Locked TODO:
 
--Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours
+~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE**
 
 -Refactor settingsFragment code (things are called way more often than they need to be)
 
@@ -17,13 +17,13 @@
 
 -Add credits for app icon, intro icons, open source libraries, etc. Perhaps replace the Feedback button with Help or Info or About and have that open to a new activity? Maybe add a 3rd button called About
 
--Add app shortcut for go to sleep early feature
-
 -Add separate content_main layout for devices with a low DPI so that the text background looks right
 
 -Add prompt to rate the app after it has been opened like 15 times or something
 
 -Make edit bedtime button disappear after returning from settings for the first time
+
+-Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
 
 -Investigate code to detect when a purchase has been refunded and disable the advanced options. **UPDATE:** still not sure how long it takes a revoked in-app purchase to be detected by the app code. Moving this to a lower priority
 

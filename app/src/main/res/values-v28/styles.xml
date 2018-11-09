@@ -42,7 +42,7 @@
         <item name="android:fontFamily">@font/product_sans_regular</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:colorBackground">@color/colorPrimary</item>
-        <item name="android:background">@color/colorPrimary</item>
+
     </style>
 
     <style name="about_About.wrapper" parent="AppTheme.Settings">

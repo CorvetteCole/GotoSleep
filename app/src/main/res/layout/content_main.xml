@@ -198,7 +198,7 @@
         ads:adUnitId="@string/admob_test_banner_key"
         ads:layout_constraintBottom_toTopOf="@+id/feedbackButton"
         ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintStart_toStartOf="parent"></com.google.android.gms.ads.AdView>
+        ads:layout_constraintStart_toStartOf="parent" />
 
 
 

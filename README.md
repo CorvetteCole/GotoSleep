@@ -3,7 +3,7 @@
 # TODO
 ## First Release Feature Locked TODO:
 
-~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE** (not confirmed fixed)
+~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE** 
 
 -Refactor settingsFragment code (things are called way more often than they need to be)
 
@@ -19,7 +19,7 @@
 
 -Add separate content_main layout for devices with a low DPI so that the text background looks right
 
--Add prompt to rate the app after it has been opened like 15 times or something
+~~-Add prompt to rate the app after it has been opened like 15 times or something~~ **DONE** (still needs polishing in terms of words)
 
 -Make edit bedtime button disappear after returning from settings for the first time
 

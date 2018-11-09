@@ -23,6 +23,8 @@
 
 -Make edit bedtime button disappear after returning from settings for the first time
 
+-Reduce work being done on main thread for SettingsFragment and, if possible, MainActivity. Especially with SettingFragment, the work on the main thread is severely impacting the launch of settings after clicking the settings button and the app is skipping frames.
+
 -Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
 
 -Investigate code to detect when a purchase has been refunded and disable the advanced options. **UPDATE:** still not sure how long it takes a revoked in-app purchase to be detected by the app code. Moving this to a lower priority

@@ -50,7 +50,6 @@ import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 import static java.lang.Math.abs;
-import static java.lang.Math.log;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private static final int BACK_INTERVAL = 2000;
     private long backPressed;
     private Button settingsButton;
-    private Button feedBackButton;
+    private Button aboutButton;
     private Button editBedtimeButton;
 
     private Calendar bedtimeCal;
@@ -241,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adView = findViewById(R.id.adView);
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
-            feedBackButton = findViewById(R.id.feedbackButton);
+            aboutButton = findViewById(R.id.aboutButton);
             hours = findViewById(R.id.hours);
             minutes = findViewById(R.id.minutes);
             sleepMessage = findViewById(R.id.sleepMessage);
@@ -283,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             //runs when the intro slides launch mainActivity again
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
+            final Intent about = new Intent(MainActivity.this, AboutActivity.class);
 
             if (isSecondStart) {
                 editBedtimeButton.setVisibility(View.VISIBLE);
@@ -321,10 +321,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
             });
 
-            feedBackButton.setOnClickListener(new View.OnClickListener() {
+            aboutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    sendFeedback();
+                    startActivity(about);
                 }
             });
 
@@ -333,10 +333,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     public void onClick(View v) {
                             if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
                                 settingsButton.setVisibility(View.INVISIBLE);
-                                feedBackButton.setVisibility(View.INVISIBLE);
+                                aboutButton.setVisibility(View.INVISIBLE);
                             } else {
                                 settingsButton.setVisibility(View.VISIBLE);
-                                feedBackButton.setVisibility(View.VISIBLE);
+                                aboutButton.setVisibility(View.VISIBLE);
                             }
                     }
                 });

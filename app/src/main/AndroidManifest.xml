@@ -41,7 +41,7 @@
         <activity android:name=".SettingsActivity"
             android:theme="@style/AppTheme.Settings"/>
         <activity android:name=".AboutActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/about_About.wrapper"/>
 
         <receiver
             android:name=".BedtimeNotificationReceiver"

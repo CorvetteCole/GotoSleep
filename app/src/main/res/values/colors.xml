@@ -28,4 +28,6 @@
     <color name="starPrimary">#bdbdbd</color>
     <color name="starAccent">#8d8d8d</color>
 
+    <color name="about_background_color" tools:override="true">#263238</color>
+
 </resources>

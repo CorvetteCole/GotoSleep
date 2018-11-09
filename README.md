@@ -9,6 +9,8 @@
 
 ~~-Refactor variables regarding request codes for alarms and notifications. Notification request codes are particularly important since they let you dismiss and interact with notifications in different classes.~~ **DONE**
 
+-Add broadcastreceiver to run when phone boots up so it can reset an alarm for the bedtime reminders 
+
 -Add separate moon icon that is the right size for the notifications
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 
 
@@ -36,12 +37,23 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private boolean advancedOptionsPurchased;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
+    private boolean isAutoDoNotDisturbEnabled;
     private BillingProcessor bp;
+    private NotificationManager mNotificationManager;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.preferences, rootKey);
         final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        isAutoDoNotDisturbEnabled = sharedPreferences.getBoolean(DND_KEY, false);
+        if (isAutoDoNotDisturbEnabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                sharedPreferences.edit().putBoolean(DND_KEY, !mNotificationManager.isNotificationPolicyAccessGranted()).apply();
+            }
+        }
+
+        setPreferencesFromResource(R.xml.preferences, rootKey);
+
 
         Log.d("PREFERENCES", rootKey + " ");
         if (rootKey == null){
@@ -52,6 +64,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
             final Preference customNotificationsPref = this.findPreference(CUSTOM_NOTIFICATIONS_KEY);
             final Preference autoDnDPref = this.findPreference(DND_KEY);
+
+
 
             advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
             adsEnabled = sharedPreferences.getBoolean(ADS_ENABLED_KEY, false);
@@ -112,7 +126,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 }
             });
 
-            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
                 this.findPreference(DND_KEY).setSummary("Android 6.0 (Marshmallow) and up required");
                 //# TODO add else if to check if user device is an LG G4. If so, disable option with reason
@@ -121,11 +135,11 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                        NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
 
                         // Check if the notification policy access has been granted for the app.
                         if ((boolean) newValue && mNotificationManager != null && !mNotificationManager.isNotificationPolicyAccessGranted()) {
-                            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
                             startActivity(intent);
                         }
                         return true;

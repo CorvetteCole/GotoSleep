@@ -39,8 +39,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Intro"/>
         <activity android:name=".SettingsActivity"
-
             android:theme="@style/AppTheme.Settings"/>
+        <activity android:name=".AboutActivity"
+            android:theme="@style/AppTheme"/>
+
         <receiver
             android:name=".BedtimeNotificationReceiver"
             android:permission="android.permission.BIND_JOB_SERVICE" />

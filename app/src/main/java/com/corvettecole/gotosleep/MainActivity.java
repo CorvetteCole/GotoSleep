@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private SharedPreferences getPrefs;
 
+    String TAG1 = "TimeDebugging";
+
     @Override
     public void onStart() {
         super.onStart();
@@ -145,12 +147,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onResume() {
         super.onResume();
+
         loadPreferences();
+
+        setNotifications(); //Warning: takes a long time to execute (55ms!)
+
         updateCountdown();
+
         if (!adsLoaded) {
             enableDisableAds();
         }
-
         if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
             rateLayout.setVisibility(View.GONE);
         }
@@ -198,19 +204,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
-        bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
-        bp.initialize();
-        bp.loadOwnedPurchasesFromGoogle();
-        notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-
-        createNotificationChannel();
-        loadPreferences();
-
         getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
-
         //  Create a new boolean and preference and set it to true
         isFirstStart = getPrefs.getBoolean("firstStart", true);
         isSecondStart = getPrefs.getBoolean("secondStart", true);
@@ -242,8 +237,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             finish();
         } else {
 
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             setContentView(R.layout.activity_main);
             adView = findViewById(R.id.adView);
             settingsButton = findViewById(R.id.settingsButton);
@@ -258,6 +251,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             rateNoButton = findViewById(R.id.rateNoButton);
             rateYesButton = findViewById(R.id.rateYesButton);
             rateTextView = findViewById(R.id.rateText);
+
+
+
+            bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
+            bp.initialize();
+            bp.loadOwnedPurchasesFromGoogle();
+            notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            createNotificationChannel();
+
+            loadPreferences();
+
 
 
 
@@ -337,8 +341,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     }
                 });
 
+
+
             MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
             enableDisableAds();
+
 
 
 
@@ -440,11 +447,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
             }
 
-            Log.d(TAG, "bedtime calendar: " + bedtimeCalendar.getTimeInMillis() + " more: " + bedtimeCalendar.getTime());
-            Log.d(TAG, "Current time: " + System.currentTimeMillis());
-            Log.d(TAG, "Setting notification at: " + bedtimeCalendar.getTimeInMillis() + " more: " + bedtimeCalendar.getTime());
             Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
-
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
                     FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
@@ -453,8 +456,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             } else {
                 am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
             }
-        } else {
-            Log.d(TAG, "setNotifications: " + notificationsEnabled);
         }
     }
 
@@ -483,8 +484,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
 
-
-        setNotifications();
     }
 
 

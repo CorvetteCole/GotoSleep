@@ -3,7 +3,7 @@
 # TODO
 ## First Release Feature Locked TODO:
 
-~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE**
+~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE** (not confirmed fixed)
 
 -Refactor settingsFragment code (things are called way more often than they need to be)
 
@@ -11,7 +11,7 @@
 
 -Add broadcastreceiver to run when phone boots up so it can reset an alarm for the bedtime reminders 
 
--Add separate moon icon that is the right size for the notifications
+~~-Add separate moon icon that is the right size for the notifications~~ **DONE** (not confirmed fixed)
 
 -Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
 

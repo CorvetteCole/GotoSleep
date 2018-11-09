@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         isAutoDoNotDisturbEnabled = settings.getBoolean(DND_KEY, false);
         if (isAutoDoNotDisturbEnabled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                settings.edit().putBoolean(DND_KEY, !notificationManager.isNotificationPolicyAccessGranted()).apply();
+                settings.edit().putBoolean(DND_KEY, notificationManager.isNotificationPolicyAccessGranted()).apply();
             }
         }
 

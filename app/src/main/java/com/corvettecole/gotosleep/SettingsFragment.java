@@ -8,6 +8,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.Switch;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 
 import com.anjlab.android.iab.v3.BillingProcessor;
@@ -16,6 +20,8 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
+import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 
 public class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
@@ -39,12 +45,13 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private boolean adsEnabled;
     private BillingProcessor bp;
     private NotificationManager mNotificationManager;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        sharedPreferences = getPreferenceManager().getSharedPreferences();
         mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
 
@@ -127,8 +134,6 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 autoDnDPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                     @Override
                     public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-
 
                         // Check if the notification policy access has been granted for the app.
                         if ((boolean) newValue && mNotificationManager != null && !mNotificationManager.isNotificationPolicyAccessGranted()) {
@@ -229,6 +234,13 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     @Override
     public void onResume(){
         Log.d("settings", "onResume called!");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!mNotificationManager.isNotificationPolicyAccessGranted() && sharedPreferences.getBoolean(DND_KEY, false)){
+                Toast.makeText(getContext(), "Do not Disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
+            }
+        }
+
+
         super.onResume();
     }
 

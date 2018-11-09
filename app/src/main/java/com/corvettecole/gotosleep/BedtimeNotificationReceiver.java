@@ -128,7 +128,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
         // Check if the notification policy access has been granted for the app.
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, BEDTIME_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_moon)
+                .setSmallIcon(R.drawable.moon_notification_icon)
                 .setContentTitle(title)
                 .setAutoCancel(true)
                 .setContentText(content)

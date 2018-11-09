@@ -1,5 +1,6 @@
 package com.corvettecole.gotosleep;
 
+import android.animation.LayoutTransition;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,10 +16,12 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +50,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 import static java.lang.Math.abs;
+import static java.lang.Math.log;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
@@ -88,6 +92,21 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private boolean adsLoaded = false;
     private boolean isAutoDoNotDisturbEnabled;
+
+    private Button rateYesButton;
+    private Button rateNoButton;
+    private TextView rateTextView;
+    private ConstraintLayout rateLayout;
+
+    private boolean isRequestingFeedback = false;
+    private boolean isRequestingRating = false;
+
+    final static String APP_LAUNCHED_KEY = "numLaunched";
+    private int appLaunched;
+    final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
+    private boolean ratingPromptShown;
+
+    private SharedPreferences getPrefs;
 
     @Override
     public void onStart() {
@@ -131,6 +150,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if (!adsLoaded) {
             enableDisableAds();
         }
+
+        if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
+            rateLayout.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -184,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         createNotificationChannel();
         loadPreferences();
 
-        SharedPreferences getPrefs = PreferenceManager
+        getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
 
         //  Create a new boolean and preference and set it to true
@@ -217,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //this is needed to stop weird back button stuff
             finish();
         } else {
-            MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
+
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
             setContentView(R.layout.activity_main);
@@ -230,8 +254,28 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
             enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
+            rateLayout = findViewById(R.id.rate_layout);
+            rateNoButton = findViewById(R.id.rateNoButton);
+            rateYesButton = findViewById(R.id.rateYesButton);
+            rateTextView = findViewById(R.id.rateText);
 
-            enableDisableAds();
+
+
+            //#TODO add in additional parameter requiring an amount of time to have passed
+            if (appLaunched < 10 && !ratingPromptShown) {
+                rateLayout.setVisibility(View.GONE);
+                Log.d(TAG, "appLaunched: " + appLaunched);
+                getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();
+                //initiateRatingDialogue(getPrefs); //debug
+            } else if (!ratingPromptShown) {
+                Log.d(TAG, "initiating rating dialogue");
+                initiateRatingDialogue();
+            } else {
+               rateLayout.setVisibility(View.GONE);
+               //initiateRatingDialogue(getPrefs);  //debug
+            }
+
+
 
             //runs when the intro slides launch mainActivity again
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
@@ -276,19 +320,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             feedBackButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String subject = "Go to Sleep Feedback";
-                    String bodyText = "Please explain your bug or feature suggestion thoroughly";
-                    String mailto = "mailto:corvettecole@gmail.com" +
-                            "?subject=" + Uri.encode(subject) +
-                            "&body=" + Uri.encode(bodyText);
-
-                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-                    emailIntent.setData(Uri.parse(mailto));
-                    try {
-                        startActivity(emailIntent);
-                    } catch (ActivityNotFoundException e) {
-                        //TODO: Handle case where no email app is available
-                    }
+                    sendFeedback();
                 }
             });
 
@@ -304,10 +336,92 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             }
                     }
                 });
+
+            MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
+            enableDisableAds();
+
+
+
         }
+    }
+
+    private void initiateRatingDialogue(){
 
 
+        rateLayout.setVisibility(View.VISIBLE);
+        rateLayout.invalidate();
+        Log.d(TAG, "set rateLayout to visible");
+        //initial state, TextView displays "Are you enjoying Go to Sleep?"
 
+        ((ViewGroup) findViewById(R.id.rate_layout)).getLayoutTransition()
+                .enableTransitionType(LayoutTransition.CHANGING);
+
+        rateNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isRequestingFeedback && !isRequestingRating) {
+                    isRequestingFeedback = true;
+                    rateTextView.setText("Would you mind sending some feedback?");
+                    rateNoButton.setText("No, thanks");
+                    rateYesButton.setText("Ok, sure");
+                } else {
+                    rateLayout.setVisibility(View.GONE);
+                }
+                getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
+            }
+        });
+
+        rateYesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isRequestingRating && !isRequestingFeedback){
+                    isRequestingRating = true;
+                    rateTextView.setText("How about rating the app then?");
+                    rateYesButton.setText("Ok, sure!");
+                    rateNoButton.setText("No, thanks");
+                } else if (isRequestingFeedback){
+                    //#TODO user said yes to sending feedback
+                    sendFeedback();
+
+                } else {
+                    //#TODO user said yes to rating the app
+                    sendToPlayStore();
+                }
+                getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
+            }
+        });
+
+
+    }
+
+    private void sendToPlayStore(){
+        final Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+        final Intent rateAppIntent = new Intent(Intent.ACTION_VIEW, uri);
+
+        if (getPackageManager().queryIntentActivities(rateAppIntent, 0).size() > 0)
+        {
+            startActivity(rateAppIntent);
+        }
+        else
+        {
+            /* handle your error case: the device has no way to handle market urls */
+        }
+    }
+
+    private void sendFeedback(){
+        String subject = "Go to Sleep Feedback";
+        String bodyText = "Please explain your bug or feature suggestion thoroughly";
+        String mailto = "mailto:corvettecole@gmail.com" +
+                "?subject=" + Uri.encode(subject) +
+                "&body=" + Uri.encode(bodyText);
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse(mailto));
+        try {
+            startActivity(emailIntent);
+        } catch (ActivityNotFoundException e) {
+            //TODO: Handle case where no email app is available
+        }
     }
 
     private void setNotifications() {
@@ -363,9 +477,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 settings.edit().putBoolean(DND_KEY, notificationManager.isNotificationPolicyAccessGranted()).apply();
             }
         }
-
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
+        ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
+        appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
+
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
+
 
         setNotifications();
     }
@@ -407,12 +524,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void enableDisableAds(){
-        if (adsEnabled) {
+        if (adsEnabled && adView.getVisibility() == View.GONE) {
+            Log.d(TAG, "enableDisableAds initialized");
             adView.setVisibility(View.VISIBLE);
             AdRequest adRequest = new AdRequest.Builder().build();
-
             adView.loadAd(adRequest);
-        } else {
+
+        } else if (adView.getVisibility() != View.GONE && !adsEnabled){
 
             adView.setVisibility(View.GONE);
         }

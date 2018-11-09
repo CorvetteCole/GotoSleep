@@ -13,8 +13,9 @@
     tools:showIn="@layout/activity_main">
 
     <include
+        android:id="@+id/include"
         layout="@layout/background"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/sleepMessage"
@@ -40,7 +41,7 @@
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minutes"/>
+        app:layout_constraintTop_toBottomOf="@+id/minutes" />
 
 
     <TextView
@@ -51,6 +52,7 @@
         android:layout_marginBottom="8dp"
         android:elevation="4dp"
         android:fontFamily="@font/product_sans_bold"
+        android:maxLines="1"
         android:shadowColor="@color/accentPrimaryDark"
         android:shadowDx="4"
         android:shadowDy="4"
@@ -65,9 +67,7 @@
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/minutes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:maxLines="1"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/minutes"
@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bedtimeSetButton"
@@ -107,14 +107,14 @@
         android:textAllCaps="false"
         android:textColor="@color/accentPrimaryDark"
         android:textSize="20sp"
+        android:visibility="gone"
         app:cornerRadius="15dp"
         app:icon="@drawable/ic_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sleepMessage"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"
-        android:visibility="gone"/>
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/enableSleepModeButton"
@@ -135,7 +135,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sleepMessage"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/settingsButton"
@@ -200,7 +200,103 @@
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/rate_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="34dp"
+        android:elevation="8dp"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/feedback_outline"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bedtimeSetButton">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/rateNoButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/product_sans_regular"
+            android:includeFontPadding="true"
+            android:text="No"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/accentPrimaryDark"
+            android:textSize="20sp"
+            app:cornerRadius="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRate"
+            app:layout_constraintTop_toBottomOf="@+id/rateText"
+            app:layout_constraintVertical_bias="0.0"
+            app:strokeColor="@color/colorPrimaryLight"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/rateYesButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/product_sans_regular"
+            android:includeFontPadding="true"
+            android:text="Yes"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/accentPrimaryDark"
+            android:textSize="20sp"
+            app:cornerRadius="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineRate"
+            app:layout_constraintTop_toBottomOf="@+id/rateText"
+            app:layout_constraintVertical_bias="0.0"
+            app:strokeColor="@color/colorPrimaryLight"
+            app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/rateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="48dp"
+            android:fontFamily="@font/product_sans_regular"
+            android:shadowColor="@color/colorPrimaryLight"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2"
+            android:text="Enjoying Go to Sleep?"
+            android:textColor="@color/accentPrimary"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            app:layout_constraintGuide_percent=".5"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

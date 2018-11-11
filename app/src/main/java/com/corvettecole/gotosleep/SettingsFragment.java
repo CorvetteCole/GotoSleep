@@ -75,6 +75,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference autoDnDPref = this.findPreference(DND_KEY);
             final Preference smartNotificationsPref = this.findPreference(SMART_NOTIFICATIONS_KEY);
             final Preference inactivityTimerPref = this.findPreference(INACTIVITY_TIMER_KEY);
+            final Preference notificationAmount = this.findPreference(NOTIF_AMOUNT_KEY);
+            final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
 
 
 
@@ -149,8 +151,11 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             smartNotificationsPref.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((boolean) newValue && !isUsageAccessGranted(getContext())){
+                    notificationAmount.setEnabled(false);
                     Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                     startActivity(usageSettings);
+                } else if (!(boolean)newValue){
+                    notificationAmount.setEnabled(true);
                 }
                 return true;
             });
@@ -171,14 +176,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 });
             }
 
-            final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
             notificationDelay.setSummary(sharedPreferences.getString(NOTIF_DELAY_KEY, "15") + " minute delay between sleep notifications");
             notificationDelay.setOnPreferenceChangeListener((preference, newValue) -> {
                 notificationDelay.setSummary(newValue + " minute delay between sleep notifications");
                 return true;
             });
 
-            final Preference notificationAmount = this.findPreference(NOTIF_AMOUNT_KEY);
             notificationAmount.setSummary(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "2") + " sleep reminders will be sent");
             notificationAmount.setOnPreferenceChangeListener((preference, newValue) -> {
                 notificationAmount.setSummary(newValue + " sleep reminders will be sent");
@@ -284,10 +287,9 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             }
         }
 
-        if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false) && !isUsageAccessGranted(getContext())){
+        if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false) && !isUsageAccessGranted(getContext())) {
             Toast.makeText(getContext(), "Usage access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
         }
-
 
         super.onResume();
     }

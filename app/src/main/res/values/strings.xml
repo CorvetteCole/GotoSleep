@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Go to Sleep!</string>
+    <string name="app_name">Go to Sleep</string>
     <string name="action_settings">Settings</string>
     <string name="app_intro">Intro</string>
     <string name="default_hours_string">% hours</string>

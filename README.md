@@ -15,7 +15,7 @@
 
 ~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (not fully tested)
 
--Add credits for app icon, intro icons, open source libraries, etc. Perhaps replace the Feedback button with Help or Info or About and have that open to a new activity? Maybe add a 3rd button called About
+-Add credits for app icon, intro icons, open source libraries
 
 -Add separate content_main layout for devices with a low DPI so that the text background looks right
 

@@ -15,6 +15,8 @@
 
 ~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (not fully tested)
 
+-If notification minute is 1, say minute in notification vs minutes
+
 -Add credits for app icon, intro icons, open source libraries
 
 -Add separate content_main layout for devices with a low DPI so that the text background looks right

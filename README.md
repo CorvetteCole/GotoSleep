@@ -13,7 +13,7 @@
 
 ~~-Add separate moon icon that is the right size for the notifications~~ **DONE** (not confirmed fixed)
 
--Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)
+~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (not fully tested)
 
 -Add credits for app icon, intro icons, open source libraries, etc. Perhaps replace the Feedback button with Help or Info or About and have that open to a new activity? Maybe add a 3rd button called About
 

@@ -192,7 +192,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setColor(context.getResources().getColor(R.color.moonPrimary));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (notificationManager.isNotificationPolicyAccessGranted()){
-            mBuilder.addAction(R.drawable.ic_do_not_disturb_on_white_24dp, "I'm Going to Sleep", snoozePendingIntent);
+            mBuilder.addAction(R.drawable.ic_do_not_disturb_on_white_24dp, "I'm going to sleep", snoozePendingIntent);
             }
         }
 

@@ -5,6 +5,8 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -35,21 +37,27 @@ import com.google.android.gms.ads.MobileAds;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_MINUTE_MILLIS;
 import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.INACTIVITY_TIMER_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
 
@@ -107,7 +115,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private SharedPreferences getPrefs;
 
-    String TAG1 = "TimeDebugging";
+    /*private UsageStatsManager usageStatsManager;
+    private Button usageButton;
+    private int userActiveMargin;
+    */
 
     @Override
     public void onStart() {
@@ -286,12 +297,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             if (isSecondStart) {
                 editBedtimeButton.setVisibility(View.VISIBLE);
-                editBedtimeButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(settings);
-                    }
-                });
+                editBedtimeButton.setOnClickListener(view -> startActivity(settings));
                 SharedPreferences.Editor e = getPrefs.edit();
                 //  Edit preference to make it false because we don't want this to run again
                 e.putBoolean("secondStart", false);
@@ -300,46 +306,33 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
 
 
-            settingsButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(settings);
+            settingsButton.setOnClickListener(view -> startActivity(settings));
+
+            enableSleepmodeButton.setOnClickListener(v -> {
+                Intent snoozeIntent = new Intent(getApplicationContext(), AutoDoNotDisturbReceiver.class);
+                PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 11, snoozeIntent, 0);
+                try {
+                    snoozePendingIntent.send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
                 }
+                enableSleepmodeButton.setVisibility(View.GONE);
             });
 
-            enableSleepmodeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent snoozeIntent = new Intent(getApplicationContext(), AutoDoNotDisturbReceiver.class);
-                    PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 11, snoozeIntent, 0);
-                    try {
-                        snoozePendingIntent.send();
-                    } catch (PendingIntent.CanceledException e) {
-                        e.printStackTrace();
-                    }
-                    enableSleepmodeButton.setVisibility(View.GONE);
+            aboutButton.setOnClickListener(view -> startActivity(about));
+
+
+
+
+            contentMain.setOnClickListener(v -> {
+                if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
+                    settingsButton.setVisibility(View.INVISIBLE);
+                    aboutButton.setVisibility(View.INVISIBLE);
+                } else {
+                    settingsButton.setVisibility(View.VISIBLE);
+                    aboutButton.setVisibility(View.VISIBLE);
                 }
             });
-
-            aboutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(about);
-                }
-            });
-
-                contentMain.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                            if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
-                                settingsButton.setVisibility(View.INVISIBLE);
-                                aboutButton.setVisibility(View.INVISIBLE);
-                            } else {
-                                settingsButton.setVisibility(View.VISIBLE);
-                                aboutButton.setVisibility(View.VISIBLE);
-                            }
-                    }
-                });
 
 
 
@@ -483,7 +476,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
 
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
-
     }
 
 
@@ -534,6 +526,38 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             adView.setVisibility(View.GONE);
         }
     }
+
+    /*
+    private void testUsageStats(){
+        String TAG = "testUsageStats";
+        userActiveMargin = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString(INACTIVITY_TIMER_KEY, "5"));
+
+        long startTime = System.currentTimeMillis() - notificationDelay * ONE_MINUTE_MILLIS;
+
+        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, startTime, System.currentTimeMillis());
+
+        UsageStats minUsageStat = queryUsageStats.get(0);
+
+        long min = Long.MAX_VALUE;
+        for (UsageStats usageStat : queryUsageStats){
+            if (usageStat.getLastTimeUsed() < min && usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS){
+                minUsageStat = usageStat;
+            }
+        }
+
+
+        Log.d(TAG, "current time " + System.currentTimeMillis());
+        Log.d(TAG, "last activity " + minUsageStat.getPackageName() + " time in foreground " + minUsageStat.getTotalTimeInForeground() + " time last used " + minUsageStat.getLastTimeStamp());
+
+        long difference = System.currentTimeMillis() - minUsageStat.getLastTimeStamp();
+
+        if (System.currentTimeMillis() - minUsageStat.getLastTimeStamp() <=  userActiveMargin * ONE_MINUTE_MILLIS){
+            Log.d(TAG, "user is active, last activity " + difference/ONE_MINUTE_MILLIS + " minutes ago");
+        } else {
+            Log.d(TAG, "user is inactive, last activity " + difference/ONE_MINUTE_MILLIS + " minutes ago");
+        }
+    }
+    */
 
     private void updateCountdown() {
         if (!isFirstStart){

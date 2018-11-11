@@ -1,27 +1,32 @@
 package com.corvettecole.gotosleep;
 
+import android.app.Activity;
+import android.app.AppOpsManager;
 import android.app.NotificationManager;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
-import androidx.preference.SwitchPreference;
-import androidx.preference.SwitchPreferenceCompat;
 
 
 public class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
@@ -38,13 +43,16 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     final static String NOTIFICATION_4_KEY = "pref_notification4";
     final static String NOTIFICATION_5_KEY = "pref_notification5";
     final static String CUSTOM_NOTIFICATIONS_KEY = "pref_customNotifications_category";
+    final static String SMART_NOTIFICATIONS_KEY = "pref_smartNotifications";
     final static String ADS_ENABLED_KEY = "pref_adsEnabled";
     final static String ADVANCED_PURCHASED_KEY = "advanced_options_purchased";
+    final static String INACTIVITY_TIMER_KEY = "pref_activityMargin";
     private boolean advancedOptionsPurchased;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
     private BillingProcessor bp;
-    private NotificationManager mNotificationManager;
+    private NotificationManager notificationManager;
+    private UsageStatsManager usageStatsManager;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -52,7 +60,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         sharedPreferences = getPreferenceManager().getSharedPreferences();
-        mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
 
 
         Log.d("PREFERENCES", rootKey + " ");
@@ -64,6 +73,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
             final Preference customNotificationsPref = this.findPreference(CUSTOM_NOTIFICATIONS_KEY);
             final Preference autoDnDPref = this.findPreference(DND_KEY);
+            final Preference smartNotificationsPref = this.findPreference(SMART_NOTIFICATIONS_KEY);
+            final Preference inactivityTimerPref = this.findPreference(INACTIVITY_TIMER_KEY);
 
 
 
@@ -80,6 +91,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
             } else {
+
                 final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
                 advancedPurchasePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
@@ -102,28 +114,45 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
 
             Preference bedtime = this.findPreference(BEDTIME_KEY);
-            bedtime.setSummary("Bedtime is " + sharedPreferences.getString(BEDTIME_KEY, "19:35"));
+            try {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                Date time = simpleDateFormat.parse(sharedPreferences.getString(BEDTIME_KEY, "19:35"));
+                bedtime.setSummary("Bedtime is " +  DateFormat.getTimeInstance(DateFormat.SHORT).format(time));
+            } catch (ParseException e) {
+                e.printStackTrace();
+                bedtime.setSummary("Bedtime is " + sharedPreferences.getString(BEDTIME_KEY, "19:35"));
+            }
+
+
 
             getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(enableAdvancedOptions);
             customNotificationsPref.setEnabled(enableAdvancedOptions);
 
 
-            adsEnabledPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            adsEnabledPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                //if enable ads is switched off, set premium options to false;
+                if ((!(boolean) newValue) && (!advancedOptionsPurchased)) {
 
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    //if enable ads is switched off, set premium options to false;
-                    if ((!(boolean) newValue) && (!advancedOptionsPurchased)) {
-                        sharedPreferences.edit().putBoolean("pref_smartNotifications", false).apply();
-                        getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(false);
-                        customNotificationsPref.setEnabled(false);
-                    } else {
-                        getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
-                        customNotificationsPref.setEnabled(true);
-                    }
-
-                    return true;
+                    getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(false);
+                    customNotificationsPref.setEnabled(false);
+                } else {
+                    getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
+                    customNotificationsPref.setEnabled(true);
                 }
+
+                return true;
+            });
+
+
+            //#TODO figure out a way to only toggle switch if the notification or usage permission is actually granted.
+            // Returning false in onPreferenceChange will not update the preference with the new value, and onClickListeners exist...
+
+            smartNotificationsPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if ((boolean) newValue && !isUsageAccessGranted(getContext())){
+                    Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                    startActivity(usageSettings);
+                }
+                return true;
             });
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -131,98 +160,113 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 this.findPreference(DND_KEY).setSummary("Android 6.0 (Marshmallow) and up required");
                 //# TODO add else if to check if user device is an LG G4. If so, disable option with reason
             } else {
-                autoDnDPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                autoDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
 
-                        // Check if the notification policy access has been granted for the app.
-                        if ((boolean) newValue && mNotificationManager != null && !mNotificationManager.isNotificationPolicyAccessGranted()) {
-                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                            startActivity(intent);
-                        }
-                        return true;
+                    // Check if the notification policy access has been granted for the app.
+                    if ((boolean) newValue && notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
+                        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                        startActivity(intent);
                     }
+                    return true;
                 });
             }
 
             final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
             notificationDelay.setSummary(sharedPreferences.getString(NOTIF_DELAY_KEY, "15") + " minute delay between sleep notifications");
-            notificationDelay.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notificationDelay.setSummary(newValue + " minute delay between sleep notifications");
-                    return true;
-                }
+            notificationDelay.setOnPreferenceChangeListener((preference, newValue) -> {
+                notificationDelay.setSummary(newValue + " minute delay between sleep notifications");
+                return true;
             });
 
             final Preference notificationAmount = this.findPreference(NOTIF_AMOUNT_KEY);
             notificationAmount.setSummary(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "2") + " sleep reminders will be sent");
-            notificationAmount.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notificationAmount.setSummary(newValue + " sleep reminders will be sent");
-                    return true;
-                }
+            notificationAmount.setOnPreferenceChangeListener((preference, newValue) -> {
+                notificationAmount.setSummary(newValue + " sleep reminders will be sent");
+                return true;
             });
+
+            inactivityTimerPref.setSummary("User must be inactive for " + sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5") + " minutes to be considered inactive");
+            inactivityTimerPref.setOnPreferenceChangeListener(((preference, newValue) -> {
+                inactivityTimerPref.setSummary("User must be inactive for " + newValue + " minutes to be considered inactive");
+                return true;
+            }));
+
         } else {
-            final Preference notification1 = this.findPreference(NOTIFICATION_1_KEY);
-            final Preference notification2 = this.findPreference(NOTIFICATION_2_KEY);
-            final Preference notification3 = this.findPreference(NOTIFICATION_3_KEY);
-            final Preference notification4 = this.findPreference(NOTIFICATION_4_KEY);
-            final Preference notification5 = this.findPreference(NOTIFICATION_5_KEY);
-
-            notification1.setSummary(sharedPreferences.getString(NOTIFICATION_1_KEY, getString(R.string.notification1)));
-            notification2.setSummary(sharedPreferences.getString(NOTIFICATION_2_KEY, getString(R.string.notification2)));
-            notification3.setSummary(sharedPreferences.getString(NOTIFICATION_3_KEY, getString(R.string.notification3)));
-            notification4.setSummary(sharedPreferences.getString(NOTIFICATION_4_KEY, getString(R.string.notification4)));
-            notification5.setSummary(sharedPreferences.getString(NOTIFICATION_5_KEY, getString(R.string.notification5)));
-
-            notification1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notification1.setSummary((String) newValue);
-                    return true;
-                }
-            });
-
-            notification2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notification2.setSummary((String) newValue);
-                    return true;
-                }
-            });
-
-            notification3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notification3.setSummary((String) newValue);
-                    return true;
-                }
-            });
-
-            notification4.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notification4.setSummary((String) newValue);
-                    return true;
-                }
-            });
-
-            notification5.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    notification5.setSummary((String) newValue);
-                    return true;
-                }
-            });
-
-
-
+           startCustomNotificationsScreen();
         }
     }
+
+    public static boolean isUsageAccessGranted(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+            AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+            int mode = 0;
+            mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    applicationInfo.uid, applicationInfo.packageName);
+            return (mode == AppOpsManager.MODE_ALLOWED);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private void startCustomNotificationsScreen(){
+
+        final Preference notification1 = this.findPreference(NOTIFICATION_1_KEY);
+        final Preference notification2 = this.findPreference(NOTIFICATION_2_KEY);
+        final Preference notification3 = this.findPreference(NOTIFICATION_3_KEY);
+        final Preference notification4 = this.findPreference(NOTIFICATION_4_KEY);
+        final Preference notification5 = this.findPreference(NOTIFICATION_5_KEY);
+
+        notification1.setSummary(sharedPreferences.getString(NOTIFICATION_1_KEY, getString(R.string.notification1)));
+        notification2.setSummary(sharedPreferences.getString(NOTIFICATION_2_KEY, getString(R.string.notification2)));
+        notification3.setSummary(sharedPreferences.getString(NOTIFICATION_3_KEY, getString(R.string.notification3)));
+        notification4.setSummary(sharedPreferences.getString(NOTIFICATION_4_KEY, getString(R.string.notification4)));
+        notification5.setSummary(sharedPreferences.getString(NOTIFICATION_5_KEY, getString(R.string.notification5)));
+
+        notification1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                notification1.setSummary((String) newValue);
+                return true;
+            }
+        });
+
+        notification2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                notification2.setSummary((String) newValue);
+                return true;
+            }
+        });
+
+        notification3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                notification3.setSummary((String) newValue);
+                return true;
+            }
+        });
+
+        notification4.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                notification4.setSummary((String) newValue);
+                return true;
+            }
+        });
+
+        notification5.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                notification5.setSummary((String) newValue);
+                return true;
+            }
+        });
+    }
+
+
 
     @Override
     public Fragment getCallbackFragment() {
@@ -235,9 +279,13 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     public void onResume(){
         Log.d("settings", "onResume called!");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!mNotificationManager.isNotificationPolicyAccessGranted() && sharedPreferences.getBoolean(DND_KEY, false)){
-                Toast.makeText(getContext(), "Do not Disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
+            if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
+                Toast.makeText(getContext(), "Do not disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
             }
+        }
+
+        if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false) && !isUsageAccessGranted(getContext())){
+            Toast.makeText(getContext(), "Usage access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
         }
 
 
@@ -292,5 +340,6 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         }
         super.onDestroy();
     }
+
 }
 

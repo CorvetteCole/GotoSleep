@@ -108,7 +108,15 @@
             android:defaultValue="false"
             android:key="pref_smartNotifications"
             android:title="Persistent Notifications"
-            android:summary="Send notifications based on usage patterns (note, requires usage permission)"/>
+            android:summary="Send notifications until you stop using your phone"/>
+        <EditTextPreference
+            android:dependency="pref_smartNotifications"
+            android:key="pref_activityMargin"
+            android:title="Inactivity Timer"
+            android:inputType="number"
+            android:defaultValue="5"
+            android:maxLength="2"
+            android:summary="User must be inactive for 5 minutes to be counted as inactive"/>
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_adsEnabled"

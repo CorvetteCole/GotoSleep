@@ -15,6 +15,8 @@
 
 ~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (not fully tested)
 
+- Constrain rating box to bottom of the sleepmessage so they dont interfere
+
 -If notification minute is 1, say minute in notification vs minutes
 
 -Add credits for app icon, intro icons, open source libraries

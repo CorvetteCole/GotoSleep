@@ -12,6 +12,7 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme_Settings);
 
         Element versionElement = new Element();
         versionElement.setTitle("Version " + BuildConfig.VERSION_NAME);
@@ -43,6 +44,8 @@ public class AboutActivity extends AppCompatActivity {
                 .addGitHub("corvettecole", "View my GitHub")
                 .addWebsite("https://sleep.corvettecole.com/privacy/", "Privacy Policy")
                 .create();
+
+        Element element = new Element();
 
         setContentView(aboutPage);
 

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -41,13 +42,20 @@
         <activity android:name=".SettingsActivity"
             android:theme="@style/AppTheme.Settings"/>
         <activity android:name=".AboutActivity"
-            android:theme="@style/about_About.wrapper"/>
+            android:theme="@style/about_description"/>
 
         <receiver
             android:name=".BedtimeNotificationReceiver"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <receiver android:name=".AutoDoNotDisturbReceiver"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver android:name=".BedtimeNotificationHelper">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
+
     </application>
 
     </manifest>

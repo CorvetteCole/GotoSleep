@@ -8,7 +8,9 @@
 
 - If notification minute is 1, say minute in notification vs minutes
 
-- Add credits for app icon, intro icons, open source libraries
+- Add credits for app icon, intro icons, open source libraries to about
+
+- Add in-app purchase for a donation in about page
 
 - Add separate content_main layout for devices with a low DPI so that the text background looks right
 
@@ -21,6 +23,8 @@
 - Add setting for do not disturb delay
 
 - Speed up launch of MainActivity after pressing the DONE button in Intro slides
+
+- See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
 
 - Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
 

@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
             //#TODO add in additional parameter requiring an amount of time to have passed
-            if (appLaunched < 4 && !ratingPromptShown) {
+            if (appLaunched < 6 && !ratingPromptShown) {
                 rateLayout.setVisibility(View.GONE);
                 Log.d(TAG, "appLaunched: " + appLaunched);
                 getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();

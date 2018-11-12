@@ -237,6 +237,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
             if (currentNotification == 1) {
                 return "Time to head to bed.";
+            } else if (min == 1){
+                return "It is " + min + " minute past your bedtime!";
             } else {
                 return "It is " + min + " minutes past your bedtime!";
             }

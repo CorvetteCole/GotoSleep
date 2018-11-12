@@ -551,7 +551,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void getAdConsentStatus(Context context){
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {context.getResources().getString(R.string.admob_publisher_id)};
-        consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
+        //consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
 
             @Override
@@ -563,7 +563,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         extras.putString("npa", "1");
                         AdRequest adRequest = new AdRequest.Builder()
                                 .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                                .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+          //                      .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                                 .build();
                         adView.loadAd(adRequest);
                     } else if (consentStatus == ConsentStatus.UNKNOWN) {
@@ -572,14 +572,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         consentForm.load();
                     } else {
                         AdRequest adRequest = new AdRequest.Builder()
-                                .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+            //                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                                 .build();
                         adView.loadAd(adRequest);
                     }
                 } else {
                     //US users
                     AdRequest adRequest = new AdRequest.Builder()
-                            .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+              //              .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                             .build();
                     adView.loadAd(adRequest);
                 }

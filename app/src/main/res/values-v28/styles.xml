@@ -34,8 +34,8 @@
 
     <style name="AppTheme.Settings" parent="AppTheme">
         <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
         <item name="android:colorAccent">@color/moonPrimary</item>
         <item name="android:colorControlActivated">@color/moonPrimary</item>

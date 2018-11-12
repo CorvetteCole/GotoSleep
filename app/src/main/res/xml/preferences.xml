@@ -40,8 +40,8 @@
             android:dependency="pref_notificationsEnabled"
             android:inputType="number"
             android:key="pref_notificationDelay"
-            android:title="Notification Delay"
-            android:summary="15 minute delay between sleep notifications"
+            android:title="Notification Interval"
+            android:summary="15 minute interval between sleep notifications"
             android:maxLength="2"
             android:defaultValue="15"
             android:max="30"/>
@@ -73,6 +73,20 @@
             android:title="Clear GDPR preferences"
             android:summary="Clear your preferences regarding ad personalization">
         </PreferenceScreen>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_smartNotifications"
+            android:title="Smart Notifications"
+            android:summary="Send notifications until you stop using your phone"
+            android:dependency="pref_notificationsEnabled"/>
+        <EditTextPreference
+            android:dependency="pref_smartNotifications"
+            android:key="pref_activityMargin"
+            android:title="Inactivity Timer"
+            android:inputType="number"
+            android:defaultValue="5"
+            android:maxLength="2"
+            android:summary="User must be inactive for 5 minutes to be counted as inactive"/>
         <PreferenceScreen
             android:key="pref_customNotifications_category"
             android:title="Custom Notifications"
@@ -108,21 +122,6 @@
                 android:defaultValue="@string/notification5"
                 android:summary="@string/notification5"/>
         </PreferenceScreen>
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="pref_smartNotifications"
-            android:title="Persistent Notifications"
-            android:summary="Send notifications until you stop using your phone"
-            android:dependency="pref_notificationsEnabled"/>
-        <EditTextPreference
-            android:dependency="pref_smartNotifications"
-            android:key="pref_activityMargin"
-            android:title="Inactivity Timer"
-            android:inputType="number"
-            android:defaultValue="5"
-            android:maxLength="2"
-            android:summary="User must be inactive for 5 minutes to be counted as inactive"/>
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_adsEnabled"

@@ -91,7 +91,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference inactivityTimerPref = this.findPreference(INACTIVITY_TIMER_KEY);
             final Preference notificationAmount = this.findPreference(NOTIF_AMOUNT_KEY);
             final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
-            final Preference gdpr = this.findPreference(GDPR_KEY);
+            final Preference GDPR = this.findPreference(GDPR_KEY);
 
 
 
@@ -105,19 +105,18 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
                getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
                getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
-               getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
+               smartNotificationsPref.setEnabled(true);
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
             } else {
 
                 ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
                 String[] publisherIds = {getContext().getResources().getString(R.string.admob_publisher_id)};
-                consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
                 consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
                     @Override
                     public void onConsentInfoUpdated(ConsentStatus consentStatus) {
                         // User's consent status successfully updated.
                         if (consentInformation.isRequestLocationInEeaOrUnknown()){
-                            gdpr.setOnPreferenceClickListener(preference -> {
+                            GDPR.setOnPreferenceClickListener(preference -> {
                                 consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
                                 shouldUpdateConsent = true;
                                 Toast.makeText(getContext(), "Consent preferences cleared... Go back to main screen to edit", Toast.LENGTH_SHORT).show();
@@ -125,7 +124,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                                 return false;
                             });
                         }  else {
-                            gdpr.setVisible(false);
+                            GDPR.setVisible(false);
                         }
 
 
@@ -166,9 +165,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 bedtime.setSummary("Bedtime is " + sharedPreferences.getString(BEDTIME_KEY, "19:35"));
             }
 
-
-
-            getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(enableAdvancedOptions);
+            smartNotificationsPref.setEnabled(enableAdvancedOptions);
+            if (enableAdvancedOptions){
+                smartNotificationsPref.setSummary("Send notifications until you stop using your phone");
+            }
             customNotificationsPref.setEnabled(enableAdvancedOptions);
 
 
@@ -176,10 +176,11 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 //if enable ads is switched off, set premium options to false;
                 if ((!(boolean) newValue) && (!advancedOptionsPurchased)) {
 
-                    getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(false);
+                    smartNotificationsPref.setEnabled(false);
+
                     customNotificationsPref.setEnabled(false);
                 } else {
-                    getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
+                    smartNotificationsPref.setEnabled(true);
                     customNotificationsPref.setEnabled(true);
                 }
 

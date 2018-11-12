@@ -26,9 +26,7 @@ public class AboutActivity extends AppCompatActivity {
                     }
                 });*/
 
-        /*Element credits = new Element();
-        credits.setTitle("Icon Credits");
-        credits.*/
+
 
 
 
@@ -43,9 +41,9 @@ public class AboutActivity extends AppCompatActivity {
                 .addWebsite("https://corvettecole.com", "Visit my website")
                 .addGitHub("corvettecole", "View my GitHub")
                 .addWebsite("https://sleep.corvettecole.com/privacy/", "Privacy Policy")
+                .addWebsite()
                 .create();
 
-        Element element = new Element();
 
         setContentView(aboutPage);
 

@@ -19,6 +19,8 @@
 
 - Add setting for do not disturb delay
 
+- Add setting to change GDPR preference. Make it only display if user is in the EU
+
 - Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists
 
 - Add Google Admob consent SDK for European users (https://developers.google.com/admob/android/eu-consent)

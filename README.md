@@ -4,15 +4,11 @@
 ## First Release Feature Locked TODO:
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
-- If notification minute is 1, say minute in notification vs minutes
-
 - Add in-app purchase for a donation in about page
 
 - Add separate content_main layout for devices with a low DPI so that the text background looks right
 
 - Make edit bedtime button disappear after returning from settings for the first time
-
-- Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists
 
 - Add setting for do not disturb delay
 
@@ -21,6 +17,10 @@
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
 
 - Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
+
+~~- Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists~~ **DONE** (tested but decided against)
+
+~~- If notification minute is 1, say minute in notification vs minutes~~ **DONE**
 
 ~~- Add broadcastreceiver to run when phone boots up so it can reset an alarm for the bedtime reminders~~ **DONE**
 

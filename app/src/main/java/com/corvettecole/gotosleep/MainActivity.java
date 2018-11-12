@@ -336,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
 
-            MobileAds.initialize(this, getResources().getString(R.string.admob_test_key));
+            MobileAds.initialize(this, getResources().getString(R.string.admob_key));
             enableDisableAds();
 
 
@@ -518,7 +518,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if (adsEnabled && adView.getVisibility() == View.GONE) {
             Log.d(TAG, "enableDisableAds initialized");
             adView.setVisibility(View.VISIBLE);
-            AdRequest adRequest = new AdRequest.Builder().build();
+            AdRequest adRequest = new AdRequest.Builder()
+                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+                    .build();
             adView.loadAd(adRequest);
 
         } else if (adView.getVisibility() != View.GONE && !adsEnabled){

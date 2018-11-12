@@ -552,7 +552,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {context.getResources().getString(R.string.admob_publisher_id)};
         consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
-        consentInformation.setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA);
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
 
             @Override

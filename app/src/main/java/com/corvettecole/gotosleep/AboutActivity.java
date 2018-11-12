@@ -35,13 +35,13 @@ public class AboutActivity extends AppCompatActivity {
                 .isRTL(false)
                 .setDescription("I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. I encourage you to look at the source code of this app, available on my GitHub linked below. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project. Thank you for downloading Go to Sleep and I hope you have a beautiful sleep schedule from here on out! ")
                 .addItem(versionElement)
+                .addGitHub("corvettecole", "View my GitHub")
                 .addPlayStore(BuildConfig.APPLICATION_ID, "Rate the app")
-
                 .addEmail("corvettecole@gmail.com", "Contact me")
                 .addWebsite("https://corvettecole.com", "Visit my website")
-                .addGitHub("corvettecole", "View my GitHub")
+                
                 .addWebsite("https://sleep.corvettecole.com/privacy/", "Privacy Policy")
-                .addWebsite()
+                .addWebsite("https://sleep.corvettecole.com/license/", "License")
                 .create();
 
 

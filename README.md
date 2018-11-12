@@ -15,7 +15,11 @@
 
 ~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (Confirmed working)
 
+- Fix bug where notification amount isn't always disabled when enabling persistent notifications
+
 - Add setting for do not disturb delay
+
+- Add setting to change GDPR preference. Make it only display if user is in the EU
 
 - Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists
 

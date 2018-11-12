@@ -35,6 +35,7 @@ import com.google.ads.consent.ConsentFormListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
+import com.google.ads.consent.DebugGeography;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -179,6 +180,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
             rateLayout.setVisibility(View.GONE);
+            if (adView.getVisibility() != View.VISIBLE){
+                Log.d(TAG, "re-enabling ads after rating prompt...");
+                adsEnabled = true;
+                enableDisableAds();
+            }
         }
 
     }
@@ -281,27 +287,33 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
             bp.initialize();
             bp.loadOwnedPurchasesFromGoogle();
+
             notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             createNotificationChannel();
 
             loadPreferences();
 
 
+            MobileAds.initialize(this, getResources().getString(R.string.admob_key));
 
 
             //#TODO add in additional parameter requiring an amount of time to have passed
-            if (appLaunched < 10 && !ratingPromptShown) {
+            if (appLaunched < 4 && !ratingPromptShown) {
                 rateLayout.setVisibility(View.GONE);
                 Log.d(TAG, "appLaunched: " + appLaunched);
                 getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();
                 //initiateRatingDialogue(getPrefs); //debug
+                enableDisableAds();
             } else if (!ratingPromptShown) {
                 Log.d(TAG, "initiating rating dialogue");
                 initiateRatingDialogue();
             } else {
                rateLayout.setVisibility(View.GONE);
+                enableDisableAds();
                //initiateRatingDialogue(getPrefs);  //debug
             }
+
+
 
 
 
@@ -350,8 +362,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
 
-            MobileAds.initialize(this, getResources().getString(R.string.admob_key));
-            enableDisableAds();
+
 
 
 
@@ -360,8 +371,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void initiateRatingDialogue(){
-
-
         rateLayout.setVisibility(View.VISIBLE);
         rateLayout.invalidate();
         Log.d(TAG, "set rateLayout to visible");
@@ -370,39 +379,35 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ((ViewGroup) findViewById(R.id.rate_layout)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
 
-        rateNoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isRequestingFeedback && !isRequestingRating) {
-                    isRequestingFeedback = true;
-                    rateTextView.setText("Would you mind sending some feedback?");
-                    rateNoButton.setText("No, thanks");
-                    rateYesButton.setText("Ok, sure");
-                } else {
-                    rateLayout.setVisibility(View.GONE);
-                }
-                getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
+        rateNoButton.setOnClickListener(v -> {
+            if (!isRequestingFeedback && !isRequestingRating) {
+                isRequestingFeedback = true;
+                rateTextView.setText("Would you mind sending some feedback?");
+                rateNoButton.setText("No, thanks");
+                rateYesButton.setText("Ok, sure");
+            } else {
+                rateLayout.setVisibility(View.GONE);
+                Log.d(TAG, "re-enabling ads after rating prompt...");
+                enableDisableAds();
             }
+            getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
         });
 
-        rateYesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isRequestingRating && !isRequestingFeedback){
-                    isRequestingRating = true;
-                    rateTextView.setText("How about rating the app then?");
-                    rateYesButton.setText("Ok, sure!");
-                    rateNoButton.setText("No, thanks");
-                } else if (isRequestingFeedback){
-                    //#TODO user said yes to sending feedback
-                    sendFeedback();
+        rateYesButton.setOnClickListener(v -> {
+            if (!isRequestingRating && !isRequestingFeedback){
+                isRequestingRating = true;
+                rateTextView.setText("How about rating the app then?");
+                rateYesButton.setText("Ok, sure!");
+                rateNoButton.setText("No, thanks");
+            } else if (isRequestingFeedback){
+                //#TODO user said yes to sending feedback
+                sendFeedback();
 
-                } else {
-                    //#TODO user said yes to rating the app
-                    sendToPlayStore();
-                }
-                getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
+            } else {
+                //#TODO user said yes to rating the app
+                sendToPlayStore();
             }
+            getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
         });
 
 
@@ -529,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void enableDisableAds(){
-        if (adsEnabled && adView.getVisibility() == View.GONE) {
+        if (adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) {
 
 
 
@@ -547,6 +552,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {context.getResources().getString(R.string.admob_publisher_id)};
         consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
+        consentInformation.setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA);
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
 
             @Override
@@ -563,6 +569,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         adView.loadAd(adRequest);
                     } else if (consentStatus == ConsentStatus.UNKNOWN) {
                         consentForm = makeConsentForm(context);
+                        Log.d(TAG, "consent form loading");
                         consentForm.load();
                     } else {
                         AdRequest adRequest = new AdRequest.Builder()
@@ -576,7 +583,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                             .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                             .build();
                     adView.loadAd(adRequest);
-
                 }
 
 
@@ -602,6 +608,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     @Override
                     public void onConsentFormLoaded() {
                         // Consent form loaded successfully.
+                        Log.d(TAG, "consent form loaded... showing");
                         consentForm.show();
 
                     }
@@ -609,13 +616,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     @Override
                     public void onConsentFormOpened() {
                         // Consent form was displayed.
+                        Log.d(TAG, "consent form opened");
                     }
 
                     @Override
                     public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
                         // Consent form was closed.
+                        Log.d(TAG, "consent form closed");
                         if (userPrefersAdFree){
-                            bp.purchase(getParent(), "go_to_sleep_advanced");
+                            Log.d(TAG, "initiating in-app purchase...");
+                            bp.purchase(MainActivity.this, "go_to_sleep_advanced");
+
                         } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
                             Bundle extras = new Bundle();
                             extras.putString("npa", "1");

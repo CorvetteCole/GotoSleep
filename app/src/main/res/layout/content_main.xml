@@ -207,13 +207,13 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="34dp"
-        android:elevation="8dp"
         android:animateLayoutChanges="true"
         android:background="@drawable/feedback_outline"
+        android:elevation="8dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bedtimeSetButton">
+        app:layout_constraintTop_toBottomOf="@+id/sleepMessage">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rateNoButton"

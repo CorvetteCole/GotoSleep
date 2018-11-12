@@ -39,8 +39,8 @@ public class AboutActivity extends AppCompatActivity {
                 .addPlayStore(BuildConfig.APPLICATION_ID, "Rate the app")
                 .addEmail("corvettecole@gmail.com", "Contact me")
                 .addWebsite("https://corvettecole.com", "Visit my website")
-                
-                .addWebsite("https://sleep.corvettecole.com/privacy/", "Privacy Policy")
+                .addWebsite("https://sleep.corvettecole.com/credits/", "Credits")
+                .addWebsite("https://sleep.corvettecole.com/privacy/", "Privacy policy")
                 .addWebsite("https://sleep.corvettecole.com/license/", "License")
                 .create();
 

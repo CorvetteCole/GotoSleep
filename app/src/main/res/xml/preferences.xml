@@ -70,8 +70,8 @@
         </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_gdpr"
-            android:title="Change GDPR preferences"
-            android:summary="Change your preferences regarding ad personalization">
+            android:title="Clear GDPR preferences"
+            android:summary="Clear your preferences regarding ad personalization">
         </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_customNotifications_category"

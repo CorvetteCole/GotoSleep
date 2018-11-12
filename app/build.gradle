@@ -6,8 +6,8 @@ android {
         applicationId "com.corvettecole.gotosleep"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 22
-        versionName "1.19.02.DEBUG"
+        versionCode 23
+        versionName "1.19.03.DEBUG"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

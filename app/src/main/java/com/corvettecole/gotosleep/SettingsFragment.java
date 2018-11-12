@@ -118,8 +118,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                         // User's consent status successfully updated.
                         if (consentInformation.isRequestLocationInEeaOrUnknown()){
                             gdpr.setOnPreferenceClickListener(preference -> {
-                                consentForm = makeConsentForm(getContext());
-
+                                consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
+                                shouldUpdateConsent = true;
+                                Toast.makeText(getContext(), "Consent preferences cleared... Go back to main screen to edit", Toast.LENGTH_SHORT).show();
+                                //toast here
                                 return false;
                             });
                         }  else {
@@ -240,52 +242,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         }
     }
 
-    private ConsentForm makeConsentForm(Context context){
-        URL privacyUrl = null;
-        try {
-            privacyUrl = new URL("https://sleep.corvettecole.com/privacy");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            // Handle error.
-        }
-        return new ConsentForm.Builder(context, privacyUrl)
-                .withListener(new ConsentFormListener() {
-                    @Override
-                    public void onConsentFormLoaded() {
-                        // Consent form loaded successfully.
-                        Log.d(TAG, "consent form loaded... showing");
-                        consentForm.show();
 
-                    }
-
-                    @Override
-                    public void onConsentFormOpened() {
-                        // Consent form was displayed.
-                        Log.d(TAG, "consent form opened");
-                    }
-
-                    @Override
-                    public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
-                        // Consent form was closed.
-                        Log.d(TAG, "consent form closed");
-                        if (userPrefersAdFree){
-                            Log.d(TAG, "initiating in-app purchase...");
-                            bp.purchase(getActivity(), "go_to_sleep_advanced");
-                        }
-                        shouldUpdateConsent = true;
-
-                    }
-
-                    @Override
-                    public void onConsentFormError(String errorDescription) {
-                        // Consent form error.
-                    }
-                })
-                .withPersonalizedAdsOption()
-                .withNonPersonalizedAdsOption()
-                .withAdFreeOption()
-                .build();
-    }
 
     public static boolean isUsageAccessGranted(Context context) {
         try {

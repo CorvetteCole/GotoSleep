@@ -592,6 +592,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 // User's consent status failed to update.
             }
         });
+        shouldUpdateConsent = false;
     }
 
     private ConsentForm makeConsentForm(Context context){

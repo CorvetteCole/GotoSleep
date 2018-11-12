@@ -2,21 +2,15 @@
 
 # TODO
 ## First Release Feature Locked TODO:
-- Add broadcastreceiver to run when phone boots up so it can reset an alarm for the bedtime reminders 
-
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
 - If notification minute is 1, say minute in notification vs minutes
-
-- Add credits for app icon, intro icons, open source libraries to about
 
 - Add in-app purchase for a donation in about page
 
 - Add separate content_main layout for devices with a low DPI so that the text background looks right
 
 - Make edit bedtime button disappear after returning from settings for the first time
-
-- Re-do about page to use a custom layout vs the about page library it is using now
 
 - Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists
 
@@ -27,6 +21,12 @@
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
 
 - Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
+
+~~- Add broadcastreceiver to run when phone boots up so it can reset an alarm for the bedtime reminders~~ **DONE**
+
+~~- Add credits for app icon, intro icons, open source libraries to about~~ **DONE**
+
+~~- Re-do about page to use a custom layout vs the about page library it is using now~~ **DONE** (change not needed)
 
 ~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE** 
 

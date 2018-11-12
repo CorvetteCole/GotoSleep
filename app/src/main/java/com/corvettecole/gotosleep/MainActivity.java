@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private SharedPreferences getPrefs;
 
+    static boolean shouldUpdateConsent = false;
+
     /*private UsageStatsManager usageStatsManager;
     private Button usageButton;
     private int userActiveMargin;
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         updateCountdown();
 
-        if (!adsLoaded) {
+        if (!adsLoaded || shouldUpdateConsent) {
             enableDisableAds();
         }
         if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
@@ -388,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             } else {
                 rateLayout.setVisibility(View.GONE);
                 Log.d(TAG, "re-enabling ads after rating prompt...");
-                enableDisableAds();
+                adView.setVisibility(View.VISIBLE);
             }
             getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
         });
@@ -400,11 +402,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 rateYesButton.setText("Ok, sure!");
                 rateNoButton.setText("No, thanks");
             } else if (isRequestingFeedback){
-                //#TODO user said yes to sending feedback
                 sendFeedback();
 
             } else {
-                //#TODO user said yes to rating the app
                 sendToPlayStore();
             }
             getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void enableDisableAds(){
-        if (adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) {
+        if ((adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) || shouldUpdateConsent) {
 
 
 

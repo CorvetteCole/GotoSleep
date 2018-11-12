@@ -69,6 +69,11 @@
             android:summary="Support me and unlock all advanced options without advertisements for life">
         </PreferenceScreen>
         <PreferenceScreen
+            android:key="pref_gdpr"
+            android:title="Change GDPR preferences"
+            android:summary="Change your preferences regarding ad personalization">
+        </PreferenceScreen>
+        <PreferenceScreen
             android:key="pref_customNotifications_category"
             android:title="Custom Notifications"
             android:summary="Customize your sleep notifications">
@@ -108,7 +113,8 @@
             android:defaultValue="false"
             android:key="pref_smartNotifications"
             android:title="Persistent Notifications"
-            android:summary="Send notifications until you stop using your phone"/>
+            android:summary="Send notifications until you stop using your phone"
+            android:dependency="pref_notificationsEnabled"/>
         <EditTextPreference
             android:dependency="pref_smartNotifications"
             android:key="pref_activityMargin"

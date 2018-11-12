@@ -18,7 +18,16 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.google.ads.consent.ConsentForm;
+import com.google.ads.consent.ConsentFormListener;
+import com.google.ads.consent.ConsentInfoUpdateListener;
+import com.google.ads.consent.ConsentInformation;
+import com.google.ads.consent.ConsentStatus;
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +36,8 @@ import java.util.Date;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
+
+import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
 
 
 public class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
@@ -47,6 +58,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     final static String ADS_ENABLED_KEY = "pref_adsEnabled";
     final static String ADVANCED_PURCHASED_KEY = "advanced_options_purchased";
     final static String INACTIVITY_TIMER_KEY = "pref_activityMargin";
+    final static String GDPR_KEY = "pref_gdpr";
     private boolean advancedOptionsPurchased;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
@@ -54,6 +66,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private NotificationManager notificationManager;
     private UsageStatsManager usageStatsManager;
     private SharedPreferences sharedPreferences;
+    private final String TAG = "SettingsFragment";
+    private ConsentForm consentForm;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
@@ -77,6 +91,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference inactivityTimerPref = this.findPreference(INACTIVITY_TIMER_KEY);
             final Preference notificationAmount = this.findPreference(NOTIF_AMOUNT_KEY);
             final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
+            final Preference gdpr = this.findPreference(GDPR_KEY);
 
 
 
@@ -94,17 +109,41 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
             } else {
 
-                final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
-                advancedPurchasePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+                String[] publisherIds = {getContext().getResources().getString(R.string.admob_publisher_id)};
+                consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
+                consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
                     @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        bp.purchase(getActivity(), "go_to_sleep_advanced");
+                    public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                        // User's consent status successfully updated.
+                        if (consentInformation.isRequestLocationInEeaOrUnknown()){
+                            gdpr.setOnPreferenceClickListener(preference -> {
+                                consentForm = makeConsentForm(getContext());
+
+                                return false;
+                            });
+                        }  else {
+                            gdpr.setVisible(false);
+                        }
 
 
-
-
-                        return false;
                     }
+
+                    @Override
+                    public void onFailedToUpdateConsentInfo(String errorDescription) {
+                        // User's consent status failed to update.
+                    }
+                });
+
+
+                final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
+                advancedPurchasePref.setOnPreferenceClickListener(preference -> {
+                    bp.purchase(getActivity(), "go_to_sleep_advanced");
+
+
+
+
+                    return false;
                 });
 
             }
@@ -150,10 +189,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             // Returning false in onPreferenceChange will not update the preference with the new value, and onClickListeners exist...
 
             smartNotificationsPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((boolean) newValue && !isUsageAccessGranted(getContext())){
+                if ((boolean) newValue) {
                     notificationAmount.setEnabled(false);
-                    Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                    startActivity(usageSettings);
+                    if (!isUsageAccessGranted(getContext())){
+                        Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                        startActivity(usageSettings);
+                    }
                 } else if (!(boolean)newValue){
                     notificationAmount.setEnabled(true);
                 }
@@ -197,6 +238,53 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         } else {
            startCustomNotificationsScreen();
         }
+    }
+
+    private ConsentForm makeConsentForm(Context context){
+        URL privacyUrl = null;
+        try {
+            privacyUrl = new URL("https://sleep.corvettecole.com/privacy");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            // Handle error.
+        }
+        return new ConsentForm.Builder(context, privacyUrl)
+                .withListener(new ConsentFormListener() {
+                    @Override
+                    public void onConsentFormLoaded() {
+                        // Consent form loaded successfully.
+                        Log.d(TAG, "consent form loaded... showing");
+                        consentForm.show();
+
+                    }
+
+                    @Override
+                    public void onConsentFormOpened() {
+                        // Consent form was displayed.
+                        Log.d(TAG, "consent form opened");
+                    }
+
+                    @Override
+                    public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                        // Consent form was closed.
+                        Log.d(TAG, "consent form closed");
+                        if (userPrefersAdFree){
+                            Log.d(TAG, "initiating in-app purchase...");
+                            bp.purchase(getActivity(), "go_to_sleep_advanced");
+                        }
+                        shouldUpdateConsent = true;
+
+                    }
+
+                    @Override
+                    public void onConsentFormError(String errorDescription) {
+                        // Consent form error.
+                    }
+                })
+                .withPersonalizedAdsOption()
+                .withNonPersonalizedAdsOption()
+                .withAdFreeOption()
+                .build();
     }
 
     public static boolean isUsageAccessGranted(Context context) {

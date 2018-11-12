@@ -18,6 +18,7 @@ import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIF
 import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
 import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 
 public class BedtimeNotificationHelper extends BroadcastReceiver {
 
@@ -29,28 +30,27 @@ public class BedtimeNotificationHelper extends BroadcastReceiver {
         Log.d(TAG, "Device booted, broadcast received, setting bedtime notification");
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notificationsEnabled = settings.getBoolean(NOTIF_ENABLE_KEY, true);
 
-        bedtime = Calendar.getInstance();
-        bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
+        if (notificationsEnabled) {
+            bedtime = Calendar.getInstance();
+            bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
 
-        settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-        setBedtimeNotification(context);
+            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+            setBedtimeNotification(context);
+        }
     }
 
     private void setBedtimeNotification(Context context){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(bedtime.getTimeInMillis());
-        Log.d(TAG, "Setting bedtime notification");
-
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtime.getTimeInMillis(), pendingIntent);
         } else {
-            am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            am.setExact(AlarmManager.RTC_WAKEUP, bedtime.getTimeInMillis(), pendingIntent);
         }
 
 

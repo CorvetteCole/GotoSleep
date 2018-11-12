@@ -30,10 +30,18 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.google.ads.consent.ConsentForm;
+import com.google.ads.consent.ConsentFormListener;
+import com.google.ads.consent.ConsentInfoUpdateListener;
+import com.google.ads.consent.ConsentInformation;
+import com.google.ads.consent.ConsentStatus;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -113,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
     private boolean ratingPromptShown;
 
+    private ConsentForm consentForm;
+
     private SharedPreferences getPrefs;
 
     /*private UsageStatsManager usageStatsManager;
@@ -175,7 +185,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     public void onProductPurchased(String productId, TransactionDetails details) {
-
+        if (productId.equals("go_to_sleep_advanced")){
+            Log.d("productPurchased", "go to sleep advanced purchased");
+            advancedOptionsPurchased = true;
+            getPrefs.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
+        }
     }
 
     @Override
@@ -516,18 +530,120 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private void enableDisableAds(){
         if (adsEnabled && adView.getVisibility() == View.GONE) {
+
+
+
             Log.d(TAG, "enableDisableAds initialized");
             adView.setVisibility(View.VISIBLE);
-            AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
-                    .build();
-            adView.loadAd(adRequest);
+            getAdConsentStatus(this);
 
         } else if (adView.getVisibility() != View.GONE && !adsEnabled){
 
             adView.setVisibility(View.GONE);
         }
     }
+
+    private void getAdConsentStatus(Context context){
+        ConsentInformation consentInformation = ConsentInformation.getInstance(context);
+        String[] publisherIds = {context.getResources().getString(R.string.admob_publisher_id)};
+        consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
+        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+
+            @Override
+            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                // User's consent status successfully updated.
+                if (consentInformation.isRequestLocationInEeaOrUnknown()){
+                    if (consentStatus == ConsentStatus.NON_PERSONALIZED){
+                        Bundle extras = new Bundle();
+                        extras.putString("npa", "1");
+                        AdRequest adRequest = new AdRequest.Builder()
+                                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                                .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+                                .build();
+                        adView.loadAd(adRequest);
+                    } else if (consentStatus == ConsentStatus.UNKNOWN) {
+                        consentForm = makeConsentForm(context);
+                        consentForm.load();
+                    } else {
+                        AdRequest adRequest = new AdRequest.Builder()
+                                .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+                                .build();
+                        adView.loadAd(adRequest);
+                    }
+                } else {
+                    //US users
+                    AdRequest adRequest = new AdRequest.Builder()
+                            .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+                            .build();
+                    adView.loadAd(adRequest);
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailedToUpdateConsentInfo(String errorDescription) {
+                // User's consent status failed to update.
+            }
+        });
+    }
+
+    private ConsentForm makeConsentForm(Context context){
+        URL privacyUrl = null;
+        try {
+            privacyUrl = new URL("https://sleep.corvettecole.com/privacy");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            // Handle error.
+        }
+        return new ConsentForm.Builder(context, privacyUrl)
+                .withListener(new ConsentFormListener() {
+                    @Override
+                    public void onConsentFormLoaded() {
+                        // Consent form loaded successfully.
+                        consentForm.show();
+
+                    }
+
+                    @Override
+                    public void onConsentFormOpened() {
+                        // Consent form was displayed.
+                    }
+
+                    @Override
+                    public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+                        // Consent form was closed.
+                        if (userPrefersAdFree){
+                            bp.purchase(getParent(), "go_to_sleep_advanced");
+                        } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
+                            Bundle extras = new Bundle();
+                            extras.putString("npa", "1");
+                            AdRequest adRequest = new AdRequest.Builder()
+                                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+                                    .build();
+                            adView.loadAd(adRequest);
+                        } else {
+                            AdRequest adRequest = new AdRequest.Builder()
+                                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
+                                    .build();
+                            adView.loadAd(adRequest);
+                        }
+
+                    }
+
+                    @Override
+                    public void onConsentFormError(String errorDescription) {
+                        // Consent form error.
+                    }
+                })
+                .withPersonalizedAdsOption()
+                .withNonPersonalizedAdsOption()
+                .withAdFreeOption()
+                .build();
+    }
+
 
     /*
     private void testUsageStats(){

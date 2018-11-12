@@ -13,7 +13,13 @@
 
 ~~-Add separate moon icon that is the right size for the notifications~~ **DONE** (not confirmed fixed)
 
-~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (not fully tested)
+~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (Confirmed working)
+
+- Add setting for do not disturb delay
+
+- Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists
+
+- Add Google Admob consent SDK for European users (https://developers.google.com/admob/android/eu-consent)
 
 - Re-do about page to use a custom layout vs the about page library it is using now
 
@@ -29,11 +35,9 @@
 
 - Make edit bedtime button disappear after returning from settings for the first time
 
-- Reduce work being done on main thread for SettingsFragment and, if possible, MainActivity. Especially with SettingFragment, the work on the main thread is severely impacting the launch of settings after clicking the settings button and the app is skipping frames.
-
 - Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
 
-- Investigate code to detect when a purchase has been refunded and disable the advanced options. **UPDATE:** still not sure how long it takes a revoked in-app purchase to be detected by the app code. Moving this to a lower priority
+~~- Investigate code to detect when a purchase has been refunded and disable the advanced options. **UPDATE:** still not sure how long it takes a revoked in-app purchase to be detected by the app code. Moving this to a lower priority~~ **DONE** (confirmed working, takes a couple of days to update though)
 
 
 

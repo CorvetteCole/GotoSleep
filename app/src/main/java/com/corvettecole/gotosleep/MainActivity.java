@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     static boolean shouldUpdateConsent = false;
 
+    static boolean editBedtimeClicked = false;
+
+    private boolean adsInitialized = false;
+
     /*private UsageStatsManager usageStatsManager;
     private Button usageButton;
     private int userActiveMargin;
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onStart() {
         super.onStart();
+
         _broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context ctx, Intent intent) {
@@ -170,12 +175,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume called " + System.currentTimeMillis());
 
         loadPreferences();
 
         setNotifications(); //Warning: takes a long time to execute (55ms!)
 
         updateCountdown();
+
+        if (editBedtimeClicked){
+            editBedtimeButton.setVisibility(View.GONE);
+            editBedtimeClicked = false;
+        }
 
         if (!adsLoaded || shouldUpdateConsent) {
             enableDisableAds();
@@ -188,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 enableDisableAds();
             }
         }
+        Log.d(TAG, "onResume finished " + System.currentTimeMillis());
 
     }
 
@@ -233,8 +245,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate called " + System.currentTimeMillis());
+
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
 
         getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
@@ -250,12 +265,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //  Launch app slide1
             final Intent intro = new Intent(MainActivity.this, IntroActivity.class);
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(intro);
-                }
-            });
+            runOnUiThread(() -> startActivity(intro));
 
             //  Make a new preferences editor
             SharedPreferences.Editor e = getPrefs.edit();
@@ -268,8 +278,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //this is needed to stop weird back button stuff
             finish();
         } else {
-
+            Log.d(TAG, "onCreate section 1 " + System.currentTimeMillis());
+            //~328 ms
             setContentView(R.layout.activity_main);
+            Log.d(TAG, "onCreate section 2 " + System.currentTimeMillis());
             adView = findViewById(R.id.adView);
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
@@ -283,22 +295,24 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             rateNoButton = findViewById(R.id.rateNoButton);
             rateYesButton = findViewById(R.id.rateYesButton);
             rateTextView = findViewById(R.id.rateText);
-
-
-
+            Log.d(TAG, "onCreate section 3 " + System.currentTimeMillis());
+            //~781 ms
             bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
+            Log.d(TAG, "onCreate section 4 " + System.currentTimeMillis());
             bp.initialize();
+            Log.d(TAG, "onCreate section 5 " + System.currentTimeMillis());
             bp.loadOwnedPurchasesFromGoogle();
+            Log.d(TAG, "onCreate section 6 " + System.currentTimeMillis());
 
             notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+            Log.d(TAG, "onCreate section 7 " + System.currentTimeMillis());
             createNotificationChannel();
+            Log.d(TAG, "onCreate section 8 " + System.currentTimeMillis());
 
             loadPreferences();
+            Log.d(TAG, "onCreate section 9 " + System.currentTimeMillis());
 
-
-            MobileAds.initialize(this, getResources().getString(R.string.admob_key));
-
-
+            Log.d(TAG, "onCreate section 10 " + System.currentTimeMillis());
             //#TODO add in additional parameter requiring an amount of time to have passed
             if (appLaunched < 6 && !ratingPromptShown) {
                 rateLayout.setVisibility(View.GONE);
@@ -325,7 +339,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             if (isSecondStart) {
                 editBedtimeButton.setVisibility(View.VISIBLE);
-                editBedtimeButton.setOnClickListener(view -> startActivity(settings));
+                editBedtimeButton.setOnClickListener(view -> {
+                    startActivity(settings);
+                    editBedtimeClicked = true;
+                });
                 SharedPreferences.Editor e = getPrefs.edit();
                 //  Edit preference to make it false because we don't want this to run again
                 e.putBoolean("secondStart", false);
@@ -362,13 +379,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
             });
 
-
-
-
-
-
-
-
+            Log.d(TAG, "onCreate finished " + System.currentTimeMillis());
         }
     }
 
@@ -384,9 +395,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         rateNoButton.setOnClickListener(v -> {
             if (!isRequestingFeedback && !isRequestingRating) {
                 isRequestingFeedback = true;
-                rateTextView.setText("Would you mind sending some feedback?");
-                rateNoButton.setText("No, thanks");
-                rateYesButton.setText("Ok, sure");
+                rateTextView.setText(getString(R.string.request_feedback));
+                rateNoButton.setText(getString(R.string.no_thanks));
+                rateYesButton.setText(getString(R.string.ok_sure));
             } else {
                 rateLayout.setVisibility(View.GONE);
                 Log.d(TAG, "re-enabling ads after rating prompt...");
@@ -398,9 +409,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         rateYesButton.setOnClickListener(v -> {
             if (!isRequestingRating && !isRequestingFeedback){
                 isRequestingRating = true;
-                rateTextView.setText("How about rating the app then?");
-                rateYesButton.setText("Ok, sure!");
-                rateNoButton.setText("No, thanks");
+                rateTextView.setText(getString(R.string.rating_request));
+                rateYesButton.setText(getString(R.string.ok_sure));
+                rateNoButton.setText(getString(R.string.no_thanks));
             } else if (isRequestingFeedback){
                 sendFeedback();
 
@@ -535,10 +546,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private void enableDisableAds(){
         if ((adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) || shouldUpdateConsent) {
-
-
-
             Log.d(TAG, "enableDisableAds initialized");
+            if (!adsInitialized){
+                //MobileAds.initialize(this, getResources().getString(R.string.admob_key));
+                adsInitialized = true;
+            }
             adView.setVisibility(View.VISIBLE);
             getAdConsentStatus(this);
 

@@ -80,9 +80,10 @@ public class IntroActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+        // Do something when users tap on Done button.
         loadMainActivity();
         finish();
-        // Do something when users tap on Done button.
+
     }
 
     @Override

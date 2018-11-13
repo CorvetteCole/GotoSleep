@@ -23,4 +23,11 @@
     <string name="shortcut_short">Sleep Mode</string>
     <string name="shortcut_long">I\'m going to sleep</string>
     <string name="advertisement">Advertisement</string>
+    <string name="request_feedback">Would you like to send some feedback?</string>
+    <string name="no_thanks">No, thanks</string>
+    <string name="ok_sure">Ok, sure</string>
+    <string name="rating_request">How about rating the app then?</string>
+    <string name="rating_prompt">Enjoying Go to Sleep?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

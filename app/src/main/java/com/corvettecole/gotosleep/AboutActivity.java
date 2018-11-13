@@ -17,14 +17,13 @@ public class AboutActivity extends AppCompatActivity {
         Element versionElement = new Element();
         versionElement.setTitle("Version " + BuildConfig.VERSION_NAME);
 
-        /*Element donate = new Element();
-        versionElement.setTitle("Buy me a coffee and support my future open-source projects")
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+        Element donate = new Element();
+        donate.setTitle("Donate")
+                .setOnClickListener(v -> {
 
-                    }
-                });*/
+                });
+        donate.setIconDrawable(R.drawable.ic_money_white);
+
 
 
 
@@ -37,6 +36,7 @@ public class AboutActivity extends AppCompatActivity {
                 .addItem(versionElement)
                 .addGitHub("corvettecole", "View my GitHub")
                 .addPlayStore(BuildConfig.APPLICATION_ID, "Rate the app")
+                .addItem(donate)
                 .addEmail("corvettecole@gmail.com", "Contact me")
                 .addWebsite("https://corvettecole.com", "Visit my website")
                 .addWebsite("https://sleep.corvettecole.com/credits/", "Credits")

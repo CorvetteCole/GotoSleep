@@ -30,6 +30,7 @@ import static com.corvettecole.gotosleep.MainActivity.notifications;
 import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
 import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.DND_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.INACTIVITY_TIMER_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
@@ -48,7 +49,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     static final int LAUNCH_APP_REQUEST_CODE = 6;
     static final String LAST_NOTIFICATION_KEY = "lastNotificationTime";
     static final long ONE_MINUTE_MILLIS = 60000;
-    static final int DnD_delay = 2; //in minutes
+    private int DnD_delay = 2; //in minutes
 
     private Calendar bedtime;
     private int numNotifications;
@@ -82,6 +83,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
         lastNotification = settings.getLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis());
         userActiveMargin = Integer.parseInt(settings.getString(INACTIVITY_TIMER_KEY, "5"));
+        DnD_delay = Integer.parseInt(settings.getString(DND_DELAY_KEY, "2"));
 
 
 

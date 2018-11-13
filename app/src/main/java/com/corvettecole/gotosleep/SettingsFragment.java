@@ -59,6 +59,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     final static String ADVANCED_PURCHASED_KEY = "advanced_options_purchased";
     final static String INACTIVITY_TIMER_KEY = "pref_activityMargin";
     final static String GDPR_KEY = "pref_gdpr";
+    final static String DND_DELAY_KEY = "pref_dndDelay";
+
     private boolean advancedOptionsPurchased;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
@@ -92,6 +94,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference notificationAmount = this.findPreference(NOTIF_AMOUNT_KEY);
             final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
             final Preference GDPR = this.findPreference(GDPR_KEY);
+            final Preference delayDnDPref = this.findPreference(DND_DELAY_KEY);
 
 
 
@@ -105,6 +108,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
                getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
                getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
+               delayDnDPref.setEnabled(sharedPreferences.getBoolean(DND_KEY, false));
                smartNotificationsPref.setEnabled(true);
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
             } else {
@@ -166,6 +170,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             }
 
             smartNotificationsPref.setEnabled(enableAdvancedOptions);
+            delayDnDPref.setEnabled(enableAdvancedOptions);
             if (enableAdvancedOptions){
                 smartNotificationsPref.setSummary("Send notifications until you stop using your phone");
             }
@@ -177,13 +182,28 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 if ((!(boolean) newValue) && (!advancedOptionsPurchased)) {
 
                     smartNotificationsPref.setEnabled(false);
-
+                    delayDnDPref.setEnabled(false);
                     customNotificationsPref.setEnabled(false);
+                    adsEnabled = false;
                 } else {
                     smartNotificationsPref.setEnabled(true);
+                    if (sharedPreferences.getBoolean(DND_KEY, false)){
+                        delayDnDPref.setEnabled(true);
+                    }
                     customNotificationsPref.setEnabled(true);
+                    adsEnabled = true;
                 }
 
+                return true;
+            });
+
+
+            autoDnDPref.setSummary("Automatically enable Do not Disturb " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last bedtime reminder is sent");
+            delayDnDPref.setSummary("Do not Disturb will be activated " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last notification is sent");
+
+            delayDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                autoDnDPref.setSummary("Automatically enable Do not Disturb " + newValue + " minutes after the last bedtime reminder is sent");
+                delayDnDPref.setSummary("Do not Disturb will be activated " + newValue + " minutes after the last notification is sent");
                 return true;
             });
 
@@ -212,10 +232,19 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 autoDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
 
                     // Check if the notification policy access has been granted for the app.
-                    if ((boolean) newValue && notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
-                        Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                        startActivity(intent);
+                    enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
+                    if ((boolean) newValue) {
+                        if (!notificationManager.isNotificationPolicyAccessGranted()) {
+                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                            startActivity(intent);
+                        }
+                        if (enableAdvancedOptions) {
+                            delayDnDPref.setEnabled(true);
+                        }
+                    } else {
+                        delayDnDPref.setEnabled(false);
                     }
+
                     return true;
                 });
             }
@@ -342,7 +371,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
     @Override
     public void onProductPurchased(String productId, TransactionDetails details) {
-        if (productId.equals("go_to_sleep_advanced")){
+        if (productId.equals("go_to_sleep_advanced")) {
             Log.d("productPurchased", "go to sleep advanced purchased");
             advancedOptionsPurchased = true;
             getPreferenceManager().getSharedPreferences().edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
@@ -353,8 +382,9 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
             getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
             getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
-
-
+            if (sharedPreferences.getBoolean(DND_KEY, false)) {
+                getPreferenceScreen().findPreference(DND_DELAY_KEY).setEnabled(true);
+            }
         }
 
     }

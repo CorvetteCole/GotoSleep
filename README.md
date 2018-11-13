@@ -52,6 +52,11 @@
 
 
 ## Next Major Version Features (not confirmed):
+-Animate stars to gently blink
+
+-Animate moon and stars to fade away as the sun rises
+
+-Animate background to shift color as the day gets brighter
 
 - Add app shortcut for go to sleep early feature
 

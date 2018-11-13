@@ -59,6 +59,8 @@
     </style>
 
     <style name="about_description" parent="about_elementTextAppearance">
+        <item name="android:layout_marginTop">-8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">@string/about_page_description</item>

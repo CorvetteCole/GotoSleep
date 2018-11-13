@@ -14,6 +14,8 @@
 
 - Fix bug where the rating box doesn't disappear smoothly
 
+- Fix bug where minutes on the main screen can sometimes get cut off. set the side constraints to fixed and see if that fixes it
+
 ~~- Add in-app purchase for a donation in about page~~ **DONE**
 
 ~~- Add separate content_main layout for devices with a low DPI so that the text background looks right~~ **DONE**

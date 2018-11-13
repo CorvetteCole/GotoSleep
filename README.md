@@ -10,13 +10,13 @@
 
 - Make edit bedtime button disappear after returning from settings for the first time
 
-- Add setting for do not disturb delay
-
 - Speed up launch of MainActivity after pressing the DONE button in Intro slides
 
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
 
 - Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
+
+~~- Add setting for do not disturb delay~~ **DONE**
 
 ~~- Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists~~ **DONE** (tested but decided against)
 

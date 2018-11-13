@@ -57,17 +57,21 @@
 ## Next Major Version Features (not confirmed):
 -Animate stars to gently blink
 
--Animate moon and stars to fade away as the sun rises
+- Animate moon and stars to fade away as the sun rises
 
--Animate background to shift color as the day gets brighter
+- Animate background to shift color as the day gets brighter
 
 - Add app shortcut for go to sleep early feature
 
--AMOLED black theme option (maybe in premium category? idk)
+- AMOLED black theme option (maybe in premium category? idk)
 
--Refactor styles xml and possibly colors xml so that they are better organized/labelled and more compatible with everything
+- Automatic day/night mode
 
--Refactor preferences code to reduce dependence on 3rd party libraries
+- Remove hours countdown when it is 0 possibly
 
--Add background themeing (maybe)
+- Refactor styles xml and possibly colors xml so that they are better organized/labelled and more compatible with everything
+
+- Refactor preferences code to reduce dependence on 3rd party libraries
+
+- Add background themeing (maybe)
 

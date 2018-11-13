@@ -197,13 +197,22 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 return true;
             });
 
-
-            autoDnDPref.setSummary("Automatically enable Do not Disturb " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last bedtime reminder is sent");
-            delayDnDPref.setSummary("Do not Disturb will be activated " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last notification is sent");
+            if (sharedPreferences.getString(DND_DELAY_KEY, "2").equals("1")){
+                autoDnDPref.setSummary("Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent");
+                delayDnDPref.setSummary("Do not Disturb will be activated 1 minute after the last notification is sent");
+            } else {
+                autoDnDPref.setSummary("Automatically enable Do not Disturb " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last bedtime reminder is sent");
+                delayDnDPref.setSummary("Do not Disturb will be activated " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last notification is sent");
+            }
 
             delayDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                autoDnDPref.setSummary("Automatically enable Do not Disturb " + newValue + " minutes after the last bedtime reminder is sent");
-                delayDnDPref.setSummary("Do not Disturb will be activated " + newValue + " minutes after the last notification is sent");
+                if ((newValue).equals("1")){
+                    autoDnDPref.setSummary("Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent");
+                    delayDnDPref.setSummary("Do not Disturb will be activated 1 minute after the last notification is sent");
+                } else {
+                    autoDnDPref.setSummary("Automatically enable Do not Disturb " + newValue + " minutes after the last bedtime reminder is sent");
+                    delayDnDPref.setSummary("Do not Disturb will be activated " + newValue + " minutes after the last notification is sent");
+                }
                 return true;
             });
 
@@ -255,15 +264,31 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 return true;
             });
 
-            notificationAmount.setSummary(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "2") + " sleep reminders will be sent");
+            if (sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3").equals("1")){
+                notificationAmount.setSummary("1 sleep reminder will be sent");
+            } else {
+                notificationAmount.setSummary(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3") + " sleep reminders will be sent");
+            }
             notificationAmount.setOnPreferenceChangeListener((preference, newValue) -> {
-                notificationAmount.setSummary(newValue + " sleep reminders will be sent");
+                if (((String) newValue).equals("1")){
+                    notificationAmount.setSummary("1 sleep reminder will be sent");
+                } else {
+                    notificationAmount.setSummary(newValue + " sleep reminders will be sent");
+                }
                 return true;
             });
 
-            inactivityTimerPref.setSummary("User must be inactive for " + sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5") + " minutes to be considered inactive");
+            if (Integer.parseInt(sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")) == 1){
+                inactivityTimerPref.setSummary("User must be inactive for 1 minute to be considered inactive");
+            } else {
+                inactivityTimerPref.setSummary("User must be inactive for " + sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5") + " minutes to be considered inactive");
+            }
             inactivityTimerPref.setOnPreferenceChangeListener(((preference, newValue) -> {
-                inactivityTimerPref.setSummary("User must be inactive for " + newValue + " minutes to be considered inactive");
+                if (Integer.parseInt((String) newValue) == 1){
+                    inactivityTimerPref.setSummary("User must be inactive for 1 minute to be considered inactive");
+                } else {
+                    inactivityTimerPref.setSummary("User must be inactive for " + newValue + " minutes to be considered inactive");
+                }
                 return true;
             }));
 

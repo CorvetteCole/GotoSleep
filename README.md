@@ -4,10 +4,6 @@
 ## First Release Feature Locked TODO:
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
-- Speed up launch of MainActivity after pressing the DONE button in Intro slides
-
-- Make edit bedtime button disappear after returning from settings for the first time
-
 - Add separate content_main layout for devices with a low DPI so that the text background looks right
 
 - General performance optimizations
@@ -15,6 +11,10 @@
 - Add in-app purchase for a donation in about page
 
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
+
+~~- Make edit bedtime button disappear after returning from settings for the first time~~ **DONE**
+
+~~- Speed up launch of MainActivity after pressing the DONE button in Intro slides~~ **DONE** (further optimization may still be possible)
 
 ~~- Add setting for do not disturb delay~~ **DONE**
 
@@ -44,7 +44,7 @@
 
 ~~- Constrain rating box to bottom of the sleepmessage so they dont interfere~~ **DONE**
 
-~~-Add prompt to rate the app after it has been opened like 15 times or something~~ **DONE** (still needs polishing in terms of words)
+~~-Add prompt to rate the app after it has been opened like 15 times or something~~ **DONE** 
 
 ~~- Investigate code to detect when a purchase has been refunded and disable the advanced options. **UPDATE:** still not sure how long it takes a revoked in-app purchase to be detected by the app code. Moving this to a lower priority~~ **DONE** (confirmed working, takes a couple of days to update though)
 

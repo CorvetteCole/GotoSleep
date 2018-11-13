@@ -13,7 +13,7 @@ import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NOTIFICATIO
 public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("AUTODNDREC", "Attempting to enable DnD");
+        Log.d("AutoDnDReceiver", "Attempting to enable DnD");
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS);

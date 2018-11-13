@@ -198,7 +198,8 @@
         ads:adUnitId="@string/admob_banner_key"
         ads:layout_constraintBottom_toTopOf="@+id/aboutButton"
         ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintStart_toStartOf="parent" />
+        ads:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/advertisement"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rate_layout"

@@ -22,4 +22,5 @@
 
     <string name="shortcut_short">Sleep Mode</string>
     <string name="shortcut_long">I\'m going to sleep</string>
+    <string name="advertisement">Advertisement</string>
 </resources>

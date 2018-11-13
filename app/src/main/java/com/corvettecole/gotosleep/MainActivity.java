@@ -1,6 +1,9 @@
 package com.corvettecole.gotosleep;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
 import android.animation.LayoutTransition;
+import android.animation.ValueAnimator;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +30,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +58,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
@@ -81,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private int[] bedtime;
 
     private BroadcastReceiver _broadcastReceiver;
+    private ImageView moon;
     private TextView hours;
     private TextView minutes;
     private TextView sleepMessage;
@@ -132,6 +140,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private boolean adsInitialized = false;
 
+    private boolean egg = false;
+
+    private int colorFadeDuration = 6000;
+
+
     /*private UsageStatsManager usageStatsManager;
     private Button usageButton;
     private int userActiveMargin;
@@ -182,6 +195,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         setNotifications(); //Warning: takes a long time to execute (55ms!)
 
         updateCountdown();
+
+        if (!egg){
+            moon.clearAnimation();
+        } else {
+            setEgg();
+        }
 
         if (editBedtimeClicked){
             editBedtimeButton.setVisibility(View.GONE);
@@ -278,14 +297,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //this is needed to stop weird back button stuff
             finish();
         } else {
-            Log.d(TAG, "onCreate section 1 " + System.currentTimeMillis());
-            //~328 ms
+
+
             setContentView(R.layout.activity_main);
-            Log.d(TAG, "onCreate section 2 " + System.currentTimeMillis());
+
             adView = findViewById(R.id.adView);
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
             aboutButton = findViewById(R.id.aboutButton);
+            moon = findViewById(R.id.moon);
             hours = findViewById(R.id.hours);
             minutes = findViewById(R.id.minutes);
             sleepMessage = findViewById(R.id.sleepMessage);
@@ -295,24 +315,22 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             rateNoButton = findViewById(R.id.rateNoButton);
             rateYesButton = findViewById(R.id.rateYesButton);
             rateTextView = findViewById(R.id.rateText);
-            Log.d(TAG, "onCreate section 3 " + System.currentTimeMillis());
-            //~781 ms
+
             bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
-            Log.d(TAG, "onCreate section 4 " + System.currentTimeMillis());
+
             bp.initialize();
-            Log.d(TAG, "onCreate section 5 " + System.currentTimeMillis());
+
             bp.loadOwnedPurchasesFromGoogle();
-            Log.d(TAG, "onCreate section 6 " + System.currentTimeMillis());
+
 
             notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            Log.d(TAG, "onCreate section 7 " + System.currentTimeMillis());
+
             createNotificationChannel();
-            Log.d(TAG, "onCreate section 8 " + System.currentTimeMillis());
+
 
             loadPreferences();
-            Log.d(TAG, "onCreate section 9 " + System.currentTimeMillis());
 
-            Log.d(TAG, "onCreate section 10 " + System.currentTimeMillis());
+
             //#TODO add in additional parameter requiring an amount of time to have passed
             if (appLaunched < 6 && !ratingPromptShown) {
                 rateLayout.setVisibility(View.GONE);
@@ -382,6 +400,259 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             Log.d(TAG, "onCreate finished " + System.currentTimeMillis());
         }
     }
+
+    private void setEgg(){
+        moon.setBackground(getDrawable(R.color.transparent));
+        int colorFrom = getResources().getColor(R.color.moonPrimary);
+        int colorTo = getResources().getColor(R.color.indigo);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                indigoToViolet();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+    private void redToOrange(){
+        int colorFrom = getResources().getColor(R.color.red);
+        int colorTo = getResources().getColor(R.color.orange);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                orangeToYellow();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+    private void orangeToYellow(){
+        int colorFrom = getResources().getColor(R.color.orange);
+        int colorTo = getResources().getColor(R.color.yellow);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                yellowToGreen();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+    private void yellowToGreen(){
+        int colorFrom = getResources().getColor(R.color.yellow);
+        int colorTo = getResources().getColor(R.color.green);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                greenToBlue();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+    private void greenToBlue(){
+        int colorFrom = getResources().getColor(R.color.green);
+        int colorTo = getResources().getColor(R.color.blue);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                blueToIndigo();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+    private void blueToIndigo(){
+        int colorFrom = getResources().getColor(R.color.blue);
+        int colorTo = getResources().getColor(R.color.indigo);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                indigoToViolet();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+    private void indigoToViolet(){
+        int colorFrom = getResources().getColor(R.color.indigo);
+        int colorTo = getResources().getColor(R.color.deep_purple);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                purpleToRed();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+
+    }
+
+    private void purpleToRed(){
+        int colorFrom = getResources().getColor(R.color.deep_purple);
+        int colorTo = getResources().getColor(R.color.red);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(colorFadeDuration); // milliseconds
+        colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
+        colorAnimation.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                redToOrange();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+
+        colorAnimation.start();
+    }
+
+
+
 
     private void initiateRatingDialogue(){
         rateLayout.setVisibility(View.VISIBLE);
@@ -504,6 +775,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
         ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
         appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
+        egg = settings.getBoolean(EGG_KEY, false);
 
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
     }

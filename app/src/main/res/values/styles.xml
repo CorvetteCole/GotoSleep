@@ -44,8 +44,8 @@
     <style name="about_About.wrapper" parent="AppTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:gravity">center</item>
+
+
 
         <item name="android:fontFamily">@font/product_sans_regular</item>
         <item name="android:textColor">@color/accentPrimary</item>
@@ -56,10 +56,12 @@
     <style name="about_elementTextAppearance" parent="about_About.wrapper">
         <item name="android:textColor">@color/accentPrimary</item>
         <item name="android:textSize">@dimen/about_item_text_size</item>
+        <item name="android:colorAccent">@color/moonPrimary</item>
     </style>
 
     <style name="about_description" parent="about_elementTextAppearance">
-        <item name="android:layout_marginTop">-8dp</item>
+        <item name="android:colorAccent">@color/moonPrimary</item>
+        <item name="android:layout_marginTop">-4dp</item>
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

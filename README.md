@@ -12,6 +12,8 @@
 
 - Fix bug where "clesr GDPR preferences" is visible to US users
 
+- Fix bug where the rating box doesn't disappear smoothly
+
 ~~- Add in-app purchase for a donation in about page~~ **DONE**
 
 ~~- Add separate content_main layout for devices with a low DPI so that the text background looks right~~ **DONE**

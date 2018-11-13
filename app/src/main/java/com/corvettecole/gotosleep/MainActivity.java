@@ -402,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void setEgg(){
+        moon.clearAnimation();
         moon.setBackground(getDrawable(R.color.transparent));
         int colorFrom = getResources().getColor(R.color.moonPrimary);
         int colorTo = getResources().getColor(R.color.indigo);

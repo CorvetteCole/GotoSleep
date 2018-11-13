@@ -6,9 +6,10 @@
 
 - General performance optimizations
 
-- Add in-app purchase for a donation in about page
-
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
+
+
+~~- Add in-app purchase for a donation in about page~~ **DONE**
 
 ~~- Add separate content_main layout for devices with a low DPI so that the text background looks right~~ **DONE**
 

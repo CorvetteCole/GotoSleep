@@ -4,17 +4,17 @@
 ## First Release Feature Locked TODO:
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
-- Add in-app purchase for a donation in about page
-
-- Add separate content_main layout for devices with a low DPI so that the text background looks right
+- Speed up launch of MainActivity after pressing the DONE button in Intro slides
 
 - Make edit bedtime button disappear after returning from settings for the first time
 
-- Speed up launch of MainActivity after pressing the DONE button in Intro slides
+- Add separate content_main layout for devices with a low DPI so that the text background looks right
+
+- General performance optimizations
+
+- Add in-app purchase for a donation in about page
 
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
-
-- Add app shortcut for go to sleep early feature **UPDATE** moved to lower priority
 
 ~~- Add setting for do not disturb delay~~ **DONE**
 
@@ -51,6 +51,8 @@
 
 
 ## Next Major Version Features (not confirmed):
+
+- Add app shortcut for go to sleep early feature
 
 -AMOLED black theme option (maybe in premium category? idk)
 

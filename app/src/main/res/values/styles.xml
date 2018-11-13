@@ -63,7 +63,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:text">@string/about_page_description</item>
         <item name="android:lineSpacingExtra">8dp</item>
-
         <item name="android:textColor">@color/accentPrimary</item>
         <item name="android:textSize">@dimen/about_description_text_size</item>
     </style>

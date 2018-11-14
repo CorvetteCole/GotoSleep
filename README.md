@@ -20,6 +20,8 @@
 
 - Make rating dialog only pop up when device is in portrait
 
+- Revert rating prompt changes so the rating box adjusts properly
+
 ### Maybe fixed
 - Fix bug where minutes on the main screen can sometimes get cut off. set the side constraints to fixed and see if that fixes it
 

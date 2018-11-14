@@ -18,6 +18,8 @@
 
 - Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
 
+- Make rating dialog only pop up when device is in portrait
+
 ### Maybe fixed
 - Fix bug where minutes on the main screen can sometimes get cut off. set the side constraints to fixed and see if that fixes it
 

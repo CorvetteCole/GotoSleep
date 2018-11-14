@@ -2,6 +2,8 @@
 
 # TODO
 ## First Release Feature Locked TODO:
+
+### To Do
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
 - General performance optimizations
@@ -10,13 +12,16 @@
 
 - Fix bug where number of notifications to send isnt always disabled if smart notifications are on when you open settings.
 
-- Fix bug where "clesr GDPR preferences" is visible to US users
+- Fix bug where "clear GDPR preferences" is visible to US users
 
 - Fix bug where the rating box doesn't disappear smoothly
 
+- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
+
+### Maybe fixed
 - Fix bug where minutes on the main screen can sometimes get cut off. set the side constraints to fixed and see if that fixes it
 
-- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
+### Fixed
 
 ~~- Add in-app purchase for a donation in about page~~ **DONE**
 

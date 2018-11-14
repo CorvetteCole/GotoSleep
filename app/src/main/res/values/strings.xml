@@ -30,4 +30,6 @@
     <string name="rating_prompt">Enjoying Go to Sleep?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+    <string name="about_description">I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. I encourage you to look at the source code of this app, available on my GitHub linked below. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project. Thank you for downloading Go to Sleep and I hope you have a beautiful sleep schedule from here on out!</string>
 </resources>

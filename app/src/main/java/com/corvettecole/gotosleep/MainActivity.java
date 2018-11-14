@@ -196,13 +196,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         updateCountdown();
 
-        if (!egg){
-            moon.getAnimation().cancel();
-        } else {
-            if (!moon.getAnimation().hasStarted()) {
-                setEgg();
+            if (!egg) {
+                if (moon.getAnimation() != null) {
+                    moon.getAnimation().cancel();
+                }
+            } else {
+                if (moon.getAnimation() != null){
+                    if (!moon.getAnimation().hasStarted()) {
+                        setEgg();
+                    }
+                }
             }
-        }
 
         if (editBedtimeClicked){
             editBedtimeButton.setVisibility(View.GONE);

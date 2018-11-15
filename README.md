@@ -20,6 +20,8 @@
 
 - Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
 
+- Fix bug where purchasing the in-app purchase doesn't update the settings screen immediately
+
 - Make rating dialog only pop up when device is in portrait
 
 - Revert rating prompt changes so the rating box adjusts properly

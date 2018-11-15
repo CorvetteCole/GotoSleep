@@ -10,27 +10,28 @@
 
 - See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well
 
-- Fix bug where number of notifications to send isnt always disabled if smart notifications are on when you open settings.
+- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
+
+### Maybe Done
+- Fix bug where purchasing the in-app purchase doesn't update the settings screen immediately
+
+- Fix bug where minutes on the main screen can sometimes get cut off. 
+
+- Fix bug where number of notifications to send isnt always disabled if smart notifications are on when you open settings.~~
+
+- Revert rating prompt changes so the rating box adjusts properly~~
+
+- Make rating dialog only pop up when device is in portrait
 
 - Fix bug where "clear GDPR preferences" is visible to US users
 
 - Fix bug where smart notifications only fire once
 
+- Fix bug where smart notifications will function if enabled and then ads disabled
+
 - Fix bug where the rating box doesn't disappear smoothly
 
-- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
-
-- Fix bug where purchasing the in-app purchase doesn't update the settings screen immediately
-
-- Make rating dialog only pop up when device is in portrait
-
-- Revert rating prompt changes so the rating box adjusts properly
-
-### Maybe fixed
-- Fix bug where minutes on the main screen can sometimes get cut off. set the side constraints to fixed and see if that fixes it
-
-### Fixed
-
+### Done
 ~~- Add in-app purchase for a donation in about page~~ **DONE**
 
 ~~- Add separate content_main layout for devices with a low DPI so that the text background looks right~~ **DONE**

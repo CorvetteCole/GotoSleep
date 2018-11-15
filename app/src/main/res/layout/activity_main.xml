@@ -25,8 +25,8 @@
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/product_sans_bold"
         android:shadowColor="@color/accentPrimaryDark"
-        android:shadowDx="2"
 
+        android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="2"
 
@@ -36,6 +36,10 @@
         android:textColor="@color/accentPrimary"
         android:textSize="20dp"
         android:visibility="invisible"
+        app:autoSizeMaxTextSize="100dp"
+        app:autoSizeMinTextSize="16dp"
+        app:autoSizeStepGranularity="2dp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/minutes" />
@@ -61,6 +65,10 @@
         android:textColor="@color/accentPrimary"
         android:textSize="80dp"
         android:textStyle="bold"
+        app:autoSizeMaxTextSize="120dp"
+        app:autoSizeMinTextSize="60dp"
+        app:autoSizeStepGranularity="2dp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@+id/minutes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -84,7 +92,11 @@
         android:text="@string/default_minutes_string"
         android:textAlignment="center"
         android:textColor="@color/accentPrimary"
-        android:textSize="24dp"
+        android:textSize="30dp"
+        app:autoSizeMaxTextSize="40dp"
+        app:autoSizeMinTextSize="12dp"
+        app:autoSizeStepGranularity="2dp"
+        app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -183,18 +195,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
-                                       android:id="@+id/adView"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_marginBottom="16dp"
-                                       android:contentDescription="@string/advertisement"
-                                       android:visibility="gone"
-                                       ads:adSize="BANNER"
-                                       ads:adUnitId="@string/admob_banner_key"
-                                       ads:layout_constraintBottom_toTopOf="@+id/aboutButton"
-                                       ads:layout_constraintEnd_toEndOf="parent"
-                                       ads:layout_constraintStart_toStartOf="parent"/>
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/advertisement"
+        android:visibility="gone"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/admob_banner_key"
+        ads:layout_constraintBottom_toTopOf="@+id/aboutButton"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rate_layout"
@@ -213,7 +226,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rateNoButton"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="89dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
 
@@ -226,8 +239,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/accentPrimaryDark"
-            android:textSize="20dp"
-            android:maxLines="1"
+            android:textSize="20sp"
             app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRate"
@@ -253,8 +265,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/accentPrimaryDark"
-            android:textSize="20dp"
-            android:maxLines="1"
+            android:textSize="20sp"
             app:cornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -280,7 +291,11 @@
             android:text="Enjoying Go to Sleep?"
             android:textAlignment="center"
             android:textColor="@color/accentPrimary"
-            android:textSize="20dp"
+            android:textSize="20sp"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeMinTextSize="16sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

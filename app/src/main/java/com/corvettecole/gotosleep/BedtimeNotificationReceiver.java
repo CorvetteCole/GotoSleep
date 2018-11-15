@@ -64,6 +64,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     static final long ONE_DAY_MILLIS = 86400000;
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
+    private boolean shouldEnableAdvancedOptions = false;
     private long lastNotification;
     private UsageStatsManager usageStatsManager;
 
@@ -85,10 +86,10 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         userActiveMargin = Integer.parseInt(settings.getString(INACTIVITY_TIMER_KEY, "5"));
         DnD_delay = Integer.parseInt(settings.getString(DND_DELAY_KEY, "2"));
 
+        shouldEnableAdvancedOptions = adsEnabled || advancedOptionsPurchased;
 
 
-
-        if (adsEnabled || advancedOptionsPurchased) {
+        if (shouldEnableAdvancedOptions) {
             for (int i = 0; i < notifications.length; i++) {
                 notifications[i] = settings.getString("pref_notification" + (i + 1), "");
             }
@@ -109,7 +110,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
         showNotification(context, getNotificationTitle(), getNotificationContent());
 
-        if (!smartNotifications || !isUsageAccessGranted(context)) {
+        if (!smartNotifications || !isUsageAccessGranted(context) || !shouldEnableAdvancedOptions) {
             if (currentNotification < numNotifications) {
                 setNextNotification(context);
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();

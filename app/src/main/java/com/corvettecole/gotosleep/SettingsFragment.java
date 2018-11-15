@@ -36,6 +36,7 @@ import java.util.Date;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
 
 import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
 
@@ -62,6 +63,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     final static String DND_DELAY_KEY = "pref_dndDelay";
 
     private boolean advancedOptionsPurchased;
+    private boolean smartNotificationsEnabled;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
     private BillingProcessor bp;
@@ -100,6 +102,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
             adsEnabled = sharedPreferences.getBoolean(ADS_ENABLED_KEY, false);
+            smartNotificationsEnabled = sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false);
+
 
             if (advancedOptionsPurchased) {
                adsEnabledPref.setEnabled(false);
@@ -111,7 +115,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                delayDnDPref.setEnabled(sharedPreferences.getBoolean(DND_KEY, false));
                smartNotificationsPref.setEnabled(true);
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
-            } else {
+            }
 
                 ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
                 String[] publisherIds = {getContext().getResources().getString(R.string.admob_publisher_id)};
@@ -144,6 +148,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
                 advancedPurchasePref.setOnPreferenceClickListener(preference -> {
                     bp.purchase(getActivity(), "go_to_sleep_advanced");
+                    advancedPurchased(sharedPreferences, getPreferenceScreen());
 
 
 
@@ -151,11 +156,14 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                     return false;
                 });
 
-            }
+
 
 
 
             enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
+            if (enableAdvancedOptions) {
+                notificationAmount.setEnabled(!smartNotificationsEnabled);
+            }
 
 
 
@@ -369,6 +377,40 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         });
     }
 
+    private void advancedPurchased(SharedPreferences sharedPreferences, PreferenceScreen preferenceScreen){
+        advancedOptionsPurchased = true;
+        sharedPreferences.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
+        preferenceScreen.findPreference(ADS_ENABLED_KEY).setEnabled(false);
+        preferenceScreen.findPreference(ADS_ENABLED_KEY).setSummary("Ads are disabled, thank you for supporting me!");
+        preferenceScreen.findPreference("pref_advanced_options").setEnabled(true);
+        sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
+        preferenceScreen.findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
+        preferenceScreen.findPreference(SMART_NOTIFICATIONS_KEY).setEnabled(true);
+        preferenceScreen.findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
+        if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false)){
+            preferenceScreen.findPreference(NOTIF_AMOUNT_KEY).setEnabled(false);
+        }
+        if (sharedPreferences.getBoolean(DND_KEY, false)) {
+            preferenceScreen.findPreference(DND_DELAY_KEY).setEnabled(true);
+        }
+    }
+
+    private void advancedPurchasedError(SharedPreferences sharedPreferences, PreferenceScreen preferenceScreen){
+        advancedOptionsPurchased = false;
+        sharedPreferences.edit().putBoolean(ADVANCED_PURCHASED_KEY, false).apply();
+        preferenceScreen.findPreference(ADS_ENABLED_KEY).setEnabled(true);
+        preferenceScreen.findPreference(ADS_ENABLED_KEY).setSummary("Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) ");
+        preferenceScreen.findPreference("pref_advanced_purchase").setSummary("Support me and unlock all advanced options without advertisements for life");
+        if (!adsEnabled) {
+            preferenceScreen.findPreference("pref_advanced_options").setEnabled(false);
+            sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
+            preferenceScreen.findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(false);
+            preferenceScreen.findPreference(SMART_NOTIFICATIONS_KEY).setEnabled(false);
+            preferenceScreen.findPreference(NOTIF_AMOUNT_KEY).setEnabled(true);
+            preferenceScreen.findPreference(DND_DELAY_KEY).setEnabled(false);
+        }
+    }
+
 
 
     @Override
@@ -398,18 +440,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     public void onProductPurchased(String productId, TransactionDetails details) {
         if (productId.equals("go_to_sleep_advanced")) {
             Log.d("productPurchased", "go to sleep advanced purchased");
-            advancedOptionsPurchased = true;
-            getPreferenceManager().getSharedPreferences().edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
-            getPreferenceScreen().findPreference("pref_adsEnabled").setEnabled(false);
-            getPreferenceScreen().findPreference("pref_adsEnabled").setSummary("Ads are disabled, thank you for supporting me!");
-            getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
-            getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
-            getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
-            getPreferenceScreen().findPreference("pref_smartNotifications").setEnabled(true);
-            getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
-            if (sharedPreferences.getBoolean(DND_KEY, false)) {
-                getPreferenceScreen().findPreference(DND_DELAY_KEY).setEnabled(true);
-            }
+            advancedPurchased(sharedPreferences, getPreferenceScreen());
         }
 
     }
@@ -421,7 +452,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
     @Override
     public void onBillingError(int errorCode, Throwable error) {
-
+        advancedPurchasedError(sharedPreferences, getPreferenceScreen());
     }
 
     @Override

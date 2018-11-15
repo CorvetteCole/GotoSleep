@@ -16,6 +16,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private AdView adView;
 
     private boolean adsLoaded = false;
+    private boolean adsInitialized = false;
     private boolean isAutoDoNotDisturbEnabled;
 
     private Button rateYesButton;
@@ -137,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     static boolean shouldUpdateConsent = false;
 
     static boolean editBedtimeClicked = false;
-
-    private boolean adsInitialized = false;
 
     private boolean egg = false;
 
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             editBedtimeClicked = false;
         }
 
-        if (!adsLoaded || shouldUpdateConsent) {
+        if (!adsInitialized || shouldUpdateConsent) {
             enableDisableAds();
         }
         if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
@@ -337,20 +337,22 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             loadPreferences();
 
 
-            //#TODO add in additional parameter requiring an amount of time to have passed
-            if (appLaunched < 6 && !ratingPromptShown) {
-                rateLayout.setVisibility(View.GONE);
-                Log.d(TAG, "appLaunched: " + appLaunched);
-                getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();
-                //initiateRatingDialogue(getPrefs); //debug
-                enableDisableAds();
-            } else if (!ratingPromptShown) {
-                Log.d(TAG, "initiating rating dialogue");
-                initiateRatingDialogue();
-            } else {
-               rateLayout.setVisibility(View.GONE);
-                enableDisableAds();
-               //initiateRatingDialogue(getPrefs);  //debug
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                //#TODO add in additional parameter requiring an amount of time to have passed
+                if (appLaunched < 8 && !ratingPromptShown) {
+                    rateLayout.setVisibility(View.GONE);
+                    Log.d(TAG, "appLaunched: " + appLaunched);
+                    getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();
+                    //initiateRatingDialogue(getPrefs); //debug
+                    enableDisableAds();
+                } else if (!ratingPromptShown) {
+                    Log.d(TAG, "initiating rating dialogue");
+                    initiateRatingDialogue();
+                } else {
+                    rateLayout.setVisibility(View.GONE);
+                    enableDisableAds();
+                    //initiateRatingDialogue(getPrefs);  //debug
+                }
             }
 
 
@@ -678,8 +680,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 rateYesButton.setText(getString(R.string.ok_sure));
             } else {
                 rateLayout.setVisibility(View.GONE);
-                Log.d(TAG, "re-enabling ads after rating prompt...");
-                adView.setVisibility(View.VISIBLE);
+                Log.d(TAG, "ads will re-enable after onResume called");
+                adsInitialized = false;
             }
             getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
         });

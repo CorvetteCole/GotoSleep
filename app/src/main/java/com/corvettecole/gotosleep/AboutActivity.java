@@ -21,7 +21,7 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*setTheme(R.style.AppTheme_Settings);
+        setTheme(R.style.AppTheme_Settings);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         egg = settings.getBoolean(EGG_KEY, false);
 
@@ -135,8 +135,8 @@ public class AboutActivity extends AppCompatActivity {
 
 
 
-        //setContentView something*/
-        setContentView(R.layout.activity_about);
+        //setContentView something
+        //setContentView(R.layout.activity_about);
     }
 
 

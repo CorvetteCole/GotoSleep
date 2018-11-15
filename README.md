@@ -14,6 +14,8 @@
 
 - Fix bug where "clear GDPR preferences" is visible to US users
 
+- Fix bug where smart notifications only fire once
+
 - Fix bug where the rating box doesn't disappear smoothly
 
 - Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)

@@ -41,20 +41,8 @@
         <item name="android:colorControlActivated">@color/moonPrimary</item>
         <item name="android:fontFamily">@font/product_sans_regular</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-
-
     </style>
 
-    <style name="about_About.wrapper" parent="AppTheme">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">vertical</item>
-        <item name="android:gravity">center</item>
-
-        <item name="android:fontFamily">@font/product_sans_regular</item>
-        <item name="android:textColor">@color/accentPrimary</item>
-        <item name="android:colorAccent">@color/moonPrimary</item>
-    </style>
 
 
 

@@ -28,10 +28,4 @@
     <color name="starPrimary">#bdbdbd</color>
     <color name="starAccent">#8d8d8d</color>
 
-    <color name="about_background_color" tools:override="true">#263238</color>
-
-    <color name="about_github_color" tools:override="true">#29b6f6</color>
-    <color name="about_item_icon_color" tools:override="true">#29b6f6</color>
-    <color name="about_play_store_color" tools:override="true">#29b6f6</color>
-
 </resources>

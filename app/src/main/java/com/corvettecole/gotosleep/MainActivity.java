@@ -52,6 +52,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private int colorFadeDuration = 6000;
 
+    private ArrayList<ValueAnimator> colorAnimations = new ArrayList<>();
 
     /*private UsageStatsManager usageStatsManager;
     private Button usageButton;
@@ -197,15 +199,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         updateCountdown();
 
             if (!egg) {
-                if (moon.getAnimation() != null) {
-                    moon.getAnimation().cancel();
-                }
+                clearEgg();
             } else {
-                if (moon.getAnimation() != null){
-                    if (!moon.getAnimation().hasStarted()) {
-                        setEgg();
-                    }
-                }
+                setEgg();
             }
 
         if (editBedtimeClicked){
@@ -305,8 +301,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         } else {
 
 
-            setContentView(R.layout.activity_main);
 
+
+            setContentView(R.layout.activity_main);
             adView = findViewById(R.id.adView);
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
@@ -321,6 +318,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             rateNoButton = findViewById(R.id.rateNoButton);
             rateYesButton = findViewById(R.id.rateYesButton);
             rateTextView = findViewById(R.id.rateText);
+
+            for (int i = 0; i < 10; i++){
+                int colorFrom = getResources().getColor(R.color.moonPrimary);
+                int colorTo = getResources().getColor(R.color.indigo);
+
+                colorAnimations.add(ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+            }
 
             bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
 
@@ -409,12 +413,32 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    private void setEgg(){
+    private void clearEgg(){
+        //figure out how to do this
+        boolean temp = egg;
+        egg = false;
         moon.clearAnimation();
+        for (ValueAnimator colorAnimation : colorAnimations) {
+            colorAnimation.end();
+        }
+        if (!temp) {
+            moon.setBackground(getDrawable(R.drawable.ic_moon_shadow));
+        }
+        egg = temp;
+
+
+
+    }
+
+    private void setEgg(){
         moon.setBackground(getDrawable(R.color.transparent));
         int colorFrom = getResources().getColor(R.color.moonPrimary);
         int colorTo = getResources().getColor(R.color.indigo);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        clearEgg();
+        ValueAnimator colorAnimation;
+        colorAnimations.set(0, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(0);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -425,12 +449,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                indigoToViolet();
+                if (egg) {
+                    indigoToViolet();
+                }
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -445,7 +471,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void redToOrange(){
         int colorFrom = getResources().getColor(R.color.red);
         int colorTo = getResources().getColor(R.color.orange);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(1, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(1);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -456,12 +486,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                orangeToYellow();
+              if (egg) {
+                  orangeToYellow();
+              }
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -476,7 +508,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void orangeToYellow(){
         int colorFrom = getResources().getColor(R.color.orange);
         int colorTo = getResources().getColor(R.color.yellow);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(2, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(2);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -487,12 +523,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                yellowToGreen();
+               if (egg) {
+                   yellowToGreen();
+               }
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -507,7 +545,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void yellowToGreen(){
         int colorFrom = getResources().getColor(R.color.yellow);
         int colorTo = getResources().getColor(R.color.green);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(3, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(3);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -518,12 +560,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                greenToBlue();
+                if (egg) {
+                    greenToBlue();
+                }
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -538,7 +582,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void greenToBlue(){
         int colorFrom = getResources().getColor(R.color.green);
         int colorTo = getResources().getColor(R.color.blue);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(4, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(4);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -549,12 +597,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                animator.removeAllListeners();
+                animator.removeListener(this);
                 blueToIndigo();
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -569,7 +619,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void blueToIndigo(){
         int colorFrom = getResources().getColor(R.color.blue);
         int colorTo = getResources().getColor(R.color.indigo);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(5, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(5);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -580,12 +634,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                animator.removeAllListeners();
+                animator.removeListener(this);
                 indigoToViolet();
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -600,7 +656,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void indigoToViolet(){
         int colorFrom = getResources().getColor(R.color.indigo);
         int colorTo = getResources().getColor(R.color.deep_purple);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(6, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(6);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -611,12 +671,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                animator.removeAllListeners();
+                animator.removeListener(this);
                 purpleToRed();
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override
@@ -632,7 +694,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void purpleToRed(){
         int colorFrom = getResources().getColor(R.color.deep_purple);
         int colorTo = getResources().getColor(R.color.red);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+
+        ValueAnimator colorAnimation;
+        colorAnimations.set(7, ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
+        colorAnimation = colorAnimations.get(7);
+
         colorAnimation.setDuration(colorFadeDuration); // milliseconds
         colorAnimation.addUpdateListener(animator -> moon.setColorFilter((int) animator.getAnimatedValue()));
         colorAnimation.addListener(new Animator.AnimatorListener() {
@@ -643,12 +709,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
+                animator.removeAllListeners();
+                animator.removeListener(this);
                 redToOrange();
             }
 
             @Override
             public void onAnimationCancel(Animator animator) {
-
+                animator.end();
             }
 
             @Override

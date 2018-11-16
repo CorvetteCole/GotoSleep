@@ -163,7 +163,7 @@ public class AboutActivity extends AppCompatActivity {
             startActivity(browserIntent);
         });
 
-        
+
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .addItem(version)

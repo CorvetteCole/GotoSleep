@@ -1,5 +1,6 @@
 package com.corvettecole.gotosleep;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -23,10 +24,9 @@ public class AboutActivity extends AppCompatActivity {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         egg = settings.getBoolean(EGG_KEY, false);
 
-
-        Element versionElement = new Element();
-        versionElement.setTitle("Version " + BuildConfig.VERSION_NAME);
-        versionElement.setOnClickListener(view -> {
+        Element version = new Element();
+        version.setTitle("Version " + BuildConfig.VERSION_NAME);
+        version.setOnClickListener(view -> {
             if (clicked < 10) {
                 if (!egg) {
                     switch (clicked) {
@@ -95,47 +95,89 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
+
+        Element github = new Element();
+        github.setTitle("View the GitHub repository");
+        github.setOnClickListener(view -> {
+           Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CorvetteCole/GotoSleep"));
+           startActivity(browserIntent);
+        });
+
+        Element playstore = new Element();
+        playstore.setTitle("Rate the app");
+        playstore.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep"));
+            startActivity(browserIntent);
+        });
+
         Element donate = new Element();
         donate.setTitle("Donate")
                 .setOnClickListener(v -> {
+                    //#TODO launch new activity with donation options instead of opening web page
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/donate"));
                     startActivity(browserIntent);
                 });
-        donate.setIconDrawable(R.drawable.ic_money);
+        //donate.setIconDrawable(R.drawable.ic_money);
 
+        Element email = new Element();
+        email.setTitle("Contact me");
+        email.setOnClickListener(view -> {
+            String subject = "Go to Sleep Feedback";
+            String mailto = "mailto:corvettecole@gmail.com" +
+                    "?subject=" + Uri.encode(subject);
 
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+            emailIntent.setData(Uri.parse(mailto));
+            try {
+                startActivity(emailIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No email app available", Toast.LENGTH_LONG).show();
+            }
+        });
 
+        Element website = new Element();
+        website.setTitle("Visit my website");
+        website.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.corvettecole.com/"));
+            startActivity(browserIntent);
+        });
 
+        Element credits = new Element();
+        credits.setTitle("Credits");
+        credits.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/credits"));
+            startActivity(browserIntent);
+        });
 
+        Element privacy = new Element();
+        privacy.setTitle("Privacy Policy");
+        privacy.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/privacy"));
+            startActivity(browserIntent);
+        });
 
+        Element license = new Element();
+        license.setTitle("License");
+        license.setOnClickListener(view -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/license"));
+            startActivity(browserIntent);
+        });
 
+        
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
-                .addItem(versionElement)
-                /*
-                .addGitHub("corvettecole", "View my GitHub")
-                .addPlayStore(BuildConfig.APPLICATION_ID, "Rate the app")
+                .addItem(version)
+                .addItem(github)
+                .addItem(playstore)
                 .addItem(donate)
-                .addEmail("corvettecole@gmail.com", "Contact me")
-                .addWebsite("https://corvettecole.com", "Visit my website")
-                .addWebsite("https://sleep.corvettecole.com/credits/", "Credits")
-                .addWebsite("https://sleep.corvettecole.com/privacy/", "Privacy policy")
-                .addWebsite("https://sleep.corvettecole.com/license/", "License")
-                */
+                .addItem(email)
+                .addItem(website)
+                .addItem(credits)
+                .addItem(privacy)
+                .addItem(license)
                 .create();
 
-
         setContentView(aboutPage);
-
-
-
-
-
-
-
-
-        //setContentView something
-        //setContentView(R.layout.activity_about);
     }
 
 

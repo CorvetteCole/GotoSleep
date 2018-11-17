@@ -1,7 +1,27 @@
 # GotoSleep
+I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. Ironically, programming the app that was meant to help me not stay up too late kept me up more times than it helped me sleep but I am extremely satisfied with the end product. There are definitely things that need improvement (please don't look at SettingsFragment, it is a nightmare. That is the next thing on my to-do list for next release), but overall it turned out very nice. I encourage you to look at the source code of this app and see if you can improve anything. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project.
 
-# TODO
-## First Release TODO:
+You can download this project on the Google Play Store: https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep
+
+Visit my website: https://corvettecole.com
+
+View the license: https://sleep.corvettecole.com/license
+
+View the privacy policy: https://sleep.corvettecole.com/privacy
+
+View the credits: https://sleep.corvettecole.com/credits
+
+## Donate to me
+
+Ethereum address: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B
+
+PayPal: http://paypal.me/CGerdemann
+
+Google Pay: corvettecole@gmail.com
+
+
+# Development Info
+## 1.2:
 
 ### To Do
 - Only send smart notifications within like 8 hours past your bedtime as a failsafe

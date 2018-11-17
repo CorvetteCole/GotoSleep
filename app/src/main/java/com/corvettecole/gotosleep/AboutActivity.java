@@ -97,7 +97,7 @@ public class AboutActivity extends AppCompatActivity {
 
 
         Element github = new Element();
-        github.setTitle("View the GitHub repository");
+        github.setTitle("View the GitHub");
         github.setOnClickListener(view -> {
            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CorvetteCole/GotoSleep"));
            startActivity(browserIntent);
@@ -111,7 +111,7 @@ public class AboutActivity extends AppCompatActivity {
         });
 
         Element donate = new Element();
-        donate.setTitle("Donate")
+        donate.setTitle("Donate to me")
                 .setOnClickListener(v -> {
                     //#TODO launch new activity with donation options instead of opening web page
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/donate"));
@@ -170,8 +170,8 @@ public class AboutActivity extends AppCompatActivity {
                 .addItem(github)
                 .addItem(playstore)
                 .addItem(donate)
-                .addItem(email)
                 .addItem(website)
+                .addItem(email)
                 .addItem(credits)
                 .addItem(privacy)
                 .addItem(license)

@@ -139,7 +139,7 @@ public class AboutActivity extends AppCompatActivity {
         Element website = new Element();
         website.setTitle("Visit my website");
         website.setOnClickListener(view -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.corvettecole.com/"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://corvettecole.com/"));
             startActivity(browserIntent);
         });
 

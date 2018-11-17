@@ -1,17 +1,15 @@
 # GotoSleep
 
 # TODO
-## First Release Feature Locked TODO:
+## First Release TODO:
 
 ### To Do
-- Refactor settingsFragment code (things are called way more often than they need to be)
-
-- General performance optimizations
-
-- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
+- Only send smart notifications within like 8 hours past your bedtime as a failsafe
 
 ### Maybe Done
 ~~- See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well~~ **NOT FEASIBLE**
+
+- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
 
 - Fix bug where purchasing the in-app purchase doesn't update the settings screen immediately
 
@@ -75,7 +73,11 @@
 
 
 ## Next Major Version Features (not confirmed):
--Animate stars to gently blink
+- Refactor settingsFragment code (things are called way more often than they need to be)
+
+- General performance optimizations
+
+- Animate stars to gently blink
 
 - Animate moon and stars to fade away as the sun rises
 

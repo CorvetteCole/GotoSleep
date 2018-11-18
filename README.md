@@ -95,6 +95,8 @@ Google Pay: corvettecole@gmail.com
 ## Next Major Version Features (not confirmed):
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
+- Add separare bedtimes for weekdays and weekends
+
 - General performance optimizations
 
 - Animate stars to gently blink

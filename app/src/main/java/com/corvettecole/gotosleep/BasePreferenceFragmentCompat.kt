@@ -1,13 +1,12 @@
 package com.corvettecole.gotosleep
 
 import android.annotation.SuppressLint
-import android.os.Build
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 
 import com.takisoft.preferencex.PreferenceCategory
 import com.takisoft.preferencex.PreferenceFragmentCompat
-
 import androidx.preference.Preference
 import androidx.preference.PreferenceGroupAdapter
 import androidx.preference.PreferenceScreen

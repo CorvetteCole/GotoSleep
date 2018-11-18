@@ -1,5 +1,6 @@
 package com.corvettecole.gotosleep
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
@@ -74,9 +75,10 @@ class IntroActivity : AppIntro() {
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
+        // Do something when users tap on Done button.
         loadMainActivity()
         finish()
-        // Do something when users tap on Done button.
+
     }
 
     override fun onSlideChanged(oldFragment: Fragment?, newFragment: Fragment?) {

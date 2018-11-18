@@ -4,6 +4,11 @@
           package="com.corvettecole.gotosleep">
 
     <uses-permission android:name="com.android.vending.BILLING"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -13,6 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:node="replace">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_key"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -21,6 +36,8 @@
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
+
+                <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
         <activity
@@ -30,10 +47,24 @@
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppTheme.Settings"/>
+        <activity
+            android:name=".AboutActivity"
+            android:theme="@style/about_About.wrapper"/>
+        <activity
+            android:name=".DonateActivity"
+            android:theme="@style/AppTheme.Settings"/>
 
         <receiver
             android:name=".BedtimeNotificationReceiver"
             android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver
+            android:name=".AutoDoNotDisturbReceiver"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver android:name=".BedtimeNotificationHelper">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Go to Sleep!</string>
+    <string name="app_name">Go to Sleep</string>
     <string name="action_settings">Settings</string>
     <string name="app_intro">Intro</string>
     <string name="default_hours_string">% hours</string>
     <string name="default_minutes_string">%% minutes until bedtime</string>
     <string name="edit_bedtime">Edit Bedtime</string>
     <string name="settings">Settings</string>
-    <string name="feedback">Feedback</string>
+    <string name="about">About</string>
 
     <string name="channel_name">Bedtime Reminders</string>
     <string name="channel_description">Bedtime notifications remind you around your bedtime to go to sleep.</string>
@@ -17,5 +17,26 @@
     <string name="notification3">Are you seriously still on your phone?</string>
     <string name="notification4">You should be sleeping</string>
     <string name="notification5">You\'re gonna regret this</string>
+    <string name="sleep_message">why aren\'t you sleeping?</string>
+    <string name="enable_sleep_mode">Go to sleep</string>
 
+    <string name="shortcut_short">Sleep Mode</string>
+    <string name="shortcut_long">I\'m going to sleep</string>
+    <string name="advertisement">Advertisement</string>
+    <string name="request_feedback">Would you like to send some feedback?</string>
+    <string name="no_thanks">No, thanks</string>
+    <string name="ok_sure">Ok, sure</string>
+    <string name="rating_request">How about rating the app then?</string>
+    <string name="rating_prompt">Enjoying Go to Sleep?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="about_description">I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. I encourage you to look at the source code of this app, available on my GitHub linked below. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project. Thank you for downloading Go to Sleep and I hope you have a beautiful sleep schedule from here on out!</string>
+    <string name="dollar_1">$1</string>
+    <string name="paypal">PayPal: paypal.me/CGerdemann</string>
+    <string name="donate_desc">Help support my future open-source projects by giving me a few bucks. It goes a long way and I very much appreciate it!</string>
+    <string name="dollar_3">$3</string>
+    <string name="dollar_5">$5</string>
+    <string name="google_pay">Google Pay: corvettecole@gmail.com</string>
+    <string name="ethereum">Ethereum: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B</string>
 </resources>

@@ -25,6 +25,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -322,7 +323,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             for (int i = 0; i < 10; i++){
                 int colorFrom = getResources().getColor(R.color.moonPrimary);
                 int colorTo = getResources().getColor(R.color.indigo);
-
                 colorAnimations.add(ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
             }
 
@@ -416,18 +416,17 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void clearEgg(){
         //figure out how to do this
         boolean temp = egg;
+        boolean eggCancel = !egg; //if egg is enabled, eggCancel will be false
         egg = false;
         moon.clearAnimation();
         for (ValueAnimator colorAnimation : colorAnimations) {
             colorAnimation.end();
         }
-        if (!temp) {
+        if (eggCancel) {
+            moon.setColorFilter(getResources().getColor(R.color.moonPrimary));
             moon.setBackground(getDrawable(R.drawable.ic_moon_shadow));
         }
         egg = temp;
-
-
-
     }
 
     private void setEgg(){
@@ -597,9 +596,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                animator.removeAllListeners();
-                animator.removeListener(this);
-                blueToIndigo();
+                if (egg) {
+                    blueToIndigo();
+                }
             }
 
             @Override
@@ -634,9 +633,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                animator.removeAllListeners();
-                animator.removeListener(this);
-                indigoToViolet();
+                if (egg) {
+                    indigoToViolet();
+                }
             }
 
             @Override
@@ -671,9 +670,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                animator.removeAllListeners();
-                animator.removeListener(this);
-                purpleToRed();
+                if (egg) {
+                    purpleToRed();
+                }
             }
 
             @Override
@@ -709,9 +708,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             @Override
             public void onAnimationEnd(Animator animator) {
-                animator.removeAllListeners();
-                animator.removeListener(this);
-                redToOrange();
+               if (egg) {
+                   redToOrange();
+               }
             }
 
             @Override

@@ -49,6 +49,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     static final int LAUNCH_APP_REQUEST_CODE = 6;
     static final String LAST_NOTIFICATION_KEY = "lastNotificationTime";
     static final long ONE_MINUTE_MILLIS = 60000;
+    static final long ONE_DAY_MILLIS = 86400000;
+    static final long ONE_HOUR_MILLIS = 3600000;
     private int DnD_delay = 2; //in minutes
 
     private Calendar bedtime;
@@ -61,7 +63,6 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     private boolean autoDND;
     private final String TAG = "bedtimeNotifReceiver";
     private int currentNotification;
-    static final long ONE_DAY_MILLIS = 86400000;
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
     private boolean shouldEnableAdvancedOptions = false;
@@ -120,7 +121,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 enableDoNotDisturb(context);
             }
 
-        } else if (isUserActive(UsageStatsManager.INTERVAL_BEST, lastNotification, System.currentTimeMillis())) {
+        } else if (isUserActive(UsageStatsManager.INTERVAL_BEST, lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
             //write lastNotification to preferences, set a timer for notifDelay time in the future, show notification now, update currentNotification
             settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
             settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
@@ -148,11 +149,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             }
         }
 
-        if (System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <=  userActiveMargin * ONE_MINUTE_MILLIS){
-            return true;
-        } else {
-            return false;
-        }
+        return System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS;
     }
 
     private void enableDoNotDisturb(Context context){

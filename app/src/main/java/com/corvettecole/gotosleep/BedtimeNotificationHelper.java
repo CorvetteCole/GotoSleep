@@ -15,6 +15,7 @@ import java.util.Calendar;
 import static android.content.Context.ALARM_SERVICE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
 import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
 import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
@@ -35,13 +36,15 @@ public class BedtimeNotificationHelper extends BroadcastReceiver {
         if (notificationsEnabled) {
             bedtime = Calendar.getInstance();
             bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
-
+            if (bedtime.getTimeInMillis() < System.currentTimeMillis()){
+                bedtime.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
+            }
             settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-            setBedtimeNotification(context);
+            setBedtimeNotification(context, bedtime);
         }
     }
 
-    private void setBedtimeNotification(Context context){
+    private void setBedtimeNotification(Context context, Calendar bedtime){
         Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,

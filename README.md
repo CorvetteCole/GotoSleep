@@ -24,11 +24,13 @@ Google Pay: corvettecole@gmail.com
 ## 1.2:
 
 ### To Do
+- Add icons to about screen
+
+### Maybe Done
 - Only send smart notifications within like 8 hours past your bedtime as a failsafe 
 
 - Fix bug where notifications can be sent immediately upon boot up
 
-### Maybe Done
 ~~- See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well~~ **NOT FEASIBLE**
 
 - Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)

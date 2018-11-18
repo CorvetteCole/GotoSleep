@@ -24,7 +24,6 @@ Google Pay: corvettecole@gmail.com
 ## 1.2:
 
 ### To Do
-- Add icons to about screen
 
 ### Maybe Done
 - Only send smart notifications within like 8 hours past your bedtime as a failsafe 
@@ -100,6 +99,8 @@ Google Pay: corvettecole@gmail.com
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
 - Add separare bedtimes for weekdays and weekends
+
+- Add icons to about screen
 
 - General performance optimizations
 

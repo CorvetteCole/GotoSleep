@@ -64,6 +64,7 @@ import java.util.Objects;
 import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_MINUTE_MILLIS;
 import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
@@ -140,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     static boolean shouldUpdateConsent = false;
 
+    private boolean sleepModeEnabled = false;
+
     static boolean editBedtimeClicked = false;
 
     private boolean egg = false;
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         loadPreferences();
 
-        setNotifications(); //Warning: takes a long time to execute (55ms!)
+        setNotifications(false); //Warning: takes a long time to execute (55ms!)
 
         updateCountdown();
 
@@ -384,13 +387,20 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             settingsButton.setOnClickListener(view -> startActivity(settings));
 
             enableSleepmodeButton.setOnClickListener(v -> {
-                Intent snoozeIntent = new Intent(getApplicationContext(), AutoDoNotDisturbReceiver.class);
-                PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 11, snoozeIntent, 0);
-                try {
-                    snoozePendingIntent.send();
-                } catch (PendingIntent.CanceledException e) {
-                    e.printStackTrace();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (notificationManager.isNotificationPolicyAccessGranted() && notificationManager.getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_ALARMS) {
+                        Intent snoozeIntent = new Intent(getApplicationContext(), AutoDoNotDisturbReceiver.class);
+                        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 11, snoozeIntent, 0);
+                        try {
+                            snoozePendingIntent.send();
+                        } catch (PendingIntent.CanceledException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+                cancelNextNotification(this);
+                setNotifications(true);
+                Toast.makeText(this, "Set next bedtime notification to tomorrow", Toast.LENGTH_LONG).show();
                 enableSleepmodeButton.setVisibility(View.GONE);
             });
 
@@ -427,6 +437,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             moon.setBackground(getDrawable(R.drawable.ic_moon_shadow));
         }
         egg = temp;
+    }
+
+    private void cancelNextNotification(Context context){
+        Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                NEXT_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        am.cancel(pendingIntent);
     }
 
     private void setEgg(){
@@ -801,11 +819,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    private void setNotifications() {
+    private void setNotifications(boolean nextDay) {
         if (notificationsEnabled) {
             Calendar bedtimeCalendar = getBedtimeCal(bedtime);
 
-            if (bedtimeCalendar.getTimeInMillis() < System.currentTimeMillis()){
+            if (nextDay){
+                bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
+            } else if (bedtimeCalendar.getTimeInMillis() < System.currentTimeMillis()){
                 bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
             }
 
@@ -1111,12 +1131,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 hours.setText(hour + " hours");
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (present && editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 90 && notificationManager.isNotificationPolicyAccessGranted() && notificationManager.getCurrentInterruptionFilter() != NotificationManager.INTERRUPTION_FILTER_ALARMS){
-                    enableSleepmodeButton.setVisibility(View.VISIBLE);
-                } else if (enableSleepmodeButton.getVisibility() != View.GONE) {
-                    enableSleepmodeButton.setVisibility(View.GONE);
-                }
+            if (editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 120 && !sleepModeEnabled){  //if within two hours of bedtime, show button
+                Log.d(TAG, "enabling sleep mode button");
+                enableSleepmodeButton.setVisibility(View.VISIBLE);
+                sleepModeEnabled = true;
             }
 
             if (present) {
@@ -1125,7 +1143,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 } else {
                     minutes.setText(min + " minutes until bedtime");
                 }
-                sleepMessage.setVisibility(View.INVISIBLE);
+                sleepMessage.setVisibility(View.GONE);
             } else {
                 if (min == 1){
                     minutes.setText(min + " minute past bedtime");

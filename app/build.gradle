@@ -15,7 +15,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             shrinkResources true
-            resConfigs "en"  //only the english language is supported so far, don't localize anything
         }
     }
     compileOptions {

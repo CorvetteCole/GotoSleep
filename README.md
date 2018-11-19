@@ -102,6 +102,8 @@ Google Pay: corvettecole@gmail.com
 
 - Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)
 
+- Use only vector files vs png if possible
+
 - Add icons to about screen
 
 - Revamp custom notifications screen, allow user to have infinite custom notifications. Also instead of having like "Notification 1, Notification 2" have a header saying custom notifications and simply list them, allowing more to fit on screen

@@ -86,6 +86,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         if (rootKey == null){
 
             bp = new BillingProcessor(getContext(), getResources().getString(R.string.license_key), this);
+            bp.loadOwnedPurchasesFromGoogle();
             bp.initialize();
 
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
@@ -447,7 +448,9 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
     @Override
     public void onPurchaseHistoryRestored() {
-
+        if (bp.isPurchased("go_to_sleep_advanced")) {
+            advancedPurchased(sharedPreferences, getPreferenceScreen());
+        }
     }
 
     @Override

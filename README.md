@@ -25,8 +25,12 @@ Google Pay: corvettecole@gmail.com
 # Development Info
 ## 1.2:
 
+
+
 ### To Do
 - Public release after one more round of testing
+
+- Fix bug where app may not detect user as active if they are only using one app
 
 ### Done
 ~~- Only send smart notifications within like 8 hours past your bedtime as a failsafe 

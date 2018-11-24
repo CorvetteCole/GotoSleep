@@ -121,7 +121,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 enableDoNotDisturb(context);
             }
 
-        } else if (isUserActive(UsageStatsManager.INTERVAL_BEST, lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
+        } else if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
             //write lastNotification to preferences, set a timer for notifDelay time in the future, show notification now, update currentNotification
             settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
             settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
@@ -133,12 +133,12 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    private boolean isUserActive(int interval, long startTime, long currentTime){
+    private boolean isUserActive(long startTime, long currentTime){
         if (currentNotification == 1){
             startTime = startTime - notificationDelay * ONE_MINUTE_MILLIS;
         }
 
-        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(interval, startTime, currentTime);
+        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, currentTime);
 
         UsageStats minUsageStat = queryUsageStats.get(0);
 

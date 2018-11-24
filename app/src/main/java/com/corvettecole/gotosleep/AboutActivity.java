@@ -113,8 +113,6 @@ public class AboutActivity extends AppCompatActivity {
         Element donate = new Element();
         donate.setTitle("Support me")
                 .setOnClickListener(v -> {
-                    //#TODO launch new activity with donation options instead of opening web page
-                    //Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/donate"));
                     Intent donateIntent = new Intent(this, DonateActivity.class);
                     startActivity(donateIntent);
                 });

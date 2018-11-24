@@ -23,85 +23,15 @@ Google Pay: corvettecole@gmail.com
 
 
 # Development Info
-## 1.2:
-
-
-
+## 1.3:
 ### To Do
-- Public release after one more round of testing
-
-- Fix bug where app may not detect user as active if they are only using one app
+- Not set
 
 ### Done
-~~- Only send smart notifications within like 8 hours past your bedtime as a failsafe 
 
-~~- Fix bug where notifications can be sent immediately upon boot up
+## Future Feature Suggestions:
+- Edit all icons to remove the two-tone design, make them all simple and flat
 
-~~- See if you can change the behavior of the in-app purchase pop up. right now it hides the status bar which sucks because it makes the entire app shift. If this can't be fixed oh well~~ **NOT FEASIBLE**
-
-~~- Fix about screen bugs (maybe just make your own freaking layout so you can stop dealing with the bugs in this library)
-
-~~- Fix bug where purchasing the in-app purchase doesn't update the settings screen immediately
-
-~~- Fix bug where minutes on the main screen can sometimes get cut off. 
-
-~~- Fix bug where number of notifications to send isnt always disabled if smart notifications are on when you open settings.
-
-~~- Revert rating prompt changes so the rating box adjusts properly
-
-~~- Make rating dialog only pop up when device is in portrait
-
-~~- Fix bug where "clear GDPR preferences" is visible to US users
-
-~~- Fix bug where smart notifications only fire once
-
-~~- Fix bug where smart notifications will function if enabled and then ads disabled
-
-~~- Fix bug where the rating box doesn't disappear smoothly
-
-~~- Add in-app purchase for a donation in about page~~ **DONE**
-
-~~- Add separate content_main layout for devices with a low DPI so that the text background looks right~~ **DONE**
-
-~~- Make edit bedtime button disappear after returning from settings for the first time~~ **DONE**
-
-~~- Speed up launch of MainActivity after pressing the DONE button in Intro slides~~ **DONE** (further optimization may still be possible)
-
-~~- Add setting for do not disturb delay~~ **DONE**
-
-~~- Edit settings order so perhaps the persistent notification option will go in to the notification category but will say it requires ads enabled or the in app purchase in the summary when neither exists~~ **DONE** (tested but decided against)
-
-~~- If notification minute is 1, say minute in notification vs minutes~~ **DONE**
-
-~~- Add broadcastreceiver to run when phone boots up so it can reset an alarm for the bedtime reminders~~ **DONE**
-
-~~- Add credits for app icon, intro icons, open source libraries to about~~ **DONE**
-
-~~- Re-do about page to use a custom layout vs the about page library it is using now~~ **DONE** (change not needed)
-
-~~-Fix bug where minutes will equal 60 without adding to hours on the countdown. Experiment with using Math.round() with the hours finding function, otherwise just use and if statement to check if it is 60 and if so add 1 to hours~~ **DONE** 
-
-~~-Refactor variables regarding request codes for alarms and notifications. Notification request codes are particularly important since they let you dismiss and interact with notifications in different classes.~~ **DONE**
-
-~~-Add separate moon icon that is the right size for the notifications~~ **DONE** (not confirmed fixed)
-
-~~-Implement smart persistent notifications (keeps notifiying as long as user continues to use their device)~~ **DONE** (Confirmed working)
-
-~~- Fix bug where notification amount isn't always disabled when enabling persistent notifications~~ **DONE**
-
-~~- Add setting to change GDPR preference. Make it only display if user is in the EU~~ **DONE**
-
-~~- Add Google Admob consent SDK for European users (https://developers.google.com/admob/android/eu-consent)~~ **DONE**
-
-~~- Constrain rating box to bottom of the sleepmessage so they dont interfere~~ **DONE**
-
-~~-Add prompt to rate the app after it has been opened like 15 times or something~~ **DONE** 
-
-~~- Investigate code to detect when a purchase has been refunded and disable the advanced options. **UPDATE:** still not sure how long it takes a revoked in-app purchase to be detected by the app code. Moving this to a lower priority~~ **DONE** (confirmed working, takes a couple of days to update though)
-
-
-
-## Next Major Version Features (not confirmed):
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
 - Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)

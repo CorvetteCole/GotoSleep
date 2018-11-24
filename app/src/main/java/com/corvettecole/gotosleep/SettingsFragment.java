@@ -80,14 +80,15 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         sharedPreferences = getPreferenceManager().getSharedPreferences();
         notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
         usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
+        bp = new BillingProcessor(getContext(), getResources().getString(R.string.license_key), this);
+        bp.loadOwnedPurchasesFromGoogle();
+        bp.initialize();
 
 
         Log.d("PREFERENCES", rootKey + " ");
         if (rootKey == null){
 
-            bp = new BillingProcessor(getContext(), getResources().getString(R.string.license_key), this);
-            bp.loadOwnedPurchasesFromGoogle();
-            bp.initialize();
+
 
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
             final Preference customNotificationsPref = this.findPreference(CUSTOM_NOTIFICATIONS_KEY);

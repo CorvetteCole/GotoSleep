@@ -138,7 +138,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             startTime = startTime - notificationDelay * ONE_MINUTE_MILLIS;
         }
 
-        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, currentTime);
+        List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY, startTime, currentTime);
 
         UsageStats minUsageStat = queryUsageStats.get(0);
 

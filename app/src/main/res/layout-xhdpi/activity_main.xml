@@ -160,10 +160,12 @@
         android:textColor="@color/accentPrimaryDark"
         android:textSize="20sp"
         app:cornerRadius="15dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/aboutButton"

@@ -149,7 +149,6 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
                 advancedPurchasePref.setOnPreferenceClickListener(preference -> {
                     bp.purchase(getActivity(), "go_to_sleep_advanced");
-                    advancedPurchased(sharedPreferences, getPreferenceScreen());
 
 
 
@@ -424,6 +423,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     @Override
     public void onResume(){
         Log.d("settings", "onResume called!");
+        bp.loadOwnedPurchasesFromGoogle();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
                 Toast.makeText(getContext(), "Do not disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();

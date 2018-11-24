@@ -162,6 +162,8 @@
         android:textColor="@color/accentPrimaryDark"
         android:textSize="20sp"
         app:cornerRadius="15dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:strokeColor="@color/colorPrimaryLight"

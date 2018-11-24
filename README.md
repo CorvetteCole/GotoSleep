@@ -34,6 +34,8 @@ Google Pay: corvettecole@gmail.com
 
 - Refactor settingsFragment code (things are called way more often than they need to be)
 
+- Add sleep tracking. Perhaps as a direct consumer to Sleep as Android
+
 - Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)
 
 - Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values

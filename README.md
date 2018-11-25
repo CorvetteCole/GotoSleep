@@ -49,20 +49,20 @@ Google Pay: corvettecole@gmail.com
 
 ## 1.3 (Major Feature Update):
 ### To Do
-- Not set
+- Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)
+
+- Revamp custom notifications screen, allow user to have infinite custom notifications. Also instead of having like "Notification 1, Notification 2" have a header saying custom notifications and simply list them, allowing more to fit on screen
+
+- General performance optimizations
+
+- Add app shortcut for go to sleep early feature
 
 ### Done
 
 ## Future Feature Suggestions:
 - Add sleep tracking. Perhaps as a direct competitor to Sleep as Android
 
-- Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)
-
 - Use only vector files vs png if possible
-
-- Revamp custom notifications screen, allow user to have infinite custom notifications. Also instead of having like "Notification 1, Notification 2" have a header saying custom notifications and simply list them, allowing more to fit on screen
-
-- General performance optimizations
 
 - Animate stars to gently blink
 
@@ -70,7 +70,6 @@ Google Pay: corvettecole@gmail.com
 
 - Animate background to shift color as the day gets brighter
 
-- Add app shortcut for go to sleep early feature
 
 - AMOLED black theme option (maybe in premium category? idk)
 

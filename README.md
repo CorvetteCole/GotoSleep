@@ -23,7 +23,17 @@ Google Pay: corvettecole@gmail.com
 
 
 # Development Info
-## 1.3:
+## 1.2.+ (Quality of Life Updates):
+### To Do
+- Set auto do not disturb to false if do not disturb access is not granted, and do the same for smart notifications with usage access (they can sometimes be enabled by restoring data from the play store even if permission is not granted). There is protection to stop crashes from this but it isn't clear to the user
+
+- Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
+
+- Change default bedtime to something slightly more sensible
+
+- Edit toasts to better reflect what settings need to be toggled
+
+## 1.3 (Major Feature Update):
 ### To Do
 - Not set
 

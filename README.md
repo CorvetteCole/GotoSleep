@@ -37,8 +37,6 @@ Google Pay: corvettecole@gmail.com
 
 - Edit all icons to remove the two-tone design, make them all simple and flat
 
-- Refactor settingsFragment code (things are called way more often than they need to be)
-
 - Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
 
 - Add icons to about screen
@@ -53,9 +51,13 @@ Google Pay: corvettecole@gmail.com
 
 - Revamp custom notifications screen, allow user to have infinite custom notifications. Also instead of having like "Notification 1, Notification 2" have a header saying custom notifications and simply list them, allowing more to fit on screen
 
-- General performance optimizations
+- Refactor settingsFragment code (things are called way more often than they need to be)
+
+- Put app settings in categories to make it more intuitive
 
 - Add app shortcut for go to sleep early feature
+
+- General performance optimizations
 
 ### Done
 
@@ -69,7 +71,6 @@ Google Pay: corvettecole@gmail.com
 - Animate moon and stars to fade away as the sun rises
 
 - Animate background to shift color as the day gets brighter
-
 
 - AMOLED black theme option (maybe in premium category? idk)
 

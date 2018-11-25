@@ -134,21 +134,27 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     }
 
     private boolean isUserActive(long startTime, long currentTime){
+        String TAG = "isUserActive";
         if (currentNotification == 1){
             startTime = startTime - notificationDelay * ONE_MINUTE_MILLIS;
         }
 
+        //#TODO experiment with using a daily interval (make sure it works past midnight)
         List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY, startTime, currentTime);
 
         UsageStats minUsageStat = queryUsageStats.get(0);
 
         long min = Long.MAX_VALUE;
         for (UsageStats usageStat : queryUsageStats){
-            if (usageStat.getLastTimeUsed() < min && usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS){
+            if ((System.currentTimeMillis() - usageStat.getLastTimeUsed() < min) && (usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS / 4)){  //make sure app has been in foreground for more than 15 seconds to filter out background apps
                 minUsageStat = usageStat;
+                min = System.currentTimeMillis() - usageStat.getLastTimeUsed();
             }
         }
 
+        Log.d(TAG, minUsageStat.getPackageName() + " last time used: " + minUsageStat.getLastTimeUsed() + " time in foreground: " + minUsageStat.getTotalTimeInForeground());
+        Log.d(TAG, "getLastTimeStamp: " + minUsageStat.getLastTimeStamp() + " getLastUsed: " + minUsageStat.getLastTimeUsed() + " current time: " + System.currentTimeMillis());
+        Log.d(TAG, (System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS) + "");
         return System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS;
     }
 
@@ -156,7 +162,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         if (autoDND) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis() + (ONE_MINUTE_MILLIS * DnD_delay));
-            Log.d(TAG, "Setting auto DND for 2 minutes from now: " + calendar.getTime());
+            Log.d(TAG, "Setting auto DND for " + DnD_delay + " minutes from now: " + calendar.getTime());
 
             Intent intent1 = new Intent(context, AutoDoNotDisturbReceiver.class);
 

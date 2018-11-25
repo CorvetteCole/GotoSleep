@@ -35,6 +35,18 @@ Google Pay: corvettecole@gmail.com
 
 - Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
 
+- Edit all icons to remove the two-tone design, make them all simple and flat
+
+- Refactor settingsFragment code (things are called way more often than they need to be)
+
+- Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
+
+- Add icons to about screen
+
+- Remove hours countdown when it is 0 possibly
+
+### Done
+
 ## 1.3 (Major Feature Update):
 ### To Do
 - Not set
@@ -42,19 +54,11 @@ Google Pay: corvettecole@gmail.com
 ### Done
 
 ## Future Feature Suggestions:
-- Edit all icons to remove the two-tone design, make them all simple and flat
-
-- Refactor settingsFragment code (things are called way more often than they need to be)
-
-- Add sleep tracking. Perhaps as a direct consumer to Sleep as Android
+- Add sleep tracking. Perhaps as a direct competitor to Sleep as Android
 
 - Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)
 
-- Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
-
 - Use only vector files vs png if possible
-
-- Add icons to about screen
 
 - Revamp custom notifications screen, allow user to have infinite custom notifications. Also instead of having like "Notification 1, Notification 2" have a header saying custom notifications and simply list them, allowing more to fit on screen
 
@@ -71,8 +75,6 @@ Google Pay: corvettecole@gmail.com
 - AMOLED black theme option (maybe in premium category? idk)
 
 - Automatic day/night mode
-
-- Remove hours countdown when it is 0 possibly
 
 - Refactor styles xml and possibly colors xml so that they are better organized/labelled and more compatible with everything
 

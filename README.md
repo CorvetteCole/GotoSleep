@@ -33,6 +33,8 @@ Google Pay: corvettecole@gmail.com
 
 - Edit toasts to better reflect what settings need to be toggled
 
+- Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
+
 ## 1.3 (Major Feature Update):
 ### To Do
 - Not set

@@ -1,5 +1,6 @@
 package com.corvettecole.gotosleep;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.NotificationManager;
@@ -32,6 +33,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -73,14 +75,16 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private final String TAG = "SettingsFragment";
     private ConsentForm consentForm;
 
+    private boolean shouldEnableSmartNotifications;
+
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         sharedPreferences = getPreferenceManager().getSharedPreferences();
-        notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.NOTIFICATION_SERVICE);
         usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-        bp = new BillingProcessor(getContext(), getResources().getString(R.string.license_key), this);
+        bp = new BillingProcessor(Objects.requireNonNull(getContext()), getResources().getString(R.string.license_key), this);
         bp.loadOwnedPurchasesFromGoogle();
         bp.initialize();
 
@@ -170,7 +174,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             Preference bedtime = this.findPreference(BEDTIME_KEY);
             try {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
                 Date time = simpleDateFormat.parse(sharedPreferences.getString(BEDTIME_KEY, "19:35"));
                 bedtime.setSummary("Bedtime is " +  DateFormat.getTimeInstance(DateFormat.SHORT).format(time));
             } catch (ParseException e) {
@@ -239,13 +243,23 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 } else if (!(boolean)newValue){
                     notificationAmount.setEnabled(true);
                 }
+                Log.d(TAG, "isUsageAccessGranted " + isUsageAccessGranted(getContext()));
                 return true;
             });
+
+            smartNotificationsPref.setOnPreferenceClickListener((preference -> {
+
+                return true;
+            }));
+
+            //smartNotificationsPref.performClick(); //this says restricted API but that is not true
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
                 this.findPreference(DND_KEY).setSummary("Android 6.0 (Marshmallow) and up required");
-                //# TODO add else if to check if user device is an LG G4. If so, disable option with reason
+            } else if (android.os.Build.MANUFACTURER.equalsIgnoreCase("lg") && android.os.Build.MODEL.equalsIgnoreCase("g4")){
+                this.findPreference(DND_KEY).setEnabled(false);
+                this.findPreference(DND_KEY).setSummary("LG G4 is not compatible (LG didn't implement the API correctly)");
             } else {
                 autoDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
 

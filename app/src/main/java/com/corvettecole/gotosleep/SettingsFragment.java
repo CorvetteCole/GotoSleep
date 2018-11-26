@@ -279,53 +279,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
 
                     enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
-                    /*
-                    // Check if the notification policy access has been granted for the app.
-                    enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
-                    if ((boolean) newValue) {
-                        if (!notificationManager.isNotificationPolicyAccessGranted()) {
-                            Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                            startActivity(intent);
-                        }
-                        if (enableAdvancedOptions) {
-                            delayDnDPref.setEnabled(true);
-                        }
-                    } else {
-                        delayDnDPref.setEnabled(false);
-                    }
 
-                    return true;*/
-
-                    /*
-                     if (!desiredSmartNotificationValue) {
-                    if ((boolean) newValue) {
-                        if (!isUsageAccessGranted(getContext())) {
-                            usageSettingsOpened = true;
-                            Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                            startActivity(usageSettings);
-                            return false;
-                        } else {
-                            notificationAmount.setEnabled(false);
-                        }
-                        return true;
-                    } else if (!(boolean) newValue) {
-                        notificationAmount.setEnabled(true);
-                        return true;
-                    }
-                } else if ((boolean) newValue) {
-                    notificationAmount.setEnabled(false);
-                    usageSettingsOpened = false;
-                    return true;
-
-                } else {
-                    notificationAmount.setEnabled(true);
-                    usageSettingsOpened = false;
-                    desiredSmartNotificationValue = false;
-                    return true;
-                }
-                return true;
-
-                     */
 
                     if (!desiredDoNotDisturbValue) {
                         if ((boolean) newValue) {

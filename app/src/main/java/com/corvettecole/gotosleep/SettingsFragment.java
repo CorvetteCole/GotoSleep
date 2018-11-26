@@ -70,12 +70,14 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private ConsentForm consentForm;
 
     private boolean desiredSmartNotificationValue = false;
+    private boolean desiredDoNotDisturbValue = false;
 
     private String rootKey;
 
     private PreferenceScreen preferenceScreen;
 
     private boolean usageSettingsOpened = false;
+    private boolean doNotDisturbSettingsOpened = false;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
@@ -258,31 +260,13 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                     desiredSmartNotificationValue = false;
                     return true;
                 }
-
-                Log.d(TAG, "isUsageAccessGranted " + isUsageAccessGranted(getContext()));
-
-                /*if ((boolean) newValue) {
-                    if (!isUsageAccessGranted(getContext())) {
-                        Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                        startActivity(usageSettings);
-                    }
-                }
-
-                if (desiredSmartNotificationValue){
-                    notificationAmount.setEnabled(false);
-                    return true;
-                }
-                */
-
                 return true;
             });
-
-            smartNotificationsPref.setOnPreferenceClickListener((preference -> {
-
-                return true;
-            }));
-
-            //smartNotificationsPref.performClick(); //this says restricted API but that is not true
+            if (advancedOptionsPurchased || adsEnabled){
+                delayDnDPref.setEnabled(sharedPreferences.getBoolean(DND_KEY, false));
+            } else {
+                delayDnDPref.setEnabled(false);
+            }
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
@@ -293,6 +277,9 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             } else {
                 autoDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
 
+
+                    enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
+                    /*
                     // Check if the notification policy access has been granted for the app.
                     enableAdvancedOptions = advancedOptionsPurchased || adsEnabled;
                     if ((boolean) newValue) {
@@ -307,7 +294,73 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                         delayDnDPref.setEnabled(false);
                     }
 
+                    return true;*/
+
+                    /*
+                     if (!desiredSmartNotificationValue) {
+                    if ((boolean) newValue) {
+                        if (!isUsageAccessGranted(getContext())) {
+                            usageSettingsOpened = true;
+                            Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                            startActivity(usageSettings);
+                            return false;
+                        } else {
+                            notificationAmount.setEnabled(false);
+                        }
+                        return true;
+                    } else if (!(boolean) newValue) {
+                        notificationAmount.setEnabled(true);
+                        return true;
+                    }
+                } else if ((boolean) newValue) {
+                    notificationAmount.setEnabled(false);
+                    usageSettingsOpened = false;
                     return true;
+
+                } else {
+                    notificationAmount.setEnabled(true);
+                    usageSettingsOpened = false;
+                    desiredSmartNotificationValue = false;
+                    return true;
+                }
+                return true;
+
+                     */
+
+                    if (!desiredDoNotDisturbValue) {
+                        if ((boolean) newValue) {
+                            if (!notificationManager.isNotificationPolicyAccessGranted()) {
+                                doNotDisturbSettingsOpened = true;
+                                Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                                startActivity(intent);
+                                return false;
+                            } else if (enableAdvancedOptions) {
+                                delayDnDPref.setEnabled(true);
+                            }
+                            return true;
+                        } else if (!(boolean) newValue) {
+                            delayDnDPref.setEnabled(false);
+                            return true;
+                        }
+                    } else if ((boolean) newValue) {
+                        if (enableAdvancedOptions) {
+                            delayDnDPref.setEnabled(true);
+                        }
+                        doNotDisturbSettingsOpened = false;
+                        return true;
+
+                    } else {
+                        if (enableAdvancedOptions) {
+                            delayDnDPref.setEnabled(false);
+                        }
+                        doNotDisturbSettingsOpened = false;
+                        desiredDoNotDisturbValue = false;
+                        return true;
+                    }
+                    return true;
+
+
+
                 });
             }
 
@@ -472,7 +525,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
                 sharedPreferences.edit().putBoolean(DND_KEY, false).apply();
+                desiredDoNotDisturbValue = false;
                 Toast.makeText(getContext(), "Do not disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
+                getPreferenceScreen().findPreference(DND_KEY).performClick();
+            } else if (notificationManager.isNotificationPolicyAccessGranted() && doNotDisturbSettingsOpened){
+                desiredDoNotDisturbValue = true;
+                getPreferenceScreen().findPreference(DND_KEY).performClick();
             }
         }
 

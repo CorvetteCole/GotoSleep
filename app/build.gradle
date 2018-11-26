@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.corvettecole.gotosleep"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 35
         versionName "1.2.1.3"

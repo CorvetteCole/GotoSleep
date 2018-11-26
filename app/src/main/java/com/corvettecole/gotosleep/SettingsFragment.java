@@ -472,6 +472,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         // however, in that case you need to traverse to the implementing parent fragment
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onResume(){
         Log.d("settings", "onResume called!");

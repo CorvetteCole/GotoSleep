@@ -1,7 +1,6 @@
 package com.corvettecole.gotosleep;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.NotificationManager;
 import android.app.usage.UsageStatsManager;
@@ -20,15 +19,10 @@ import android.widget.Toast;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
 import com.google.ads.consent.ConsentForm;
-import com.google.ads.consent.ConsentFormListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdRequest;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,12 +69,18 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private final String TAG = "SettingsFragment";
     private ConsentForm consentForm;
 
-    private boolean shouldEnableSmartNotifications;
+    private boolean desiredSmartNotificationValue = false;
+
+    private String rootKey;
+
+    private PreferenceScreen preferenceScreen;
+
+    private boolean usageSettingsOpened = false;
 
     @Override
     public void onCreatePreferencesFix(@Nullable Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
-
+        this.rootKey = rootKey;
         sharedPreferences = getPreferenceManager().getSharedPreferences();
         notificationManager = (NotificationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.NOTIFICATION_SERVICE);
         usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
@@ -230,20 +230,50 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             });
 
 
-            //#TODO figure out a way to only toggle switch if the notification or usage permission is actually granted.
-            // Returning false in onPreferenceChange will not update the preference with the new value, and onClickListeners exist...
-
             smartNotificationsPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((boolean) newValue) {
+
+                if (!desiredSmartNotificationValue) {
+                    if ((boolean) newValue) {
+                        if (!isUsageAccessGranted(getContext())) {
+                            usageSettingsOpened = true;
+                            Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                            startActivity(usageSettings);
+                            return false;
+                        } else {
+                            notificationAmount.setEnabled(false);
+                        }
+                        return true;
+                    } else if (!(boolean) newValue) {
+                        notificationAmount.setEnabled(true);
+                        return true;
+                    }
+                } else if ((boolean) newValue) {
                     notificationAmount.setEnabled(false);
-                    if (!isUsageAccessGranted(getContext())){
+                    usageSettingsOpened = false;
+                    return true;
+
+                } else {
+                    notificationAmount.setEnabled(true);
+                    usageSettingsOpened = false;
+                    desiredSmartNotificationValue = false;
+                    return true;
+                }
+
+                Log.d(TAG, "isUsageAccessGranted " + isUsageAccessGranted(getContext()));
+
+                /*if ((boolean) newValue) {
+                    if (!isUsageAccessGranted(getContext())) {
                         Intent usageSettings = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                         startActivity(usageSettings);
                     }
-                } else if (!(boolean)newValue){
-                    notificationAmount.setEnabled(true);
                 }
-                Log.d(TAG, "isUsageAccessGranted " + isUsageAccessGranted(getContext()));
+
+                if (desiredSmartNotificationValue){
+                    notificationAmount.setEnabled(false);
+                    return true;
+                }
+                */
+
                 return true;
             });
 
@@ -441,12 +471,19 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         bp.loadOwnedPurchasesFromGoogle();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
+                sharedPreferences.edit().putBoolean(DND_KEY, false).apply();
                 Toast.makeText(getContext(), "Do not disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
             }
         }
 
         if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false) && !isUsageAccessGranted(getContext())) {
+            sharedPreferences.edit().putBoolean(SMART_NOTIFICATIONS_KEY, false).apply();
+            desiredSmartNotificationValue = false;
             Toast.makeText(getContext(), "Usage access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
+            getPreferenceScreen().findPreference(SMART_NOTIFICATIONS_KEY).performClick();
+        } else if (isUsageAccessGranted(getContext()) && usageSettingsOpened){
+            desiredSmartNotificationValue = true;
+            getPreferenceScreen().findPreference(SMART_NOTIFICATIONS_KEY).performClick();
         }
 
         super.onResume();

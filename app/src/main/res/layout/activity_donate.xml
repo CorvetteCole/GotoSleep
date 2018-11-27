@@ -11,44 +11,42 @@
         android:layout_width="0dp"
 
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/product_sans_regular"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
         android:lineSpacingExtra="8dp"
+        android:padding="16dp"
         android:text="@string/ethereum"
         android:textColor="@color/accentPrimary"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/googlePayTextView"
 
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/googlePayTextView"/>
 
     <TextView
         android:id="@+id/googlePayTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/product_sans_regular"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
         android:lineSpacingExtra="8dp"
+        android:padding="16dp"
+
         android:text="@string/google_pay"
-        android:textAlignment="viewStart"
         android:textColor="@color/accentPrimary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/payPalTextView"
 
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payPalTextView"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/donate5"
@@ -111,21 +109,21 @@
         android:id="@+id/payPalTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:fontFamily="@font/product_sans_regular"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
+        android:gravity="center"
         android:lineSpacingExtra="8dp"
+
+        android:padding="16dp"
         android:text="@string/paypal"
         android:textColor="@color/accentPrimary"
         android:textSize="16sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/donate1"
-
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"/>
+        app:layout_constraintTop_toBottomOf="@+id/donate1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

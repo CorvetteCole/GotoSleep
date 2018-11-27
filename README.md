@@ -33,8 +33,6 @@ Google Pay: corvettecole@gmail.com
 
 - Edit all icons to remove the two-tone design, make them all simple and flat
 
-- Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
-
 - Add icons to about screen
 
 - Remove hours countdown when it is 0 possibly
@@ -42,6 +40,8 @@ Google Pay: corvettecole@gmail.com
 ### Done
 
 - Set auto do not disturb to false if do not disturb access is not granted, and do the same for smart notifications with usage access (they can sometimes be enabled by restoring data from the play store even if permission is not granted). There is protection to stop crashes from this but it isn't clear to the user
+
+- Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
 
 ## 1.3 (Major Feature Update):
 ### To Do

@@ -27,8 +27,6 @@ Google Pay: corvettecole@gmail.com
 ### To Do
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
-- Change default bedtime to something slightly more sensible
-
 - Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
 
 - Edit all icons to remove the two-tone design, make them all simple and flat
@@ -42,6 +40,8 @@ Google Pay: corvettecole@gmail.com
 - Set auto do not disturb to false if do not disturb access is not granted, and do the same for smart notifications with usage access (they can sometimes be enabled by restoring data from the play store even if permission is not granted). There is protection to stop crashes from this but it isn't clear to the user
 
 - Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
+
+- Change default bedtime to something slightly more sensible
 
 ## 1.3 (Major Feature Update):
 ### To Do

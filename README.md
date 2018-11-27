@@ -35,6 +35,8 @@ Google Pay: corvettecole@gmail.com
 
 - Remove hours countdown when it is 0 possibly
 
+- Add dialog like the rating dialog that appears after 10 days of use or so if the user hasn't purchased the advanced options. Gently suggest that the user can purchase the advanced options to help support development of the app
+
 ### Done
 
 - Set auto do not disturb to false if do not disturb access is not granted, and do the same for smart notifications with usage access (they can sometimes be enabled by restoring data from the play store even if permission is not granted). There is protection to stop crashes from this but it isn't clear to the user
@@ -60,6 +62,8 @@ Google Pay: corvettecole@gmail.com
 ### Done
 
 ## Future Feature Suggestions:
+- Native translation contribution screen and central database to help along adoption of many languages without expensive translation services
+
 - Add sleep tracking. Perhaps as a direct competitor to Sleep as Android
 
 - Use only vector files vs png if possible

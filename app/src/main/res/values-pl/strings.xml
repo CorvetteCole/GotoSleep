@@ -127,4 +127,48 @@
     <string name="settingsUsagePermDeniedToast">Nie przyznano dostępu do danych o użyciu. Przełącz opcję aby spróbować ponownie</string>
     <string name="rateDialogTitle">Podoba ci się Go to Sleep?</string>
     <string name="app_name">Go to Sleep</string>
+
+    <!--preference defaults-->
+    <string name="categoryGeneral">Ogólne</string>
+    <string name="bedtimeSummary">Edytuj swóją porę snu</string>
+    <string name="bedtimeSummaryHasTime">Pora snu jest ustawiona na %s</string>
+    <string name="bedtimeTitle">Pora snu</string>
+
+    <string name="autoDoNotDisturbTitle">Automatyczne Nie Przeszkadzać</string>
+    <string name="autoDoNotDisturbSummary">Automatycznie włącz Nie Przeszkadzać 2 minuty po wysłaniu ostatniego przypomnienia</string>
+
+    <string name="tapToHideTitle">Dotknij, aby ukryć</string>
+    <string name="tapToHideSummary">Dotknij w dowolnym miejscu na ekranie głównym, aby ukryć ustawienia i przycisk o aplikacji</string>
+
+    <string name="categoryNotifications">Powiadomienia</string>
+    <string name="notificationToggleTitle">Włącz powiadomienia</string>
+    <string name="notificationToggleSummary">Włącz/wyłącz powiadomienia</string>
+
+    <string name="notificationDelayTitle">Przerwy pomiędzy powiadomieniami</string>
+    <string name="notificationDelaySummary">15-minutowa przerwa między powiadomieniami</string>
+
+    <string name="notificationAmountTitle">Liczba powiadomienia</string>
+
+    <string name="categoryAdvanced">Zaawansowane opcje</string>
+    <string name="advancedPurchaseTitle">Odblokuj zaawansowane opcje bez reklam</string>
+    <string name="advancedPurchaseSummary">Wspieraj mnie i odblokuj wszystkie zaawansowane opcje bez reklam na zawsze</string>
+
+    <string name="gdprTitle">Wyczyść preferencje GDPR</string>
+    <string name="gdprSummary">Wyczyść swoje preferencje dotyczące personalizacji reklam</string>
+
+    <string name="smartNotificationsTitle">Inteligentne powiadomienia</string>
+    <string name="smartNotificationsSummary">Wysyłaj powiadomienia, aż przestaniesz korzystać z telefonu</string>
+
+    <string name="activityMarginTitle">Inactivity Timer</string>
+    <string name="activityMarginSummary">Użytkownik musi być nieaktywny przez 5 minut, aby być uznanym za nieaktywnego</string>
+
+    <string name="dndDelayTitle">Automatyczny timer Nie przeszkadzać</string>
+    <string name="dndDelaySummary">Funkcja Nie Przeszkadzać zostanie aktywowana 2 minuty po wysłaniu ostatniego powiadomienia</string>
+
+    <string name="categoryCustomNotificationsTitle">Własne powiadomienia</string>
+    <string name="categoryCustomNotificationsSummary">Ustaw własne powiadomienia na porę snu</string>
+
+    <string name="enableAdsTitle">Włącz reklamy</string>
+    <string name="enableAdsSummary">Odblokuj zaawansowane opcje bez płacenia, za wyświetlanie reklam (reklamy nigdy nie będą wyświetlane poza aplikacją)</string>
+
 </resources>

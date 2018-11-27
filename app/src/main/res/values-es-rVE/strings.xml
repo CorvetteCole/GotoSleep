@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Go to Sleep</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="app_intro">Intro</string>
+    <string name="hours_string">%d horas</string>
+    <string name="minutes_string">%d minutos hasta la hora de acostarse</string>
+    <string name="edit_bedtime">Editar la hora de acostarse</string>
+    <string name="settings">Ajustes</string>
+    <string name="about">Sobre</string>
+
+    <string name="channel_name">Recordatorios de la hora de acostarse</string>
+    <string name="channel_description">Las notificaciones de la hora de acostarse te recuerdan la hora de irte a dormir.</string>
+
+
+    <string name="notification1">Hora de dormir</string>
+    <string name="notification2">¿Por qué sigues despierto?</string>
+    <string name="notification3">¿En serio aún estás en tu teléfono?</string>
+    <string name="notification4">Deberías estar durmiendo</string>
+    <string name="notification5">Te vas a arrepentir de esto</string>
+    <string name="sleep_message">¿Por qué no estás durmiendo?</string>
+    <string name="enable_sleep_mode">Ve a dormir</string>
+
+    <string name="shortcut_short">Modo de sueño</string>
+    <string name="shortcut_long">Voy a dormir</string>
+    <string name="advertisement">Anuncio</string>
+    <string name="request_feedback">¿Te gustaría enviar alguna opinión?</string>
+    <string name="no_thanks">No, gracias</string>
+    <string name="ok_sure">Ok, seguro</string>
+    <string name="rating_request">¿Qué tal calificar la aplicación entonces?</string>
+    <string name="rating_prompt">¿Disfrutando Ve a Dormir?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+
+    <string name="about_description">Creé esta aplicación de código abierto, en su mayoría sin publicidad, no por dinero, sino porque vi un problema que necesitaba solución. Te animo a que mires el código fuente de esta aplicación, disponible en mi enlace de GitHub a continuación. Me encantaría que aunque sea una persona compilara mi código desde cero y tratara de contribuir a este proyecto. ¡Gracias por descargar Go to Sleep y espero que tengas un hermoso horario de sueño de aquí en adelante!</string>
+    <string name="dollar_1">$1</string>
+    <string name="paypal">PayPal: paypal.me/CGerdemann</string>
+    <string name="donate_desc">Ayuda a respaldar mis futuros proyectos de código abierto dándome unos cuántos dólares. ¡Contribuye considerablemente y lo aprecio mucho!</string>
+    <string name="dollar_3">$3</string>
+    <string name="dollar_5">$5</string>
+    <string name="google_pay">Google Pay: corvettecole@gmail.com</string>
+    <string name="ethereum">Ethereum: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B</string>
+    <string name="egg1">tal vez hay un secreto aquí</string>
+    <string name="egg2">quizás</string>
+    <string name="egg3">estás tibio…</string>
+    <string name="egg4">¡más tibio!</string>
+    <string name="egg5">ups perdón te lo perdiste, estabas clickeando muy rápido</string>
+    <string name="egg6">solo bromeo supongo</string>
+    <string name="egg7">la curiosidad mató al gato</string>
+    <string name="egg8">y la satisfacción lo trajo de vuelta</string>
+    <string name="egg9">¡lo hiciste! algo en la aplicación parece haber cambiado…</string>
+    <string name="eggDisable1">puedes apagarlo si lo clickeas un montón</string>
+    <string name="eggDisable2">aburrido</string>
+    <string name="eggDisable3">eres aburrido</string>
+    <string name="eggDisable4">por qué me odias</string>
+    <string name="eggDisable5">odias la diversión</string>
+    <string name="eggDisable6">no seas aburrido</string>
+    <string name="eggDisable7">por qué eres así</string>
+    <string name="eggDisable8">wow</string>
+    <string name="eggDisable9">bienvenido a la zona aburrida, su aburrideza. huevo deshabilitado</string>
+    <string name="aboutGitHub">Ver el GitHub</string>
+    <string name="aboutRate">Califica la app</string>
+    <string name="aboutSupport">Apoyame</string>
+    <string name="aboutContact">Contactame</string>
+    <string name="aboutContactSubject">Opiniones Ve a Dormir</string>
+    <string name="aboutContactError">No hay aplicación de correo electrónico</string>
+    <string name="aboutWebsite">Visita mi sitio web</string>
+    <string name="aboutCredits">Créditos</string>
+    <string name="aboutPrivacy">Política de privacidad</string>
+    <string name="aboutLicense">Licencia</string>
+
+    <string name="autoDnDToast">DnD Habilitado… Ve a dormir!</string>
+    <string name="notifAction">Voy a dormir</string>
+    <string name="notifTitle1">Hora de ir a la cama.</string>
+    <string name="notifTitle2">Es %d minuto después de tu hora de acostarte!</string>
+    <string name="notifTitle3">Son %d minutos después de tu hora de acostarte!</string>
+    <string name="supportEthereum">Dirección Ethereum</string>
+    <string name="supportEthereumCopied">La dirección Ethereum ha sido copiada al portapapeles</string>
+    <string name="supportGooglePay">Dirección de Google Pay</string>
+    <string name="supportGooglePayCopied">Google Pay ha sido copiado al portapapeles</string>
+    <string name="introTitle1">Bienvenido.</string>
+    <string name="introDesc1">Es hora de arreglar tu horario de sueño</string>
+    <string name="introTitle2">Recuérdate.</string>
+    <string name="introDesc2">Establece tu hora de acostarte y nunca vuelvas a perder la noción del tiempo</string>
+    <string name="introTitle3">Motivate.</string>
+    <string name="introDesc3">Establece recordatoios de sueño personalizados</string>
+    <string name="introTitle4">Hagámoslo.</string>
+    <string name="introDesc4">Tu nuevo horario de sueño empieza ahora</string>
+    <string name="back_pressed">Presiona de nuevo para salir</string>
+    <string name="sleepModeButtonToast">Establece la próxima notificación de la hora de acostarse para mañana</string>
+    <string name="feedbackBodyText">Por favor explica el error o la sugerencia de una función a fondo</string>
+
+    <string name="countDownHourSingular">%d hora</string>
+    <string name="countdownHourPlural">%d horas</string>
+    <string name="countdownMinuteSingularFuture">%d minuto hasta la hora de acostarte</string>
+    <string name="countdownMinutePluralFuture">%d minutos hasta la hora de acostarte</string>
+    <string name="countdownMinuteSingularPast">%d minuto después de la hora de acostarte</string>
+    <string name="countdownMinutePluralPast">%d minutos después de la hora de acostarte</string>
+
+    <string name="settingsAdsDisabledSummary">Los anuncios están deshabilitados, gracias por tu apoyo.</string>
+    <string name="settingsAdvancedPurchasedSummary">Gracias por apoyarme!</string>
+    <string name="settingsConsentPrefsClearedToast">Preferencias de consentimiento borradas ... Vuelve a la pantalla principal para editar</string>
+    <string name="settingsBedtimeSummary">La hora de acostarse es %s</string>
+    <string name="settingsSmartNotificationsSummaryEnabled">Enviar notificaciones hasta que dejes de usar el teléfono</string>
+
+    <string name="settingsAutoDnDSummarySingular">Habilite automáticamente "No molestar" 1 minuto después de que se envíe el último recordatorio de la hora de acostarse</string>
+    <string name="settingsDelayDnDSummarySingular">No molestar será activado 1 minuto después del último recordatorio de la hora de acostarse enviado</string>
+    <string name="settingsDelayDnDSummaryPlural">No molestar será activado %s minutos después del último recordatorio de la hora de acostarse enviado</string>
+    <string name="settingsAutoDnDSummaryPlural">Activar automáticamente No molestar %s minutos después del último recordatorio de la hora de acostarse enviado</string>
+    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) o versiones posteriores requeridas.</string>
+    <string name="settingsAutoDnD_LG_G4_message">LG G4 no compatible (LG no implementó el API correctamente)</string>
+
+    <string name="settingsNotificationDelaySummary">%s minuto de retraso entre notificaciones de sueño</string>
+    <string name="settingNotificationAmountSingular">1 notificación de sueño será enviada</string>
+    <string name="settingsNotificationAmountPlural">%s notificaciones de sueño serán enviadast</string>
+
+    <string name="settingsInactivityTimerSummarySingular">El usuario debe estar inactivo durante 1 minuto para ser considerado inactivo</string>
+    <string name="settingsInactivityTimerSummaryPlural">El usuario debe estar inactivo durante %s minutos para ser considerado inactivo</string>
+    <string name="settingsAdsEnabledSummary">Desbloquea opciones avanzadas sin pagar viendo anuncios (Los anuncios nunca se mostrarán fuera de la aplicación)</string>
+    <string name="settingsAdvancedPurchaseSummary">Apóyame y desbloquea todas las opciones avanzadas sin anuncios de por vida.</string>
+    <string name="settingsDnDPermDeniedToast">Acceso a no molestar no concedido, cambia la opción para intentar de nuevo </string>
+    <string name="settingsUsagePermDeniedToast">Acceso de uso no concedido, cambia la opción para intentar de nuevo</string>
+    <string name="rateDialogTitle">¿Disfrutando Ve a Dormir?</string>
+</resources>

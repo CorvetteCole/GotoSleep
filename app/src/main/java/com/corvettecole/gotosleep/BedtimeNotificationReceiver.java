@@ -13,13 +13,10 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import com.corvettecole.gotosleep.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -243,14 +240,25 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
 
         Log.d(TAG, "currentNotification: " + currentNotification);
-
+        if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
             if (currentNotification == 1) {
-                return context.getString(R.string.notifTitle1);
-            } else if (min == 1){
-                return String.format(Locale.US, context.getString(R.string.notifTitle2), min);
+                return context.getString(R.string.notifTitleFirst);
+            } else if (min == 1) {
+                return String.format(context.getString(R.string.notifTitleSingular), min);
+            } else if(min >= 2 && min <= 4){
+                return String.format(context.getString(R.string.notifTitleFunky), min);
             } else {
-                return String.format(Locale.US, context.getString(R.string.notifTitle3), min);
+                return String.format(context.getString(R.string.notifTitlePlural), min);
             }
+        } else {
+            if (currentNotification == 1) {
+                return context.getString(R.string.notifTitleFirst);
+            } else if (min == 1) {
+                return String.format(context.getString(R.string.notifTitleSingular), min);
+            } else {
+                return String.format(context.getString(R.string.notifTitlePlural), min);
+            }
+        }
     }
 
     private String getNotificationTitle(){

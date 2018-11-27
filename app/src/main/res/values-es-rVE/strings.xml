@@ -3,8 +3,6 @@
     <string name="app_name" translatable="false">Go to Sleep</string>
     <string name="action_settings">Ajustes</string>
     <string name="app_intro">Intro</string>
-    <string name="hours_string">%d horas</string>
-    <string name="minutes_string">%d minutos hasta la hora de acostarse</string>
     <string name="edit_bedtime">Editar la hora de acostarse</string>
     <string name="settings">Ajustes</string>
     <string name="about">Sobre</string>
@@ -71,9 +69,10 @@
 
     <string name="autoDnDToast">DnD Habilitado… Ve a dormir!</string>
     <string name="notifAction">Voy a dormir</string>
-    <string name="notifTitle1">Hora de ir a la cama.</string>
-    <string name="notifTitle2">Es %d minuto después de tu hora de acostarte!</string>
-    <string name="notifTitle3">Son %d minutos después de tu hora de acostarte!</string>
+    <string name="notifTitleFirst">Hora de ir a la cama.</string>
+    <string name="notifTitleSingular">Es %d minuto después de tu hora de acostarte!</string>
+    <string name="notifTitlePlural">Son %d minutos después de tu hora de acostarte!</string>
+    <string name="notifTitleFunky">%d</string>
     <string name="supportEthereum">Dirección Ethereum</string>
     <string name="supportEthereumCopied">La dirección Ethereum ha sido copiada al portapapeles</string>
     <string name="supportGooglePay">Dirección de Google Pay</string>
@@ -91,10 +90,13 @@
     <string name="feedbackBodyText">Por favor explica el error o la sugerencia de una función a fondo</string>
 
     <string name="countDownHourSingular">%d hora</string>
+    <string name="countdownHourFunky">%d</string>
     <string name="countdownHourPlural">%d horas</string>
     <string name="countdownMinuteSingularFuture">%d minuto hasta la hora de acostarte</string>
+    <string name="countdownMinuteFunkyFuture">%d</string>
     <string name="countdownMinutePluralFuture">%d minutos hasta la hora de acostarte</string>
     <string name="countdownMinuteSingularPast">%d minuto después de la hora de acostarte</string>
+    <string name="countdownMinuteFunkyPast">%d</string> <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
     <string name="countdownMinutePluralPast">%d minutos después de la hora de acostarte</string>
 
     <string name="settingsAdsDisabledSummary">Los anuncios están deshabilitados, gracias por tu apoyo.</string>
@@ -105,16 +107,20 @@
 
     <string name="settingsAutoDnDSummarySingular">Habilite automáticamente "No molestar" 1 minuto después de que se envíe el último recordatorio de la hora de acostarse</string>
     <string name="settingsDelayDnDSummarySingular">No molestar será activado 1 minuto después del último recordatorio de la hora de acostarse enviado</string>
+    <string name="settingsDelayDnDSummaryFunky">%s</string>
+    <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">No molestar será activado %s minutos después del último recordatorio de la hora de acostarse enviado</string>
     <string name="settingsAutoDnDSummaryPlural">Activar automáticamente No molestar %s minutos después del último recordatorio de la hora de acostarse enviado</string>
     <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) o versiones posteriores requeridas.</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 no compatible (LG no implementó el API correctamente)</string>
 
     <string name="settingsNotificationDelaySummary">%s minuto de retraso entre notificaciones de sueño</string>
-    <string name="settingNotificationAmountSingular">1 notificación de sueño será enviada</string>
+    <string name="settingsNotificationAmountSingular">1 notificación de sueño será enviada</string>
+    <string name="settingsNotificationAmountFunky">%s</string>
     <string name="settingsNotificationAmountPlural">%s notificaciones de sueño serán enviadast</string>
 
     <string name="settingsInactivityTimerSummarySingular">El usuario debe estar inactivo durante 1 minuto para ser considerado inactivo</string>
+    <string name="settingsInactivityTimerSummaryFunky">%s</string>
     <string name="settingsInactivityTimerSummaryPlural">El usuario debe estar inactivo durante %s minutos para ser considerado inactivo</string>
     <string name="settingsAdsEnabledSummary">Desbloquea opciones avanzadas sin pagar viendo anuncios (Los anuncios nunca se mostrarán fuera de la aplicación)</string>
     <string name="settingsAdvancedPurchaseSummary">Apóyame y desbloquea todas las opciones avanzadas sin anuncios de por vida.</string>

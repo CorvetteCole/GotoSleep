@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private BroadcastReceiver _broadcastReceiver;
     private ImageView moon;
-    private TextView hours;
-    private TextView minutes;
+    private TextView countdownHoursTextView;
+    private TextView countdownMinutesTextView;
     private TextView sleepMessage;
     private Button enableSleepmodeButton;
     private View contentMain;
@@ -302,8 +302,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
             aboutButton = findViewById(R.id.aboutButton);
             moon = findViewById(R.id.moon);
-            hours = findViewById(R.id.hours);
-            minutes = findViewById(R.id.minutes);
+            countdownHoursTextView = findViewById(R.id.hours);
+            countdownMinutesTextView = findViewById(R.id.minutes);
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
             enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
@@ -1050,15 +1050,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         long difference = System.currentTimeMillis() - minUsageStat.getLastTimeStamp();
 
         if (System.currentTimeMillis() - minUsageStat.getLastTimeStamp() <=  userActiveMargin * ONE_MINUTE_MILLIS){
-            Log.d(TAG, "user is active, last activity " + difference/ONE_MINUTE_MILLIS + " minutes ago");
+            Log.d(TAG, "user is active, last activity " + difference/ONE_MINUTE_MILLIS + " countdownMinutesTextView ago");
         } else {
-            Log.d(TAG, "user is inactive, last activity " + difference/ONE_MINUTE_MILLIS + " minutes ago");
+            Log.d(TAG, "user is inactive, last activity " + difference/ONE_MINUTE_MILLIS + " countdownMinutesTextView ago");
         }
     }
     */
 
     private void updateCountdown() {
-        if (!isFirstStart){
+        if (!isFirstStart) {
 
             Calendar current = Calendar.getInstance();
             current.setTimeInMillis(System.currentTimeMillis());
@@ -1066,7 +1066,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             Date endDate;
             Date startDate;
             boolean present = false;
-
 
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
@@ -1083,64 +1082,92 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
             long difference = endDate.getTime() - startDate.getTime();
-            if (difference < 0)
-            {
+            if (difference < 0) {
                 try {
                     Date dateMax = simpleDateFormat.parse("24:00");
                     Date dateMin = simpleDateFormat.parse("00:00");
                     difference = (dateMax.getTime() - startDate.getTime()) + (endDate.getTime() - dateMin.getTime());
-                } catch (ParseException e){
+                } catch (ParseException e) {
                     Log.e("UpdateCountdown", e + "");
                 }
             }
-            int day = (int)(difference / (1000*60*60*24));
-            int hour = (int)((difference - (1000*60*60*24*day)) / (1000*60*60));
-            int min = Math.round((difference - (1000*60*60*24*day) - (1000*60*60*hour)) / (float)(1000*60));
-            Log.i("updateCountdown","Days: " + day + " Hours: "+ hour+", Mins: "+ min);
+            int day = (int) (difference / (1000 * 60 * 60 * 24));
+            int hour = (int) ((difference - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
+            int minute = Math.round((difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (float) (1000 * 60));
+            Log.i("updateCountdown", "Days: " + day + " Hours: " + hour + ", Mins: " + minute);
 
             if (hour >= bedtimePastTrigger) {
                 difference = (difference - 86400000) * -1;
                 present = true;
                 day = (int) (difference / (1000 * 60 * 60 * 24));
                 hour = (int) ((difference - (1000 * 60 * 60 * 24 * day)) / (1000 * 60 * 60));
-                min = Math.round((difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (float) (1000 * 60));
-                Log.i("updateCountdown", "Days: " + day + " Hours: " + hour + ", Mins: " + min);
+                minute = Math.round((difference - (1000 * 60 * 60 * 24 * day) - (1000 * 60 * 60 * hour)) / (float) (1000 * 60));
+                Log.i("updateCountdown", "Days: " + day + " Hours: " + hour + ", Mins: " + minute);
+                sleepMessage.setVisibility(View.GONE);
+            } else if (editBedtimeButton.getVisibility() != View.VISIBLE) {
+                sleepMessage.setVisibility(View.VISIBLE);
             }
 
-            if (min == 60){  //because minutes are being rounded for accuracy reasons, this is needed to correct for minor errors
-                min = 0;
+            if (minute == 60) {  //because countdownMinutesTextView are being rounded for accuracy reasons, this is needed to correct for minor errors
+                minute = 0;
                 hour++;
             }
 
-
-            if (hour == 1){
-                hours.setText(String.format(Locale.US, getString(R.string.countDownHourSingular), hour));
-
-            } else {
-                hours.setText(String.format(Locale.US, getString(R.string.countdownHourPlural), hour));
-            }
-
-            if (editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 120 && !sleepModeEnabled){  //if within two hours of bedtime, show button
+            if (editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + minute) <= 120 && !sleepModeEnabled) {  //if within two countdownHoursTextView of bedtime, show button
                 Log.d(TAG, "enabling sleep mode button");
                 enableSleepmodeButton.setVisibility(View.VISIBLE);
                 sleepModeEnabled = true;
             }
 
-            if (present) {
-                if (min == 1){
-                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinuteSingularFuture), min));
+
+            //#TODO make sure this method of finding the current language works, switch code to a switch case system
+            if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                //polish language stuff
+                if (hour == 1){
+                    countdownHoursTextView.setText(String.format(getString(R.string.countDownHourSingular), hour));
+                } else if (hour >= 2 && hour <= 4){
+                    countdownHoursTextView.setText(String.format(getString(R.string.countdownHourFunky), hour));
                 } else {
-                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinutePluralFuture), min));
+                    countdownHoursTextView.setText(String.format(getString(R.string.countdownHourPlural), hour));
                 }
-                sleepMessage.setVisibility(View.GONE);
+
+                if (present) {
+                    if (minute == 1) {
+                        countdownMinutesTextView.setText(String.format(getString(R.string.countdownMinuteSingularFuture), minute));
+                    } else if (minute >= 2 && minute <= 4) {
+                        countdownMinutesTextView.setText(String.format(getString(R.string.countdownMinuteFunkyFuture), minute));
+                    } else {
+                        countdownMinutesTextView.setText(String.format(getString(R.string.countdownMinutePluralFuture), minute));
+                    }
+                } else {
+                    if (minute == 1) {
+                        countdownMinutesTextView.setText(String.format(getString(R.string.countdownMinuteSingularPast), minute));
+                    } else if (minute >= 2 && minute <= 4) {
+                        countdownMinutesTextView.setText(String.format(getString(R.string.countdownMinuteFunkyPast), minute));
+                    } else {
+                        countdownMinutesTextView.setText(String.format(getString(R.string.countdownMinutePluralPast), minute));
+                    }
+                }
             } else {
-                if (min == 1){
-                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinuteSingularPast), min));
+                if (hour == 1) {
+                    countdownHoursTextView.setText(String.format(Locale.US, getString(R.string.countDownHourSingular), hour));
+
                 } else {
-                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinutePluralPast), min));
+                    countdownHoursTextView.setText(String.format(Locale.US, getString(R.string.countdownHourPlural), hour));
                 }
-                if (editBedtimeButton.getVisibility() != View.VISIBLE) {
-                    sleepMessage.setVisibility(View.VISIBLE);
+                if (present) {
+                    if (minute == 1) {
+                        countdownMinutesTextView.setText(String.format(Locale.US, getString(R.string.countdownMinuteSingularFuture), minute));
+                    } else {
+                        countdownMinutesTextView.setText(String.format(Locale.US, getString(R.string.countdownMinutePluralFuture), minute));
+                    }
+
+                } else {
+                    if (minute == 1) {
+                        countdownMinutesTextView.setText(String.format(Locale.US, getString(R.string.countdownMinuteSingularPast), minute));
+                    } else {
+                        countdownMinutesTextView.setText(String.format(Locale.US, getString(R.string.countdownMinutePluralPast), minute));
+                    }
                 }
             }
         }

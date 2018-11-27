@@ -213,21 +213,50 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 return true;
             });
 
-            if (Objects.equals(sharedPreferences.getString(DND_DELAY_KEY, "2"), "1")){
-                autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
-                delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
+            int dnd_delay = Integer.parseInt(sharedPreferences.getString(DND_DELAY_KEY, "2"));
+            if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                if (dnd_delay == 1) {
+                    autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
+                    delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
+                } else if (dnd_delay >= 2 && dnd_delay <= 4){
+                    autoDnDPref.setSummary(String.format(getString(R.string.settingsAutoDnDSummaryFunky), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                    delayDnDPref.setSummary(String.format(getString(R.string.settingsDelayDnDSummaryFunky), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                } else {
+                    autoDnDPref.setSummary(String.format(getString(R.string.settingsAutoDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                    delayDnDPref.setSummary(String.format(getString(R.string.settingsDelayDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                }
             } else {
-                autoDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsAutoDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
-                delayDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsDelayDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
-            }
-
-            delayDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((newValue).equals("1")){
+                if (dnd_delay == 1) {
                     autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
                     delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
                 } else {
-                    autoDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsAutoDnDSummaryPlural), newValue));
-                    delayDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsDelayDnDSummaryPlural), newValue));
+                    autoDnDPref.setSummary(String.format(getString(R.string.settingsAutoDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                    delayDnDPref.setSummary(String.format(getString(R.string.settingsDelayDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                }
+            }
+
+            delayDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                int value = Integer.parseInt((String)newValue);
+                //if user is polish do the weird polish language stuff
+                if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                    if (value == 1) {
+                        autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
+                        delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
+                    } else if (value >= 2 && value <= 4){
+                        autoDnDPref.setSummary(String.format(getString(R.string.settingsAutoDnDSummaryFunky), newValue));
+                        delayDnDPref.setSummary(String.format(getString(R.string.settingsDelayDnDSummaryFunky), newValue));
+                    } else {
+                        autoDnDPref.setSummary(String.format(getString(R.string.settingsAutoDnDSummaryPlural), newValue));
+                        delayDnDPref.setSummary(String.format(getString(R.string.settingsDelayDnDSummaryPlural), newValue));
+                    }
+                } else {
+                    if (value == 1) {
+                        autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
+                        delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
+                    } else {
+                        autoDnDPref.setSummary(String.format(getString(R.string.settingsAutoDnDSummaryPlural), newValue));
+                        delayDnDPref.setSummary(String.format(getString(R.string.settingsDelayDnDSummaryPlural), newValue));
+                    }
                 }
                 return true;
             });
@@ -325,30 +354,75 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 return true;
             });
 
-            if (Objects.equals(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3"), "1")){
-                notificationAmount.setSummary(R.string.settingNotificationAmountSingular);
-            } else {
-                notificationAmount.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationAmountPlural), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
-            }
-            notificationAmount.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (((String) newValue).equals("1")){
-                    notificationAmount.setSummary(R.string.settingNotificationAmountSingular);
+            int notificationAmountTemp = Integer.parseInt(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3"));
+            if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                if (notificationAmountTemp == 1) {
+                    notificationAmount.setSummary(R.string.settingsNotificationAmountSingular);
+                } else if (notificationAmountTemp >= 2 && notificationAmountTemp <= 4){
+                    notificationAmount.setSummary(String.format(getString(R.string.settingsNotificationAmountFunky), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
                 } else {
-                    notificationAmount.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationAmountPlural), newValue));
+                    notificationAmount.setSummary(String.format(getString(R.string.settingsNotificationAmountPlural), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
+                }
+            } else {
+                if (notificationAmountTemp == 1) {
+                    notificationAmount.setSummary(R.string.settingsNotificationAmountSingular);
+                } else {
+                    notificationAmount.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationAmountPlural), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
+                }
+            }
+
+            notificationAmount.setOnPreferenceChangeListener((preference, newValue) -> {
+                int value = Integer.parseInt((String)newValue);
+                if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                    if (value == 1) {
+                        notificationAmount.setSummary(R.string.settingsNotificationAmountSingular);
+                    } else if (value >= 2 && value <= 4){
+                        notificationAmount.setSummary(String.format(getString(R.string.settingsNotificationAmountFunky), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
+                    } else {
+                        notificationAmount.setSummary(String.format(getString(R.string.settingsNotificationAmountPlural), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
+                    }
+                } else {
+                    if (value == 1) {
+                        notificationAmount.setSummary(R.string.settingsNotificationAmountSingular);
+                    } else {
+                        notificationAmount.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationAmountPlural), newValue));
+                    }
                 }
                 return true;
             });
 
-            if (Integer.parseInt(Objects.requireNonNull(sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5"))) == 1){
-                inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
+            int inactivityTimer = Integer.parseInt(sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5"));
+            if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                if (inactivityTimer == 1){
+                    inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
+                } else if (inactivityTimer >= 2 && inactivityTimer <= 4){
+                    inactivityTimerPref.setSummary(String.format(getString(R.string.settingsInactivityTimerSummaryFunky), sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")));
+                } else {
+                    inactivityTimerPref.setSummary(String.format(getString(R.string.settingsInactivityTimerSummaryPlural), sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")));
+                }
             } else {
-                inactivityTimerPref.setSummary(String.format(Locale.US, getString(R.string.settingsInactivityTimerSummaryPlural), sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")));
-            }
-            inactivityTimerPref.setOnPreferenceChangeListener(((preference, newValue) -> {
-                if (Integer.parseInt((String) newValue) == 1){
+                if (inactivityTimer == 1) {
                     inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
                 } else {
-                    inactivityTimerPref.setSummary(String.format(Locale.US, getString(R.string.settingsInactivityTimerSummaryPlural), newValue));
+                    inactivityTimerPref.setSummary(String.format(Locale.US, getString(R.string.settingsInactivityTimerSummaryPlural), sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")));
+                }
+            }
+            inactivityTimerPref.setOnPreferenceChangeListener(((preference, newValue) -> {
+                int temp = Integer.parseInt((String) newValue);
+                if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
+                    if (temp == 1){
+                        inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
+                    } else if (temp >= 2 && temp <= 4){
+                        inactivityTimerPref.setSummary(String.format(getString(R.string.settingsInactivityTimerSummaryFunky), newValue));
+                    } else {
+                        inactivityTimerPref.setSummary(String.format(getString(R.string.settingsInactivityTimerSummaryPlural), newValue));
+                    }
+                } else {
+                    if (temp == 1) {
+                        inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
+                    } else {
+                        inactivityTimerPref.setSummary(String.format(Locale.US, getString(R.string.settingsInactivityTimerSummaryPlural), newValue));
+                    }
                 }
                 return true;
             }));
@@ -356,6 +430,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         } else {
            startCustomNotificationsScreen();
         }
+    }
+
+    private void initializeLanguageJunk(Context context){
+
     }
 
 

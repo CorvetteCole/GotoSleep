@@ -2,8 +2,7 @@
     <string name="app_name" translatable="false">Go to Sleep</string>
     <string name="action_settings">Settings</string>
     <string name="app_intro">Intro</string>
-    <string name="hours_string">%d hours</string>
-    <string name="minutes_string">%d minutes until bedtime</string>
+
     <string name="edit_bedtime">Edit Bedtime</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
@@ -70,9 +69,10 @@
 
     <string name="autoDnDToast">Enabled DnD… Go to sleep!</string>
     <string name="notifAction">I\'m going to sleep</string>
-    <string name="notifTitle1">Time to head to bed.</string>
-    <string name="notifTitle2">It is %d minute past your bedtime!</string>
-    <string name="notifTitle3">It is %d minutes past your bedtime!</string>
+    <string name="notifTitleFirst">Time to head to bed.</string>
+    <string name="notifTitleSingular">It is %d minute past your bedtime!</string>
+    <string name="notifTitlePlural">It is %d minutes past your bedtime!</string>
+    <string name="notifTitleFunky">%d</string>
     <string name="supportEthereum">Ethereum Address</string>
     <string name="supportEthereumCopied">Copied ethereum address to clipboard</string>
     <string name="supportGooglePay">Google Pay Address</string>
@@ -90,10 +90,13 @@
     <string name="feedbackBodyText">Please explain your bug or feature suggestion thoroughly</string>
 	
     <string name="countDownHourSingular">%d hour</string>
+    <string name="countdownHourFunky">%d</string>   <!-- Use for 2 hours, 3 hours, 4 hours -->
     <string name="countdownHourPlural">%d hours</string>
     <string name="countdownMinuteSingularFuture">%d minute until bedtime</string>
+    <string name="countdownMinuteFunkyFuture">%d</string>  <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
     <string name="countdownMinutePluralFuture">%d minutes until bedtime</string>
     <string name="countdownMinuteSingularPast">%d minute past bedtime</string>
+    <string name="countdownMinuteFunkyPast">%d</string> <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
     <string name="countdownMinutePluralPast">%d minutes past bedtime</string>
 	
     <string name="settingsAdsDisabledSummary">Ads are disabled, thank you for your support.</string>
@@ -104,20 +107,69 @@
 	
     <string name="settingsAutoDnDSummarySingular">Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent</string>
     <string name="settingsDelayDnDSummarySingular">Do not Disturb will be activated 1 minute after the last notification is sent</string>
+    <string name="settingsDelayDnDSummaryFunky">%s</string> <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
+    <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">Do not disturb will be activated %s minutes after the last notification is sent</string>
     <string name="settingsAutoDnDSummaryPlural">Automatically enable do not disturb %s minutes after the last bedtime reminder is sent</string>
     <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) and up required</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 is not compatible (LG didn\'t implement the API correctly)</string>
 	
     <string name="settingsNotificationDelaySummary">%s minute delay between sleep notifications</string>
-    <string name="settingNotificationAmountSingular">1 sleep reminder will be sent</string>
+    <string name="settingsNotificationAmountSingular">1 sleep reminder will be sent</string>
+    <string name="settingsNotificationAmountFunky">%s</string>
     <string name="settingsNotificationAmountPlural">%s sleep reminders will be sent</string>
 	
     <string name="settingsInactivityTimerSummarySingular">User must be inactive for 1 minute to be considered inactive</string>
+    <!-- Use for any amount of minutes past 4  -->
+    <string name="settingsInactivityTimerSummaryFunky">%s</string>
     <string name="settingsInactivityTimerSummaryPlural">User must be inactive for %s minutes to be considered inactive</string>
     <string name="settingsAdsEnabledSummary">Unlock advanced options without paying by showing ads (ads will never be shown outside of the app)</string>
     <string name="settingsAdvancedPurchaseSummary">Support me and unlock all advanced options without advertisements for life</string>
     <string name="settingsDnDPermDeniedToast">Do not disturb access not granted, toggle option to try again</string>
     <string name="settingsUsagePermDeniedToast">Usage access not granted, toggle option to try again</string>
     <string name="rateDialogTitle">Enjoying Go to Sleep?</string>
+
+    <!--preference defaults-->
+    <string name="categoryGeneral">General</string>
+    <string name="bedtimeSummary">Edit your bedtime</string>
+    <string name="bedtimeSummaryHasTime">Bedtime is %s</string>
+    <string name="bedtimeTitle">Bedtime</string>
+
+    <string name="autoDoNotDisturbTitle">Automatic Do Not Disturb</string>
+    <string name="autoDoNotDisturbSummary">Automatically enable Do not Disturb 2 minutes after the last bedtime reminder is sent</string>
+
+    <string name="tapToHideTitle">Tap to Hide</string>
+    <string name="tapToHideSummary">Tap anywhere on the main screen to hide the settings and about button</string>
+
+    <string name="categoryNotifications">Notifications</string>
+    <string name="notificationToggleTitle">Enable Notifications</string>
+    <string name="notificationToggleSummary">Enable/disable sleep reminder notifications</string>
+
+    <string name="notificationDelayTitle">Notification Interval</string>
+    <string name="notificationDelaySummary">15 minute interval between sleep notifications</string>
+
+    <string name="notificationAmountTitle">Notification Amount</string>
+
+    <string name="categoryAdvanced">Advanced Options</string>
+    <string name="advancedPurchaseTitle">Unlock Advanced Options Ad-Free</string>
+    <string name="advancedPurchaseSummary">Support me and unlock all advanced options without advertisements for life</string>
+
+    <string name="gdprTitle">Clear GDPR preferences</string>
+    <string name="gdprSummary">Clear your preferences regarding ad personalization</string>
+
+    <string name="smartNotificationsTitle">Smart Notifications</string>
+    <string name="smartNotificationsSummary">Send notifications until you stop using your phone</string>
+
+    <string name="activityMarginTitle">Inactivity Timer</string>
+    <string name="activityMarginSummary">User must be inactive for 5 minutes to be counted as inactive</string>
+
+    <string name="dndDelayTitle">Automatic Do Not Disturb Timer</string>
+    <string name="dndDelaySummary">Do not Disturb will be activated 2 minutes after the last notification is sent</string>
+
+    <string name="categoryCustomNotificationsTitle">Custom Notifications</string>
+    <string name="categoryCustomNotificationsSummary">Customize your sleep notifications</string>
+
+    <string name="enableAdsTitle">Enable Advertisements</string>
+    <string name="enableAdsSummary">Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) </string>
+
 </resources>

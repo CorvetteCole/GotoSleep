@@ -4,44 +4,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="preferences">
     <PreferenceCategory
-        android:title="General">
+        android:title="@string/categoryGeneral">
         <!--suppress AndroidElementNotAllowed -->
         <TimePickerPreference
             android:key="pref_bedtime"
             android:persistent="true"
-            android:summary="Edit your bedtime"
-            android:title="Bedtime"
+            android:summary="@string/bedtimeSummary"
+            android:title="@string/bedtimeTitle"
             app:pref_hourFormat="auto"
             app:pref_pickerTime="19:35"
-            app:pref_summaryHasTime="Bedtime is %s" />
+            app:pref_summaryHasTime="@string/bedtimeSummaryHasTime" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_autoDoNotDisturb"
-            android:title="Automatic Do Not Disturb"
-            android:summary="Automatically enable Do not Disturb 2 minutes after the last bedtime reminder is sent"
+            android:title="@string/autoDoNotDisturbTitle"
+            android:summary="@string/autoDoNotDisturbSummary"
             />
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_buttonHide"
-            android:title="Tap to Hide"
-            android:summary="Tap anywhere on the main screen to hide the settings and feedback button"/>
+            android:title="@string/tapToHideTitle"
+            android:summary="@string/tapToHideSummary"/>
 
 
     </PreferenceCategory>
     <PreferenceCategory
-        android:title="Notifications">
+        android:title="@string/categoryNotifications">
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_notificationsEnabled"
-            android:title="Enable Notifications"
-            android:summary="Enable/Disable sleep reminder notifications"
+            android:title="@string/notificationToggleTitle"
+            android:summary="@string/notificationToggleSummary"
             android:enabled="true"/>
         <EditTextPreference
             android:dependency="pref_notificationsEnabled"
             android:inputType="number"
             android:key="pref_notificationDelay"
-            android:title="Notification Interval"
-            android:summary="15 minute interval between sleep notifications"
+            android:title="@string/notificationDelayTitle"
+            android:summary="@string/notificationDelaySummary"
             android:maxLength="2"
             android:defaultValue="15"
             android:max="30"/>
@@ -49,7 +49,7 @@
         <SimpleMenuPreference
             android:dependency="pref_notificationsEnabled"
             android:key="pref_numNotifications"
-            android:title="Notification Amount"
+            android:title="@string/notificationAmountTitle"
             android:summary="%s"
             android:defaultValue="1"
             android:entries="@array/pref_list_entries"
@@ -60,80 +60,83 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Advanced Options"
+        android:title="@string/categoryAdvanced"
         android:key="pref_advanced_options">
 
         <PreferenceScreen
             android:key="pref_advanced_purchase"
-            android:title="Unlock Advanced Options Ad-Free"
-            android:summary="Support me and unlock all advanced options without advertisements for life">
+            android:title="@string/advancedPurchaseTitle"
+            android:summary="@string/advancedPurchaseSummary">
         </PreferenceScreen>
         <PreferenceScreen
             android:key="pref_gdpr"
-            android:title="Clear GDPR preferences"
-            android:summary="Clear your preferences regarding ad personalization">
+            android:title="@string/gdprTitle"
+            android:summary="@string/gdprSummary">
         </PreferenceScreen>
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_smartNotifications"
-            android:title="Smart Notifications"
-            android:summary="Send notifications until you stop using your phone"
+            android:title="@string/smartNotificationsTitle"
+            android:summary="@string/smartNotificationsSummary"
             android:dependency="pref_notificationsEnabled"/>
         <EditTextPreference
             android:dependency="pref_smartNotifications"
             android:key="pref_activityMargin"
-            android:title="Inactivity Timer"
+            android:title="@string/activityMarginTitle"
             android:inputType="number"
             android:defaultValue="5"
             android:maxLength="2"
-            android:summary="User must be inactive for 5 minutes to be counted as inactive"/>
+            android:summary="@string/activityMarginSummary"/>
         <EditTextPreference
             android:key="pref_dndDelay"
-            android:title="Automatic Do Not Disturb Timer"
+            android:title="@string/dndDelayTitle"
             android:inputType="number"
             android:defaultValue="2"
             android:maxLength="2"
-            android:summary="Do not Disturb will be activated 2 minutes after the last notification is sent"/>
+            android:summary="@string/dndDelaySummary"/>
         <PreferenceScreen
             android:key="pref_customNotifications_category"
-            android:title="Custom Notifications"
-            android:summary="Customize your sleep notifications">
+            android:title="@string/categoryCustomNotificationsTitle"
+            android:summary="@string/categoryCustomNotificationsSummary">
+            <PreferenceCategory
+                android:title="@string/categoryCustomNotificationsTitle">
             <EditTextPreference
                 android:inputType="text"
                 android:key="pref_notification1"
-                android:title="Notification 1"
+                android:title=""
                 android:defaultValue="@string/notification1"
                 android:summary="@string/notification1"/>
             <EditTextPreference
                 android:inputType="text"
                 android:key="pref_notification2"
-                android:title="Notification 2"
+                android:title=""
                 android:defaultValue="@string/notification2"
                 android:summary="@string/notification2"/>
             <EditTextPreference
                 android:inputType="text"
                 android:key="pref_notification3"
-                android:title="Notification 3"
+                android:title=""
                 android:defaultValue="@string/notification3"
                 android:summary="@string/notification3"/>
             <EditTextPreference
                 android:inputType="text"
                 android:key="pref_notification4"
-                android:title="Notification 4"
+                android:title=""
                 android:defaultValue="@string/notification4"
                 android:summary="@string/notification4"/>
             <EditTextPreference
                 android:inputType="text"
                 android:key="pref_notification5"
-                android:title="Notification 5"
+                android:title=""
                 android:defaultValue="@string/notification5"
                 android:summary="@string/notification5"/>
+            </PreferenceCategory>
         </PreferenceScreen>
         <SwitchPreference
             android:defaultValue="false"
             android:key="pref_adsEnabled"
-            android:title="Enable Advertisements"
-            android:summary="Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) "/>
+            android:title="@string/enableAdsTitle"
+            android:summary="@string/enableAdsSummary"/>
 
 
 

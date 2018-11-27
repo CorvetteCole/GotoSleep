@@ -35,7 +35,7 @@ public class BedtimeNotificationHelper extends BroadcastReceiver {
 
         if (notificationsEnabled) {
             bedtime = Calendar.getInstance();
-            bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
+            bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "22:00")));
             if (bedtime.getTimeInMillis() < System.currentTimeMillis()){
                 bedtime.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
             }

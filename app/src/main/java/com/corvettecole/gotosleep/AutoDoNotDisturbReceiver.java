@@ -17,7 +17,7 @@ public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mNotificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALARMS);
-            Toast.makeText(context, "Enabled DnD... Go to sleep!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.autoDnDToast), Toast.LENGTH_SHORT).show();
         }
         mNotificationManager.cancel(NOTIFICATION_REQUEST_CODE);
     }

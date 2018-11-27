@@ -27,6 +27,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
@@ -115,14 +116,14 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             if (advancedOptionsPurchased) {
                adsEnabledPref.setEnabled(false);
-               adsEnabledPref.setSummary("Ads are disabled, thank you for your support.");
+               adsEnabledPref.setSummary(R.string.settingsAdsDisabledSummary);
 
                getPreferenceScreen().findPreference("pref_advanced_options").setEnabled(true);
                getPreferenceManager().getSharedPreferences().edit().putBoolean(ADS_ENABLED_KEY, false).apply();
                getPreferenceScreen().findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
                delayDnDPref.setEnabled(sharedPreferences.getBoolean(DND_KEY, false));
                smartNotificationsPref.setEnabled(true);
-               getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
+               getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary(R.string.settingsAdvancedPurchasedSummary);
             }
 
                 ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
@@ -135,7 +136,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                             GDPR.setOnPreferenceClickListener(preference -> {
                                 consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
                                 shouldUpdateConsent = true;
-                                Toast.makeText(getContext(), "Consent preferences cleared... Go back to main screen to edit", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getString(R.string.settingsConsentPrefsClearedToast), Toast.LENGTH_SHORT).show();
                                 //toast here
                                 return false;
                             });
@@ -177,17 +178,17 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             Preference bedtime = this.findPreference(BEDTIME_KEY);
             try {
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                Date time = simpleDateFormat.parse(sharedPreferences.getString(BEDTIME_KEY, "19:35"));
-                bedtime.setSummary("Bedtime is " +  DateFormat.getTimeInstance(DateFormat.SHORT).format(time));
+                Date time = simpleDateFormat.parse(sharedPreferences.getString(BEDTIME_KEY, "22:00"));
+                bedtime.setSummary(String.format(Locale.US, getString(R.string.settingsBedtimeSummary), DateFormat.getTimeInstance(DateFormat.SHORT).format(time)));
             } catch (ParseException e) {
                 e.printStackTrace();
-                bedtime.setSummary("Bedtime is " + sharedPreferences.getString(BEDTIME_KEY, "19:35"));
+                bedtime.setSummary(String.format(Locale.US, getString(R.string.settingsBedtimeSummary), sharedPreferences.getString(BEDTIME_KEY, "22:00")));
             }
 
             smartNotificationsPref.setEnabled(enableAdvancedOptions);
             delayDnDPref.setEnabled(enableAdvancedOptions);
             if (enableAdvancedOptions){
-                smartNotificationsPref.setSummary("Send notifications until you stop using your phone");
+                smartNotificationsPref.setSummary(R.string.settingsSmartNotificationsSummaryEnabled);
             }
             customNotificationsPref.setEnabled(enableAdvancedOptions);
 
@@ -212,21 +213,21 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 return true;
             });
 
-            if (sharedPreferences.getString(DND_DELAY_KEY, "2").equals("1")){
-                autoDnDPref.setSummary("Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent");
-                delayDnDPref.setSummary("Do not Disturb will be activated 1 minute after the last notification is sent");
+            if (Objects.equals(sharedPreferences.getString(DND_DELAY_KEY, "2"), "1")){
+                autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
+                delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
             } else {
-                autoDnDPref.setSummary("Automatically enable Do not Disturb " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last bedtime reminder is sent");
-                delayDnDPref.setSummary("Do not Disturb will be activated " + sharedPreferences.getString(DND_DELAY_KEY, "2") + " minutes after the last notification is sent");
+                autoDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsAutoDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
+                delayDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsDelayDnDSummaryPlural), sharedPreferences.getString(DND_DELAY_KEY, "2")));
             }
 
             delayDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((newValue).equals("1")){
-                    autoDnDPref.setSummary("Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent");
-                    delayDnDPref.setSummary("Do not Disturb will be activated 1 minute after the last notification is sent");
+                    autoDnDPref.setSummary(R.string.settingsAutoDnDSummarySingular);
+                    delayDnDPref.setSummary(R.string.settingsDelayDnDSummarySingular);
                 } else {
-                    autoDnDPref.setSummary("Automatically enable Do not Disturb " + newValue + " minutes after the last bedtime reminder is sent");
-                    delayDnDPref.setSummary("Do not Disturb will be activated " + newValue + " minutes after the last notification is sent");
+                    autoDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsAutoDnDSummaryPlural), newValue));
+                    delayDnDPref.setSummary(String.format(Locale.US, getString(R.string.settingsDelayDnDSummaryPlural), newValue));
                 }
                 return true;
             });
@@ -270,10 +271,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
-                this.findPreference(DND_KEY).setSummary("Android 6.0 (Marshmallow) and up required");
+                this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnDLowAndroidVersonMessage);
             } else if (android.os.Build.MANUFACTURER.equalsIgnoreCase("lg") && android.os.Build.MODEL.equalsIgnoreCase("g4")){
                 this.findPreference(DND_KEY).setEnabled(false);
-                this.findPreference(DND_KEY).setSummary("LG G4 is not compatible (LG didn't implement the API correctly)");
+                this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnD_LG_G4_message);
             } else {
                 autoDnDPref.setOnPreferenceChangeListener((preference, newValue) -> {
 
@@ -318,36 +319,36 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 });
             }
 
-            notificationDelay.setSummary(sharedPreferences.getString(NOTIF_DELAY_KEY, "15") + " minute delay between sleep notifications");
+            notificationDelay.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationDelaySummary), sharedPreferences.getString(NOTIF_DELAY_KEY, "15")));
             notificationDelay.setOnPreferenceChangeListener((preference, newValue) -> {
-                notificationDelay.setSummary(newValue + " minute delay between sleep notifications");
+                notificationDelay.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationDelaySummary), newValue));
                 return true;
             });
 
-            if (sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3").equals("1")){
-                notificationAmount.setSummary("1 sleep reminder will be sent");
+            if (Objects.equals(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3"), "1")){
+                notificationAmount.setSummary(R.string.settingNotificationAmountSingular);
             } else {
-                notificationAmount.setSummary(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3") + " sleep reminders will be sent");
+                notificationAmount.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationAmountPlural), sharedPreferences.getString(NOTIF_AMOUNT_KEY, "3")));
             }
             notificationAmount.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (((String) newValue).equals("1")){
-                    notificationAmount.setSummary("1 sleep reminder will be sent");
+                    notificationAmount.setSummary(R.string.settingNotificationAmountSingular);
                 } else {
-                    notificationAmount.setSummary(newValue + " sleep reminders will be sent");
+                    notificationAmount.setSummary(String.format(Locale.US, getString(R.string.settingsNotificationAmountPlural), newValue));
                 }
                 return true;
             });
 
-            if (Integer.parseInt(sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")) == 1){
-                inactivityTimerPref.setSummary("User must be inactive for 1 minute to be considered inactive");
+            if (Integer.parseInt(Objects.requireNonNull(sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5"))) == 1){
+                inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
             } else {
-                inactivityTimerPref.setSummary("User must be inactive for " + sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5") + " minutes to be considered inactive");
+                inactivityTimerPref.setSummary(String.format(Locale.US, getString(R.string.settingsInactivityTimerSummaryPlural), sharedPreferences.getString(INACTIVITY_TIMER_KEY, "5")));
             }
             inactivityTimerPref.setOnPreferenceChangeListener(((preference, newValue) -> {
                 if (Integer.parseInt((String) newValue) == 1){
-                    inactivityTimerPref.setSummary("User must be inactive for 1 minute to be considered inactive");
+                    inactivityTimerPref.setSummary(R.string.settingsInactivityTimerSummarySingular);
                 } else {
-                    inactivityTimerPref.setSummary("User must be inactive for " + newValue + " minutes to be considered inactive");
+                    inactivityTimerPref.setSummary(String.format(Locale.US, getString(R.string.settingsInactivityTimerSummaryPlural), newValue));
                 }
                 return true;
             }));
@@ -433,12 +434,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         advancedOptionsPurchased = true;
         sharedPreferences.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
         preferenceScreen.findPreference(ADS_ENABLED_KEY).setEnabled(false);
-        preferenceScreen.findPreference(ADS_ENABLED_KEY).setSummary("Ads are disabled, thank you for supporting me!");
+        preferenceScreen.findPreference(ADS_ENABLED_KEY).setSummary(getResources().getString(R.string.settingsAdsDisabledSummary));
         preferenceScreen.findPreference("pref_advanced_options").setEnabled(true);
         sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
         preferenceScreen.findPreference(CUSTOM_NOTIFICATIONS_KEY).setEnabled(true);
         preferenceScreen.findPreference(SMART_NOTIFICATIONS_KEY).setEnabled(true);
-        preferenceScreen.findPreference("pref_advanced_purchase").setSummary("Thank you for supporting me!");
+        preferenceScreen.findPreference("pref_advanced_purchase").setSummary(getString(R.string.settingsAdvancedPurchasedSummary));
         if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false)){
             preferenceScreen.findPreference(NOTIF_AMOUNT_KEY).setEnabled(false);
         }
@@ -451,8 +452,8 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         advancedOptionsPurchased = false;
         sharedPreferences.edit().putBoolean(ADVANCED_PURCHASED_KEY, false).apply();
         preferenceScreen.findPreference(ADS_ENABLED_KEY).setEnabled(true);
-        preferenceScreen.findPreference(ADS_ENABLED_KEY).setSummary("Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) ");
-        preferenceScreen.findPreference("pref_advanced_purchase").setSummary("Support me and unlock all advanced options without advertisements for life");
+        preferenceScreen.findPreference(ADS_ENABLED_KEY).setSummary(R.string.settingsAdsEnabledSummary);
+        preferenceScreen.findPreference("pref_advanced_purchase").setSummary(R.string.settingsAdvancedPurchaseSummary);
         if (!adsEnabled) {
             preferenceScreen.findPreference("pref_advanced_options").setEnabled(false);
             sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
@@ -481,7 +482,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
                 sharedPreferences.edit().putBoolean(DND_KEY, false).apply();
                 desiredDoNotDisturbValue = false;
-                Toast.makeText(getContext(), "Do not disturb access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.settingsDnDPermDeniedToast), Toast.LENGTH_LONG).show();
                 getPreferenceScreen().findPreference(DND_KEY).performClick();
             } else if (notificationManager.isNotificationPolicyAccessGranted() && doNotDisturbSettingsOpened){
                 desiredDoNotDisturbValue = true;
@@ -492,7 +493,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         if (sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false) && !isUsageAccessGranted(getContext())) {
             sharedPreferences.edit().putBoolean(SMART_NOTIFICATIONS_KEY, false).apply();
             desiredSmartNotificationValue = false;
-            Toast.makeText(getContext(), "Usage access not granted, toggle option to try again", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.settingsUsagePermDeniedToast), Toast.LENGTH_LONG).show();
             getPreferenceScreen().findPreference(SMART_NOTIFICATIONS_KEY).performClick();
         } else if (isUsageAccessGranted(getContext()) && usageSettingsOpened){
             desiredSmartNotificationValue = true;

@@ -2,18 +2,15 @@ package com.corvettecole.gotosleep;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.corvettecole.gotosleep.R;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-
-import org.w3c.dom.Text;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -58,9 +55,9 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     });
 
     ethereum.setOnClickListener(view -> {
-        ClipData clip = ClipData.newPlainText("Ethereum Address", "0x8eFF5600A23708EFa475Be2C18892c9c0C43373B");
+        ClipData clip = ClipData.newPlainText(getString(R.string.supportEthereum), "0x8eFF5600A23708EFa475Be2C18892c9c0C43373B");
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(this, "Copied ethereum address to clipboard", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.supportEthereumCopied), Toast.LENGTH_LONG).show();
     });
 
     paypal.setOnClickListener(view -> {
@@ -69,9 +66,9 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     });
 
     googlePay.setOnClickListener(view -> {
-        ClipData clip = ClipData.newPlainText("Google Pay Address", "corvettecole@gmail.com");
+        ClipData clip = ClipData.newPlainText(getString(R.string.supportGooglePay), "corvettecole@gmail.com");
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(this, "Copied Google Pay to clipboard", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.supportGooglePayCopied), Toast.LENGTH_LONG).show();
     });
 
 

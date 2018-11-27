@@ -8,8 +8,6 @@ import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,15 +15,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -43,11 +38,9 @@ import com.google.ads.consent.ConsentFormListener;
 import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
-import com.google.ads.consent.DebugGeography;
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,10 +48,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
@@ -66,13 +57,11 @@ import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOT
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_MINUTE_MILLIS;
 import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.INACTIVITY_TIMER_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
@@ -185,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             super.onBackPressed();
             return;
         } else {
-            Toast toast = Toast.makeText(this, "Press again to exit", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, getString(R.string.back_pressed), Toast.LENGTH_SHORT);
             toast.show();
         }
         backPressed = System.currentTimeMillis();
@@ -400,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 }
                 cancelNextNotification(this);
                 setNotifications(true);
-                Toast.makeText(this, "Set next bedtime notification to tomorrow", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.sleepModeButtonToast), Toast.LENGTH_LONG).show();
                 enableSleepmodeButton.setVisibility(View.GONE);
             });
 
@@ -805,7 +794,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private void sendFeedback(){
         String subject = "Go to Sleep Feedback";
-        String bodyText = "Please explain your bug or feature suggestion thoroughly";
+        String bodyText = getString(R.string.feedbackBodyText);
         String mailto = "mailto:corvettecole@gmail.com" +
                 "?subject=" + Uri.encode(subject) +
                 "&body=" + Uri.encode(bodyText);
@@ -852,7 +841,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");
-        bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "19:35"));
+        bedtime = parseBedtime(settings.getString(BEDTIME_KEY, "22:00"));
 
         buttonHide = settings.getBoolean(BUTTON_HIDE_KEY, false);
         notificationsEnabled = settings.getBoolean(NOTIF_ENABLE_KEY, true);
@@ -1125,10 +1114,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
             if (hour == 1){
-                hours.setText(hour + " hour");
+                hours.setText(String.format(Locale.US, getString(R.string.countDownHourSingular), hour));
 
             } else {
-                hours.setText(hour + " hours");
+                hours.setText(String.format(Locale.US, getString(R.string.countdownHourPlural), hour));
             }
 
             if (editBedtimeButton.getVisibility() == View.GONE && ((hour * 60) + min) <= 120 && !sleepModeEnabled){  //if within two hours of bedtime, show button
@@ -1139,16 +1128,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             if (present) {
                 if (min == 1){
-                    minutes.setText(min + " minute until bedtime");
+                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinuteSingularFuture), min));
                 } else {
-                    minutes.setText(min + " minutes until bedtime");
+                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinutePluralFuture), min));
                 }
                 sleepMessage.setVisibility(View.GONE);
             } else {
                 if (min == 1){
-                    minutes.setText(min + " minute past bedtime");
+                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinuteSingularPast), min));
                 } else {
-                    minutes.setText(min + " minutes past bedtime");
+                    minutes.setText(String.format(Locale.US, getString(R.string.countdownMinutePluralPast), min));
                 }
                 if (editBedtimeButton.getVisibility() != View.VISIBLE) {
                     sleepMessage.setVisibility(View.VISIBLE);

@@ -3,6 +3,7 @@ package com.corvettecole.gotosleep;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import com.corvettecole.gotosleep.R;
 import android.view.WindowManager;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
@@ -21,8 +22,8 @@ public class IntroActivity extends AppIntro {
         // Just create a `SliderPage` and provide title, description, background and image.
         // AppIntro will do the rest.
         SliderPage firstSlide = new SliderPage();
-        firstSlide.setTitle("Welcome.");
-        firstSlide.setDescription("It's time to fix your sleep schedule");
+        firstSlide.setTitle(getString(R.string.introTitle1));
+        firstSlide.setDescription(getString(R.string.introDesc1));
         firstSlide.setImageDrawable(R.drawable.ic_sleep);
         firstSlide.setBgColor(ContextCompat.getColor(this, R.color.firstSlide));
         firstSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
@@ -31,8 +32,8 @@ public class IntroActivity extends AppIntro {
 
 
         SliderPage secondSlide = new SliderPage();
-        secondSlide.setTitle("Remind yourself.");
-        secondSlide.setDescription("Set your bedtime and never lose track of time again");
+        secondSlide.setTitle(getString(R.string.introTitle2));
+        secondSlide.setDescription(getString(R.string.introDesc2));
         secondSlide.setImageDrawable(R.drawable.ic_alarm_clock);
         secondSlide.setBgColor(ContextCompat.getColor(this, R.color.secondSlide));
         secondSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
@@ -40,8 +41,8 @@ public class IntroActivity extends AppIntro {
 
 
         SliderPage thirdSlide = new SliderPage();
-        thirdSlide.setTitle("Motivate yourself.");
-        thirdSlide.setDescription("Set custom sleep reminders");
+        thirdSlide.setTitle(getString(R.string.introTitle3));
+        thirdSlide.setDescription(getString(R.string.introDesc3));
         thirdSlide.setImageDrawable(R.drawable.ic_copywriting);
         thirdSlide.setBgColor(ContextCompat.getColor(this, R.color.thirdSlide));
         thirdSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);
@@ -49,8 +50,8 @@ public class IntroActivity extends AppIntro {
 
 
         SliderPage fourthSlide = new SliderPage();
-        fourthSlide.setTitle("Let's do this.");
-        fourthSlide.setDescription("Your new sleep schedule starts now");
+        fourthSlide.setTitle(getString(R.string.introTitle4));
+        fourthSlide.setDescription(getString(R.string.introDesc4));
         fourthSlide.setImageDrawable(R.drawable.ic_bed);
         fourthSlide.setBgColor(ContextCompat.getColor(this, R.color.fourthSlide));
         fourthSlide.setTitleTypefaceFontRes(R.font.product_sans_bold);

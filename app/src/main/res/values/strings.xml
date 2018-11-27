@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Go to Sleep</string>
+    <string name="app_name" translatable="false">Go to Sleep</string>
     <string name="action_settings">Settings</string>
     <string name="app_intro">Intro</string>
-    <string name="default_hours_string">% hours</string>
-    <string name="default_minutes_string">%% minutes until bedtime</string>
+    <string name="hours_string">%d hours</string>
+    <string name="minutes_string">%d minutes until bedtime</string>
     <string name="edit_bedtime">Edit Bedtime</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
@@ -39,4 +39,85 @@
     <string name="dollar_5">$5</string>
     <string name="google_pay">Google Pay: corvettecole@gmail.com</string>
     <string name="ethereum">Ethereum: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B</string>
+    <string name="egg1">maybe there is a secret here</string>
+    <string name="egg2">perhaps</string>
+    <string name="egg3">getting warmer…</string>
+    <string name="egg4">even warmer!</string>
+    <string name="egg5">oops sorry you missed it you were clicking too fast</string>
+    <string name="egg6">just kidding I guess</string>
+    <string name="egg7">curiosity killed the cat</string>
+    <string name="egg8">and satisfaction brought it back</string>
+    <string name="egg9">you made it! Something in the app seems to have changed…</string>
+    <string name="eggDisable1">you can turn it off if you click a bunch</string>
+    <string name="eggDisable2">lame</string>
+    <string name="eggDisable3">you are lame</string>
+    <string name="eggDisable4">why do you hate me</string>
+    <string name="eggDisable5">you hate fun</string>
+    <string name="eggDisable6">don\'t be lame</string>
+    <string name="eggDisable7">why are you the way you are</string>
+    <string name="eggDisable8">wow</string>
+    <string name="eggDisable9">welcome to the lamezone your lameness. egg disabled</string>
+    <string name="aboutGitHub">View the GitHub</string>
+    <string name="aboutRate">Rate the app</string>
+    <string name="aboutSupport">Support me</string>
+    <string name="aboutContact">Contact me</string>
+    <string name="aboutContactSubject">Go to Sleep Feedback</string>
+    <string name="aboutContactError">No email app available</string>
+    <string name="aboutWebsite">Visit my website</string>
+    <string name="aboutCredits">Credits</string>
+    <string name="aboutPrivacy">Privacy Policy</string>
+    <string name="aboutLicense">License</string>
+
+    <string name="autoDnDToast">Enabled DnD… Go to sleep!</string>
+    <string name="notifAction">I\'m going to sleep</string>
+    <string name="notifTitle1">Time to head to bed.</string>
+    <string name="notifTitle2">It is %d minute past your bedtime!</string>
+    <string name="notifTitle3">It is %d minutes past your bedtime!</string>
+    <string name="supportEthereum">Ethereum Address</string>
+    <string name="supportEthereumCopied">Copied ethereum address to clipboard</string>
+    <string name="supportGooglePay">Google Pay Address</string>
+    <string name="supportGooglePayCopied">Copied Google Pay to clipboard</string>
+    <string name="introTitle1">Welcome.</string>
+    <string name="introDesc1">It\'s time to fix your sleep schedule</string>
+    <string name="introTitle2">Remind yourself.</string>
+    <string name="introDesc2">Set your bedtime and never lose track of time again</string>
+    <string name="introTitle3">Motivate yourself.</string>
+    <string name="introDesc3">Set custom sleep reminders</string>
+    <string name="introTitle4">Let\'s do this.</string>
+    <string name="introDesc4">Your new sleep schedule starts now</string>
+    <string name="back_pressed">Press again to exit</string>
+    <string name="sleepModeButtonToast">Set next bedtime notification to tomorrow</string>
+    <string name="feedbackBodyText">Please explain your bug or feature suggestion thoroughly</string>
+	
+    <string name="countDownHourSingular">%d hour</string>
+    <string name="countdownHourPlural">%d hours</string>
+    <string name="countdownMinuteSingularFuture">%d minute until bedtime</string>
+    <string name="countdownMinutePluralFuture">%d minutes until bedtime</string>
+    <string name="countdownMinuteSingularPast">%d minute past bedtime</string>
+    <string name="countdownMinutePluralPast">%d minutes past bedtime</string>
+	
+    <string name="settingsAdsDisabledSummary">Ads are disabled, thank you for your support.</string>
+    <string name="settingsAdvancedPurchasedSummary">Thank you for supporting me!</string>
+    <string name="settingsConsentPrefsClearedToast">Consent preferences cleared… Go back to main screen to edit</string>
+    <string name="settingsBedtimeSummary">Bedtime is %s</string>
+    <string name="settingsSmartNotificationsSummaryEnabled">Send notifications until you stop using your phone</string>
+	
+    <string name="settingsAutoDnDSummarySingular">Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent</string>
+    <string name="settingsDelayDnDSummarySingular">Do not Disturb will be activated 1 minute after the last notification is sent</string>
+    <string name="settingsDelayDnDSummaryPlural">Do not disturb will be activated %s minutes after the last notification is sent</string>
+    <string name="settingsAutoDnDSummaryPlural">Automatically enable do not disturb %s minutes after the last bedtime reminder is sent</string>
+    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) and up required</string>
+    <string name="settingsAutoDnD_LG_G4_message">LG G4 is not compatible (LG didn\'t implement the API correctly)</string>
+	
+    <string name="settingsNotificationDelaySummary">%s minute delay between sleep notifications</string>
+    <string name="settingNotificationAmountSingular">1 sleep reminder will be sent</string>
+    <string name="settingsNotificationAmountPlural">%s sleep reminders will be sent</string>
+	
+    <string name="settingsInactivityTimerSummarySingular">User must be inactive for 1 minute to be considered inactive</string>
+    <string name="settingsInactivityTimerSummaryPlural">User must be inactive for %s minutes to be considered inactive</string>
+    <string name="settingsAdsEnabledSummary">Unlock advanced options without paying by showing ads (ads will never be shown outside of the app)</string>
+    <string name="settingsAdvancedPurchaseSummary">Support me and unlock all advanced options without advertisements for life</string>
+    <string name="settingsDnDPermDeniedToast">Do not disturb access not granted, toggle option to try again</string>
+    <string name="settingsUsagePermDeniedToast">Usage access not granted, toggle option to try again</string>
+    <string name="rateDialogTitle">Enjoying Go to Sleep?</string>
 </resources>

@@ -31,62 +31,62 @@ public class AboutActivity extends AppCompatActivity {
                 if (!egg) {
                     switch (clicked) {
                         case 1:
-                            Toast.makeText(getApplicationContext(), "maybe there is a secret here", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg1), Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            Toast.makeText(getApplicationContext(), "perhaps", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg2), Toast.LENGTH_SHORT).show();
                             break;
                         case 3:
-                            Toast.makeText(getApplicationContext(), "getting warmer...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg3), Toast.LENGTH_SHORT).show();
                             break;
                         case 4:
-                            Toast.makeText(getApplicationContext(), "even warmer!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg4), Toast.LENGTH_SHORT).show();
                             break;
                         case 5:
-                            Toast.makeText(getApplicationContext(), "oops sorry you missed it you were clicking too fast", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg5), Toast.LENGTH_SHORT).show();
                             break;
                         case 6:
-                            Toast.makeText(getApplicationContext(), "just kidding I guess", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg6), Toast.LENGTH_SHORT).show();
                             break;
                         case 7:
-                            Toast.makeText(getApplicationContext(), "curiosity killed the cat", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg7), Toast.LENGTH_SHORT).show();
                             break;
                         case 8:
-                            Toast.makeText(getApplicationContext(), "and satisfaction brought it back", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg8), Toast.LENGTH_SHORT).show();
                             break;
                         case 9:
-                            Toast.makeText(getApplicationContext(), "oi you made it! Something in the app seems to have changed...", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.egg9), Toast.LENGTH_LONG).show();
                             settings.edit().putBoolean(EGG_KEY, true).apply();
                             break;
                     }
                 } else {
                     switch (clicked) {
                         case 1:
-                            Toast.makeText(getApplicationContext(), "you can turn it off if you click 10 times", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable1), Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            Toast.makeText(getApplicationContext(), "lame", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable2), Toast.LENGTH_SHORT).show();
                             break;
                         case 3:
-                            Toast.makeText(getApplicationContext(), "you are lame", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable3), Toast.LENGTH_SHORT).show();
                             break;
                         case 4:
-                            Toast.makeText(getApplicationContext(), "why do you hate me", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable4), Toast.LENGTH_SHORT).show();
                             break;
                         case 5:
-                            Toast.makeText(getApplicationContext(), "you hate fun", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable5), Toast.LENGTH_SHORT).show();
                             break;
                         case 6:
-                            Toast.makeText(getApplicationContext(), "lame", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable6), Toast.LENGTH_SHORT).show();
                             break;
                         case 7:
-                            Toast.makeText(getApplicationContext(), "lame", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable7), Toast.LENGTH_SHORT).show();
                             break;
                         case 8:
-                            Toast.makeText(getApplicationContext(), "laaaammmeeee", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable8), Toast.LENGTH_SHORT).show();
                             break;
                         case 9:
-                            Toast.makeText(getApplicationContext(), "welcome to the lamezone your lameness. egg disabled", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getString(R.string.eggDisable9), Toast.LENGTH_LONG).show();
                             settings.edit().putBoolean(EGG_KEY, false).apply();
                             break;
                     }
@@ -97,21 +97,21 @@ public class AboutActivity extends AppCompatActivity {
 
 
         Element github = new Element();
-        github.setTitle("View the GitHub");
+        github.setTitle(getString(R.string.aboutGitHub));
         github.setOnClickListener(view -> {
            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/CorvetteCole/GotoSleep"));
            startActivity(browserIntent);
         });
 
-        Element playstore = new Element();
-        playstore.setTitle("Rate the app");
-        playstore.setOnClickListener(view -> {
+        Element playStore = new Element();
+        playStore.setTitle(getString(R.string.aboutRate));
+        playStore.setOnClickListener(view -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep"));
             startActivity(browserIntent);
         });
 
         Element donate = new Element();
-        donate.setTitle("Support me")
+        donate.setTitle(getString(R.string.aboutSupport))
                 .setOnClickListener(v -> {
                     Intent donateIntent = new Intent(this, DonateActivity.class);
                     startActivity(donateIntent);
@@ -119,9 +119,9 @@ public class AboutActivity extends AppCompatActivity {
         //donate.setIconDrawable(R.drawable.ic_money);
 
         Element email = new Element();
-        email.setTitle("Contact me");
+        email.setTitle(getString(R.string.aboutContact));
         email.setOnClickListener(view -> {
-            String subject = "Go to Sleep Feedback";
+            String subject = getString(R.string.aboutContactSubject);
             String mailto = "mailto:corvettecole@gmail.com" +
                     "?subject=" + Uri.encode(subject);
 
@@ -130,33 +130,33 @@ public class AboutActivity extends AppCompatActivity {
             try {
                 startActivity(emailIntent);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, "No email app available", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.aboutContactError), Toast.LENGTH_LONG).show();
             }
         });
 
         Element website = new Element();
-        website.setTitle("Visit my website");
+        website.setTitle(getString(R.string.aboutWebsite));
         website.setOnClickListener(view -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://corvettecole.com/"));
             startActivity(browserIntent);
         });
 
         Element credits = new Element();
-        credits.setTitle("Credits");
+        credits.setTitle(getString(R.string.aboutCredits));
         credits.setOnClickListener(view -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/credits"));
             startActivity(browserIntent);
         });
 
         Element privacy = new Element();
-        privacy.setTitle("Privacy Policy");
+        privacy.setTitle(getString(R.string.aboutPrivacy));
         privacy.setOnClickListener(view -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/privacy"));
             startActivity(browserIntent);
         });
 
         Element license = new Element();
-        license.setTitle("License");
+        license.setTitle(getString(R.string.aboutLicense));
         license.setOnClickListener(view -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.corvettecole.com/license"));
             startActivity(browserIntent);
@@ -167,7 +167,7 @@ public class AboutActivity extends AppCompatActivity {
                 .isRTL(false)
                 .addItem(version)
                 .addItem(github)
-                .addItem(playstore)
+                .addItem(playStore)
                 .addItem(donate)
                 .addItem(website)
                 .addItem(email)

@@ -1,5 +1,6 @@
 package com.corvettecole.gotosleep;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import com.corvettecole.gotosleep.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.core.app.NotificationCompat;
 
@@ -75,7 +78,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
 
         bedtime = Calendar.getInstance();
-        bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "19:35")));
+        bedtime = getBedtimeCal(parseBedtime(settings.getString(BEDTIME_KEY, "22:00")));
         numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
         notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
         adsEnabled = settings.getBoolean(ADS_ENABLED_KEY, false);
@@ -109,7 +112,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             lastNotification = System.currentTimeMillis();
         }
 
-        showNotification(context, getNotificationTitle(), getNotificationContent());
+        showNotification(context, getNotificationTitle(), getNotificationContent(context));
 
         if (!smartNotifications || !isUsageAccessGranted(context) || !shouldEnableAdvancedOptions) {
             if (currentNotification < numNotifications) {
@@ -198,7 +201,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setColor(context.getResources().getColor(R.color.moonPrimary));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (notificationManager.isNotificationPolicyAccessGranted()){
-                mBuilder.addAction(R.drawable.ic_do_not_disturb_on_white_24dp, "I'm going to sleep", snoozePendingIntent);
+                mBuilder.addAction(R.drawable.ic_do_not_disturb_on_white_24dp, context.getString(R.string.notifAction), snoozePendingIntent);
             }
         }
 
@@ -206,14 +209,14 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
     }
 
-    private String getNotificationContent() {
+    private String getNotificationContent(Context context) {
         Calendar current = Calendar.getInstance();
         current.setTimeInMillis(System.currentTimeMillis());
 
         Date endDate;
         Date startDate;
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
         Log.d(TAG, current.get(Calendar.SECOND) + "");
         current.set(Calendar.SECOND, 0);
@@ -242,11 +245,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         Log.d(TAG, "currentNotification: " + currentNotification);
 
             if (currentNotification == 1) {
-                return "Time to head to bed.";
+                return context.getString(R.string.notifTitle1);
             } else if (min == 1){
-                return "It is " + min + " minute past your bedtime!";
+                return String.format(Locale.US, context.getString(R.string.notifTitle2), min);
             } else {
-                return "It is " + min + " minutes past your bedtime!";
+                return String.format(Locale.US, context.getString(R.string.notifTitle3), min);
             }
     }
 

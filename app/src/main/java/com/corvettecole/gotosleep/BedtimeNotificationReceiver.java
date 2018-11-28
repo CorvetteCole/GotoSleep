@@ -142,7 +142,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         //#TODO experiment with using a daily interval (make sure it works past midnight)
         List<UsageStats> queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY, startTime, currentTime);
 
-        UsageStats minUsageStat = queryUsageStats.get(0);
+        UsageStats minUsageStat = null;
 
         long min = Long.MAX_VALUE;
         for (UsageStats usageStat : queryUsageStats){
@@ -152,10 +152,14 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             }
         }
 
-        Log.d(TAG, minUsageStat.getPackageName() + " last time used: " + minUsageStat.getLastTimeUsed() + " time in foreground: " + minUsageStat.getTotalTimeInForeground());
-        Log.d(TAG, "getLastTimeStamp: " + minUsageStat.getLastTimeStamp() + " getLastUsed: " + minUsageStat.getLastTimeUsed() + " current time: " + System.currentTimeMillis());
-        Log.d(TAG, (System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS) + "");
-        return System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS;
+        if (minUsageStat != null) {
+            Log.d(TAG, minUsageStat.getPackageName() + " last time used: " + minUsageStat.getLastTimeUsed() + " time in foreground: " + minUsageStat.getTotalTimeInForeground());
+            Log.d(TAG, "getLastTimeStamp: " + minUsageStat.getLastTimeStamp() + " getLastUsed: " + minUsageStat.getLastTimeUsed() + " current time: " + System.currentTimeMillis());
+            Log.d(TAG, (System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS) + "");
+            return System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS;
+        } else {
+            return true;
+        }
     }
 
     private void enableDoNotDisturb(Context context){
@@ -269,7 +273,12 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
             }
         }
-        return notifications[notificationTitleIndex];
+        try {
+            return notifications[notificationTitleIndex];
+        } catch (ArrayIndexOutOfBoundsException e){
+            Log.e(TAG, "getNotificationTitle: ",e);
+            return  notifications[0];
+        }
     }
 
     private void setNextNotification(Context context) {

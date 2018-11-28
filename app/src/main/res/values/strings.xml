@@ -31,13 +31,13 @@
     <string name="no">No</string>
 
     <string name="about_description">I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. I encourage you to look at the source code of this app, available on my GitHub linked below. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project. Thank you for downloading Go to Sleep and I hope you have a beautiful sleep schedule from here on out!</string>
-    <string name="dollar_1">$1</string>
-    <string name="paypal">PayPal: paypal.me/CGerdemann</string>
+    <string name="dollar_1" translatable="false">$1</string>
+    <string name="paypal" translatable="false">PayPal: paypal.me/CGerdemann</string>
     <string name="donate_desc">Help support my future open-source projects by giving me a few bucks. It goes a long way and I very much appreciate it!</string>
-    <string name="dollar_3">$3</string>
-    <string name="dollar_5">$5</string>
-    <string name="google_pay">Google Pay: corvettecole@gmail.com</string>
-    <string name="ethereum">Ethereum: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B</string>
+    <string name="dollar_3" translatable="false">$3</string>
+    <string name="dollar_5" translatable="false">$5</string>
+    <string name="google_pay" translatable="false">Google Pay: corvettecole@gmail.com</string>
+    <string name="ethereum" translatable="false">Ethereum: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B</string>
     <string name="egg1">maybe there is a secret here</string>
     <string name="egg2">perhaps</string>
     <string name="egg3">getting warmer…</string>
@@ -60,7 +60,7 @@
     <string name="aboutRate">Rate the app</string>
     <string name="aboutSupport">Support me</string>
     <string name="aboutContact">Contact me</string>
-    <string name="aboutContactSubject">Go to Sleep Feedback</string>
+    <string name="aboutContactSubject" translatable="false">Go to Sleep Feedback</string>
     <string name="aboutContactError">No email app available</string>
     <string name="aboutWebsite">Visit my website</string>
     <string name="aboutCredits">Credits</string>

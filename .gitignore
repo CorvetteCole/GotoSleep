@@ -8,3 +8,4 @@
 .externalNativeBuild
 app/src/main/res/values/license.xml
 .idea/caches/build_file_checksums.ser
+app/release/release/app.aab

@@ -25,6 +25,8 @@ Google Pay: corvettecole@gmail.com
 # Development Info
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
+- Create localized screenshots for supported languages in play store listing
+
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
 - Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)

@@ -847,8 +847,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         notificationsEnabled = settings.getBoolean(NOTIF_ENABLE_KEY, true);
         bedtimeCal = getBedtimeCal(bedtime);
         currentNotification = settings.getInt(CURRENT_NOTIFICATION_KEY, 1);
-        numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
-        notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
+        try {
+            numNotifications = Integer.parseInt(settings.getString(NOTIF_AMOUNT_KEY, 3 + ""));
+            notificationDelay = Integer.parseInt(settings.getString(NOTIF_DELAY_KEY, 15 + ""));
+        } catch (NumberFormatException e){
+            Log.e(TAG, e.toString());
+            numNotifications = 3;
+            notificationDelay = 15;
+        }
         advancedOptionsPurchased = settings.getBoolean(ADVANCED_PURCHASED_KEY, false);
         adsEnabled = settings.getBoolean(ADS_ENABLED_KEY, false);
         isAutoDoNotDisturbEnabled = settings.getBoolean(DND_KEY, false);

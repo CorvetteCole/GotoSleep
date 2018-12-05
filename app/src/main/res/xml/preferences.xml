@@ -36,6 +36,12 @@
             android:title="@string/notificationToggleTitle"
             android:summary="@string/notificationToggleSummary"
             android:enabled="true"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_notificationSound"
+            android:title="@string/SettingsNotificationSoundsTitle"
+            android:summary="@string/SettingsNotificationSoundsSummary"
+            android:dependency="pref_notificationsEnabled"/>
         <EditTextPreference
             android:dependency="pref_notificationsEnabled"
             android:inputType="number"

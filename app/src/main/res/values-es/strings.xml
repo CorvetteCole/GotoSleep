@@ -168,4 +168,6 @@
 
     <string name="enableAdsTitle">Habilitar Anuncios</string>
     <string name="enableAdsSummary">Desbloquea opciones avanzadas sin pagar viendo anuncios (Los anuncios nunca se mostrarán fuera de la aplicación)</string>
+    <string name="SettingsNotificationSoundsTitle">Habilitar sonidos de notificación</string>
+    <string name="SettingsNotificationSoundsSummary">Hacer sonido cuando se muestra una notificación</string>
 </resources>

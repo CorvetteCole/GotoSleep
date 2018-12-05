@@ -58,6 +58,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     final static String INACTIVITY_TIMER_KEY = "pref_activityMargin";
     final static String GDPR_KEY = "pref_gdpr";
     final static String DND_DELAY_KEY = "pref_dndDelay";
+    final static String NOTIFICATION_SOUND_KEY = "pref_notificationSound";
 
     private boolean advancedOptionsPurchased;
     private boolean smartNotificationsEnabled;

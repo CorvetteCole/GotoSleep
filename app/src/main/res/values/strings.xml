@@ -60,7 +60,7 @@
     <string name="aboutRate">Rate the app</string>
     <string name="aboutSupport">Support me</string>
     <string name="aboutContact">Contact me</string>
-    <string name="aboutContactSubject" translatable="false">Go to Sleep Feedback</string>
+    <string name="aboutContactSubject">Go to Sleep Feedback</string>
     <string name="aboutContactError">No email app available</string>
     <string name="aboutWebsite">Visit my website</string>
     <string name="aboutCredits">Credits</string>
@@ -171,5 +171,7 @@
 
     <string name="enableAdsTitle">Enable Advertisements</string>
     <string name="enableAdsSummary">Unlock advanced options without paying by showing ads (ads will never be shown outside of the app) </string>
+    <string name="SettingsNotificationSoundsTitle">Enable Notification Sounds</string>
+    <string name="SettingsNotificationSoundsSummary">Make sound when a notification is shown</string>
 
 </resources>

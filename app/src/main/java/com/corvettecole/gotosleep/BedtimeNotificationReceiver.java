@@ -150,7 +150,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
         long min = Long.MAX_VALUE;
         for (UsageStats usageStat : queryUsageStats){
-            if ((System.currentTimeMillis() - usageStat.getLastTimeUsed() < min) && (usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS / 4)){  //make sure app has been in foreground for more than 15 seconds to filter out background apps
+            if ((System.currentTimeMillis() - usageStat.getLastTimeUsed() < min) && (usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS)){  //make sure app has been in foreground for more than one minute to filter out background apps
                 minUsageStat = usageStat;
                 min = System.currentTimeMillis() - usageStat.getLastTimeUsed();
             }
@@ -207,7 +207,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         if (notificationSoundsEnabled){
             mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         }
-   
+
         mBuilder.addAction(R.drawable.ic_do_not_disturb, context.getString(R.string.notifAction), snoozePendingIntent);
 
         notificationManager.notify(NOTIFICATION_REQUEST_CODE, mBuilder.build());

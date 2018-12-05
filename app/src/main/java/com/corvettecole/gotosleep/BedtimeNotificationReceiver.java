@@ -121,7 +121,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
             } else if (currentNotification == numNotifications) {
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-                setNextDayNotification(context);
+                setNextDayNotification(context, bedtime, TAG);
                 enableDoNotDisturb(context);
             }
 
@@ -207,11 +207,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         if (notificationSoundsEnabled){
             mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (notificationManager.isNotificationPolicyAccessGranted()){
-                mBuilder.addAction(R.drawable.ic_do_not_disturb, context.getString(R.string.notifAction), snoozePendingIntent);
-            }
-        }
+   
+        mBuilder.addAction(R.drawable.ic_do_not_disturb, context.getString(R.string.notifAction), snoozePendingIntent);
 
         notificationManager.notify(NOTIFICATION_REQUEST_CODE, mBuilder.build());
 
@@ -305,7 +302,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    private void setNextDayNotification(Context context){
+    static void setNextDayNotification(Context context, Calendar bedtime, String TAG){
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
         Log.d(TAG, "Setting notification for tomorrow");

@@ -427,12 +427,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         egg = temp;
     }
 
-    private void cancelNextNotification(Context context){
-        Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                NEXT_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+    static void cancelNextNotification(Context context){
+        Intent firstNotification = new Intent(context, BedtimeNotificationReceiver.class);
+        PendingIntent firstPendingIntent = PendingIntent.getBroadcast(context,
+                FIRST_NOTIFICATION_ALARM_REQUEST_CODE, firstNotification, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent nextNotification = new Intent(context, BedtimeNotificationReceiver.class);
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context,
+                NEXT_NOTIFICATION_ALARM_REQUEST_CODE, nextNotification, PendingIntent.FLAG_UPDATE_CURRENT);
+
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.cancel(pendingIntent);
+        am.cancel(firstPendingIntent);
+        am.cancel(nextPendingIntent);
     }
 
     private void setEgg(){

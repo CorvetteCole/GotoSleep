@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -33,6 +34,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.INACTIVITY_TIMER_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.NOTIFICATION_SOUND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
@@ -66,6 +68,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
     private boolean shouldEnableAdvancedOptions = false;
+    private boolean notificationSoundsEnabled = false;
     private long lastNotification;
     private UsageStatsManager usageStatsManager;
 
@@ -86,6 +89,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         lastNotification = settings.getLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis());
         userActiveMargin = Integer.parseInt(settings.getString(INACTIVITY_TIMER_KEY, "5"));
         DnD_delay = Integer.parseInt(settings.getString(DND_DELAY_KEY, "2"));
+        notificationSoundsEnabled = settings.getBoolean(NOTIFICATION_SOUND_KEY, false);
 
         shouldEnableAdvancedOptions = adsEnabled || advancedOptionsPurchased;
 
@@ -197,12 +201,15 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setContentText(content)
                 .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setColorized(true)
                 .setColor(context.getResources().getColor(R.color.moonPrimary));
+        if (notificationSoundsEnabled){
+            mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (notificationManager.isNotificationPolicyAccessGranted()){
-                mBuilder.addAction(R.drawable.ic_do_not_disturb_on_white_24dp, context.getString(R.string.notifAction), snoozePendingIntent);
+                mBuilder.addAction(R.drawable.ic_do_not_disturb, context.getString(R.string.notifAction), snoozePendingIntent);
             }
         }
 

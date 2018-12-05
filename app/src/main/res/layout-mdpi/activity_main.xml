@@ -139,7 +139,7 @@
         android:textSize="20sp"
         android:visibility="gone"
         app:cornerRadius="15dp"
-        app:icon="@drawable/ic_do_not_disturb_on_white_24dp"
+        app:icon="@drawable/ic_do_not_disturb"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"

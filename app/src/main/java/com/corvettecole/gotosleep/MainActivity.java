@@ -422,8 +422,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             colorAnimation.end();
         }
         if (eggCancel) {
-            moon.setColorFilter(getResources().getColor(R.color.moonPrimary));
-            moon.setBackground(getDrawable(R.drawable.ic_moon_shadow));
+            //moon.setColorFilter(getResources().getColor(R.color.moonPrimary));
         }
         egg = temp;
     }

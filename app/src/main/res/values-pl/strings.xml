@@ -126,7 +126,6 @@
     <string name="settingsDnDPermDeniedToast">Dostęp do funkcji Nie Przeszkadzaj nie przyznany. Przełącz opcję aby spróbować ponownie</string>
     <string name="settingsUsagePermDeniedToast">Nie przyznano dostępu do danych o użyciu. Przełącz opcję aby spróbować ponownie</string>
     <string name="rateDialogTitle">Podoba ci się Go to Sleep?</string>
-    <string name="app_name">Go to Sleep</string>
 
     <!--preference defaults-->
     <string name="categoryGeneral">Ogólne</string>
@@ -170,5 +169,7 @@
 
     <string name="enableAdsTitle">Włącz reklamy</string>
     <string name="enableAdsSummary">Odblokuj zaawansowane opcje bez płacenia, za wyświetlanie reklam (reklamy nigdy nie będą wyświetlane poza aplikacją)</string>
+    <string name="SettingsNotificationSoundsTitle">Włącz dźwięki powiadomień</string>
+    <string name="SettingsNotificationSoundsSummary">Wykonaj dźwięk po wyświetleniu powiadomienia</string>
 
 </resources>

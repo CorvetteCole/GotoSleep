@@ -21,6 +21,12 @@ PayPal: http://paypal.me/CGerdemann
 
 Google Pay: corvettecole@gmail.com
 
+# Things to Investigate
+
+- look in to migrating the code base in to Flutter to allow for unified app development across iOS and Android
+
+- look in to creating a native iOS version outside of Flutter if not feasible
+
 
 # Development Info
 ## 1.2.+ (Quality of Life Updates):

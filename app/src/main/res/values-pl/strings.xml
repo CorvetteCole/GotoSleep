@@ -172,4 +172,7 @@
     <string name="SettingsNotificationSoundsTitle">Włącz dźwięki powiadomień</string>
     <string name="SettingsNotificationSoundsSummary">Wykonaj dźwięk po wyświetleniu powiadomienia</string>
 
+    <string name="settingsNotificationChannelSummary">Większa kontrola nad powiadomieniami z tej aplikacji</string>
+    <string name="settingsNotificationChannelTitle">Dodatkowe ustawienia powiadomień</string>
+
 </resources>

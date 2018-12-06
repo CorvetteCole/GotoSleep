@@ -61,6 +61,12 @@
             android:entries="@array/pref_list_entries"
             android:entryValues="@array/pref_list_values"
             />
+        <PreferenceScreen
+            android:key="pref_notificationChannel"
+            android:dependency="pref_notificationsEnabled"
+            android:title="@string/settingsNotificationChannelTitle"
+            android:summary="@string/settingsNotificationChannelSummary">
+        </PreferenceScreen>
 
 
     </PreferenceCategory>

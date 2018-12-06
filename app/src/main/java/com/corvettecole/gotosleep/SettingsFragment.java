@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
+import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
 import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
 
 
@@ -59,6 +60,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     final static String GDPR_KEY = "pref_gdpr";
     final static String DND_DELAY_KEY = "pref_dndDelay";
     final static String NOTIFICATION_SOUND_KEY = "pref_notificationSound";
+    final static String ADDITIONAL_NOTIFICATION_SETTINGS_KEY = "pref_notificationChannel";
 
     private boolean advancedOptionsPurchased;
     private boolean smartNotificationsEnabled;
@@ -107,12 +109,15 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference notificationDelay = this.findPreference(NOTIF_DELAY_KEY);
             final Preference GDPR = this.findPreference(GDPR_KEY);
             final Preference delayDnDPref = this.findPreference(DND_DELAY_KEY);
+            final Preference notificationChannel = this.findPreference(ADDITIONAL_NOTIFICATION_SETTINGS_KEY);
 
 
 
             advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
             adsEnabled = sharedPreferences.getBoolean(ADS_ENABLED_KEY, false);
             smartNotificationsEnabled = sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false);
+
+
 
 
             if (advancedOptionsPurchased) {
@@ -192,6 +197,21 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 smartNotificationsPref.setSummary(R.string.settingsSmartNotificationsSummaryEnabled);
             }
             customNotificationsPref.setEnabled(enableAdvancedOptions);
+
+
+            //notification channel additional settings
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationChannel.setVisible(true);
+                notificationChannel.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                            .putExtra(Settings.EXTRA_APP_PACKAGE, getContext().getPackageName())
+                            .putExtra(Settings.EXTRA_CHANNEL_ID, BEDTIME_CHANNEL_ID);
+                    startActivity(intent);
+                    return true;
+                });
+            } else {
+                notificationChannel.setVisible(false);
+            }
 
 
             adsEnabledPref.setOnPreferenceChangeListener((preference, newValue) -> {

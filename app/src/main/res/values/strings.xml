@@ -174,4 +174,7 @@
     <string name="SettingsNotificationSoundsTitle">Enable Notification Sounds</string>
     <string name="SettingsNotificationSoundsSummary">Make sound when a notification is shown</string>
 
+    <string name="settingsNotificationChannelSummary">More control over notifications from this app</string>
+    <string name="settingsNotificationChannelTitle">Additional Notification Settings</string>
+
 </resources>

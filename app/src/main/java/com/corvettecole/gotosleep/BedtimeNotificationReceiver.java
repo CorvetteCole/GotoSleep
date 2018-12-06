@@ -2,6 +2,7 @@ package com.corvettecole.gotosleep;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.usage.UsageStats;
@@ -26,6 +27,7 @@ import androidx.core.app.NotificationCompat;
 
 import static android.content.Context.ALARM_SERVICE;
 import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
+import static com.corvettecole.gotosleep.MainActivity.createNotificationChannel;
 import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
 import static com.corvettecole.gotosleep.MainActivity.notifications;
 import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
@@ -92,7 +94,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         notificationSoundsEnabled = settings.getBoolean(NOTIFICATION_SOUND_KEY, false);
 
         shouldEnableAdvancedOptions = adsEnabled || advancedOptionsPurchased;
-
+        
+        createNotificationChannel(context);
 
         if (shouldEnableAdvancedOptions) {
             for (int i = 0; i < notifications.length; i++) {
@@ -205,7 +208,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setColorized(true)
                 .setColor(context.getResources().getColor(R.color.moonPrimary));
         if (notificationSoundsEnabled){
-            mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            mBuilder.setDefaults(Notification.DEFAULT_SOUND);
+            mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+            mBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
         }
 
         mBuilder.addAction(R.drawable.ic_do_not_disturb, context.getString(R.string.notifAction), snoozePendingIntent);

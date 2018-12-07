@@ -117,7 +117,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             lastNotification = System.currentTimeMillis();
         }
 
-        if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) {
+        if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) { //if any of these are not met, code will fall back to normal notifications
+            //smart notification code block
             if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
                 showNotification(context, getNotificationTitle(), getNotificationContent(context));
                 settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
@@ -128,6 +129,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 enableDoNotDisturb(context);
             }
         }  else {
+            //normal notification code block
             showNotification(context, getNotificationTitle(), getNotificationContent(context));
             if (currentNotification < numNotifications) {
                 setNextNotification(context);

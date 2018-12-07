@@ -65,6 +65,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     private boolean advancedOptionsPurchased;
     private boolean smartNotifications;
     private boolean autoDND;
+    private boolean userActive = true;
     private final String TAG = "bedtimeNotifReceiver";
     private int currentNotification;
     static final String CURRENT_NOTIFICATION_KEY = "current_notification";
@@ -116,9 +117,18 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             lastNotification = System.currentTimeMillis();
         }
 
-        showNotification(context, getNotificationTitle(), getNotificationContent(context));
-
-        if (!smartNotifications || !isUsageAccessGranted(context) || !shouldEnableAdvancedOptions) {
+        if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) {
+            if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
+                showNotification(context, getNotificationTitle(), getNotificationContent(context));
+                settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
+                setNextNotification(context);
+            } else {
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+                enableDoNotDisturb(context);
+            }
+        }  else {
+            showNotification(context, getNotificationTitle(), getNotificationContent(context));
             if (currentNotification < numNotifications) {
                 setNextNotification(context);
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
@@ -127,16 +137,6 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 setNextDayNotification(context, bedtime, TAG);
                 enableDoNotDisturb(context);
             }
-
-        } else if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
-            //write lastNotification to preferences, set a timer for notifDelay time in the future, show notification now, update currentNotification
-            settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
-            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
-            setNextNotification(context);
-
-        } else {
-            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-            enableDoNotDisturb(context);
         }
     }
 

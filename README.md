@@ -31,19 +31,17 @@ Google Pay: corvettecole@gmail.com
 # Development Info
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
-- Create localized screenshots for supported languages in play store listing
-
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
 - Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
-
-- Edit all icons to remove the two-tone design, make them all simple and flat
 
 - Add icons to about screen
 
 - Remove hours countdown when it is 0 possibly
 
 - Add dialog like the rating dialog that appears after 10 days of use or so if the user hasn't purchased the advanced options. Gently suggest that the user can purchase the advanced options to help support development of the app
+
+- Create localized screenshots for supported languages in play store listing (partially done)
 
 ### Done
 
@@ -52,6 +50,8 @@ Google Pay: corvettecole@gmail.com
 - Move all string resources to string value xml file, replace preference updating by creating a new string with two separate strings and adding them together around the value. Basically just make the app easy to translate to other languages by the community just by adding localized string values
 
 - Change default bedtime to something slightly more sensible
+
+- Edit all icons to remove the two-tone design, make them all simple and flat
 
 ## 1.3 (Major Feature Update):
 ### To Do

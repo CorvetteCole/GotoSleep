@@ -211,10 +211,14 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setColorized(true)
                 .setColor(context.getResources().getColor(R.color.moonPrimary));
-        if (notificationSoundsEnabled){
-            mBuilder.setDefaults(Notification.DEFAULT_SOUND);
-            mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-            mBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            if (notificationSoundsEnabled) {  //if device does not support notification channels check if notification sound is enabled
+                mBuilder.setDefaults(Notification.DEFAULT_SOUND);
+                mBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+                mBuilder.setDefaults(Notification.DEFAULT_LIGHTS);
+            } else {
+                mBuilder.setSound(null);
+            }
         }
 
         mBuilder.addAction(R.drawable.ic_do_not_disturb, context.getString(R.string.notifAction), snoozePendingIntent);

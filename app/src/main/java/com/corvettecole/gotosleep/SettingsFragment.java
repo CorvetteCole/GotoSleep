@@ -110,7 +110,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
             final Preference GDPR = this.findPreference(GDPR_KEY);
             final Preference delayDnDPref = this.findPreference(DND_DELAY_KEY);
             final Preference notificationChannel = this.findPreference(ADDITIONAL_NOTIFICATION_SETTINGS_KEY);
-
+            final Preference notificationSound = this.findPreference(NOTIFICATION_SOUND_KEY);
 
 
             advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
@@ -201,6 +201,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             //notification channel additional settings
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationSound.setVisible(false);
                 notificationChannel.setVisible(true);
                 notificationChannel.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
@@ -210,6 +211,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                     return true;
                 });
             } else {
+                notificationSound.setVisible(true);
                 notificationChannel.setVisible(false);
             }
 

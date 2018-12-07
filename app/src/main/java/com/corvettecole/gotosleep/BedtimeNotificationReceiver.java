@@ -94,7 +94,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         notificationSoundsEnabled = settings.getBoolean(NOTIFICATION_SOUND_KEY, false);
 
         shouldEnableAdvancedOptions = adsEnabled || advancedOptionsPurchased;
-        
+
         createNotificationChannel(context);
 
         if (shouldEnableAdvancedOptions) {
@@ -153,9 +153,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
         long min = Long.MAX_VALUE;
         for (UsageStats usageStat : queryUsageStats){
-            if ((System.currentTimeMillis() - usageStat.getLastTimeUsed() < min) && (usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS)){  //make sure app has been in foreground for more than one minute to filter out background apps
+            if ((System.currentTimeMillis() - usageStat.getLastTimeStamp() < min) && (usageStat.getTotalTimeInForeground() > ONE_MINUTE_MILLIS) && !usageStat.getPackageName().equals("com.corvettecole.gotosleep")){  //make sure app has been in foreground for more than one minute to filter out background apps
                 minUsageStat = usageStat;
-                min = System.currentTimeMillis() - usageStat.getLastTimeUsed();
+                min = System.currentTimeMillis() - usageStat.getLastTimeStamp();
             }
         }
 
@@ -163,9 +163,11 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             Log.d(TAG, minUsageStat.getPackageName() + " last time used: " + minUsageStat.getLastTimeUsed() + " time in foreground: " + minUsageStat.getTotalTimeInForeground());
             Log.d(TAG, "getLastTimeStamp: " + minUsageStat.getLastTimeStamp() + " getLastUsed: " + minUsageStat.getLastTimeUsed() + " current time: " + System.currentTimeMillis());
             Log.d(TAG, (System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS) + "");
-            return System.currentTimeMillis() - minUsageStat.getLastTimeUsed() <= userActiveMargin * ONE_MINUTE_MILLIS;
+            return System.currentTimeMillis() - minUsageStat.getLastTimeStamp() <= userActiveMargin * ONE_MINUTE_MILLIS;
         } else {
-            return true;
+            Log.e(TAG, "minUsageStat was null!");
+            Log.e(TAG, queryUsageStats.toString());
+            return false;
         }
     }
 

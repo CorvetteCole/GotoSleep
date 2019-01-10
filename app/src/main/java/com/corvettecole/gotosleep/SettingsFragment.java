@@ -36,6 +36,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
 import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
+import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
+import static com.corvettecole.gotosleep.MainActivity.setNotifications;
 import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
 
 
@@ -602,6 +604,15 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         }
 
         super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        setNotifications(false, sharedPreferences.getBoolean(NOTIF_ENABLE_KEY, false),
+                parseBedtime(sharedPreferences.getString(BEDTIME_KEY, "22:00")),
+                Integer.parseInt(sharedPreferences.getString(NOTIF_DELAY_KEY, "10")),
+                Integer.parseInt(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "1")), getContext());
+        super.onPause();
     }
 
     @Override

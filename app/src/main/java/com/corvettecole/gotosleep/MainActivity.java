@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private boolean notificationsEnabled;
 
     static String[] notifications = new String[5];
-    private int currentNotification;
+    private static int currentNotification;
     private int numNotifications;
     private int notificationDelay;
 
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         loadPreferences();
 
-        setNotifications(false); //Warning: takes a long time to execute (55ms!)
+        setNotifications(false, notificationsEnabled, bedtime, notificationDelay, numNotifications, this); //Warning: takes a long time to execute (55ms!)
 
         updateCountdown();
 
@@ -210,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             rateLayout.setVisibility(View.GONE);
             if (adView.getVisibility() != View.VISIBLE){
                 Log.d(TAG, "re-enabling ads after rating prompt...");
-                adsEnabled = true;
                 enableDisableAds();
             }
         }
@@ -389,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     }
                 }
                 cancelNextNotification(this);
-                setNotifications(true);
+                setNotifications(true, notificationsEnabled, bedtime, notificationDelay, numNotifications, this);
                 Toast.makeText(this, getString(R.string.sleepModeButtonToast), Toast.LENGTH_LONG).show();
                 enableSleepmodeButton.setVisibility(View.GONE);
             });
@@ -814,7 +813,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    private void setNotifications(boolean nextDay) {
+    static void setNotifications(boolean nextDay, boolean notificationsEnabled, int[] bedtime, int notificationDelay, int numNotifications, Context context) {
         if (notificationsEnabled) {
             Calendar bedtimeCalendar = getBedtimeCal(bedtime);
 
@@ -826,16 +825,16 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             int errorMargin = 30;
             if (currentNotification != 1){
-                if (abs(System.currentTimeMillis() - bedtimeCal.getTimeInMillis()) > ((notificationDelay * numNotifications + errorMargin) * 60000 )){
-                    PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+                if (abs(System.currentTimeMillis() - bedtimeCalendar.getTimeInMillis()) > ((notificationDelay * numNotifications + errorMargin) * 60000 )){
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
                     currentNotification = 1;
                 }
             }
 
-            Intent intent1 = new Intent(this, BedtimeNotificationReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+            Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                     FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
             } else {
@@ -1135,7 +1134,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             }
 
 
-            //#TODO make sure this method of finding the current language works, switch code to a switch case system
             if (Locale.getDefault().toString().toLowerCase().contains("pl")) {
                 //polish language stuff
                 if (hour == 1){

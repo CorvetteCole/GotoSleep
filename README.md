@@ -21,14 +21,16 @@ PayPal: http://paypal.me/CGerdemann
 
 Google Pay: corvettecole@gmail.com
 
+# Compile Instructions (very important!)
+For obvious reasons, I left the secret keys used in admob and the google play billing library. This makes the compiling the app as-is impossible. To solve this problem, I have gone through and put simple comments instructing what to comment out/remove throughout the app to make it compile. To find all of these, just search the app files for "COMPILE INSTRUCTIONS". All of the comments start with that little blurb to make finding them easy.
+
 # Things to Investigate
 
 - look in to migrating the code base in to Flutter to allow for unified app development across iOS and Android
 
 - look in to creating a native iOS version outside of Flutter if not feasible
 
-
-# Development Info
+# Roadmap
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")

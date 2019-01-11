@@ -32,6 +32,8 @@ For obvious reasons, I left the secret keys used in admob and the google play bi
 # Roadmap
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
+- Enable title bar (and the back button that goes with it) to the settings screen. Some users got confused here
+
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
 - Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)

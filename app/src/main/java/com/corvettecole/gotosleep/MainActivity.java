@@ -208,10 +208,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
             rateLayout.setVisibility(View.GONE);
+            //COMPILE INSTRUCTIONS: comment out the following code block
+            //Start
             if (adView.getVisibility() != View.VISIBLE){
                 Log.d(TAG, "re-enabling ads after rating prompt...");
                 enableDisableAds();
             }
+            //End
         }
         Log.d(TAG, "onResume finished " + System.currentTimeMillis());
 
@@ -297,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
             setContentView(R.layout.activity_main);
-            adView = findViewById(R.id.adView);
+            adView = findViewById(R.id.adView); //COMPILE INSTRUCTIONS: comment out this line
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
             aboutButton = findViewById(R.id.aboutButton);
@@ -317,19 +320,15 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 int colorTo = getResources().getColor(R.color.indigo);
                 colorAnimations.add(ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
             }
-
+            //COMPILE INSTRUCTIONS: comment out the following block
+            //Start
             bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
-
             bp.initialize();
-
             bp.loadOwnedPurchasesFromGoogle();
-
+            //End
 
             notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
             createNotificationChannel(getBaseContext());
-
-
             loadPreferences();
 
 
@@ -868,7 +867,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 settings.edit().putBoolean(DND_KEY, notificationManager.isNotificationPolicyAccessGranted()).apply();
             }
         }
+        //COMPILE INSTRUCTIONS: comment out the following line
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
+
         ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
         appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
         egg = settings.getBoolean(EGG_KEY, false);
@@ -916,6 +917,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void enableDisableAds(){
+        //COMPILE INSTRUCTIONS: comment out the following code block
+        //Start
         if ((adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) || shouldUpdateConsent) {
             Log.d(TAG, "enableDisableAds initialized");
             if (!adsInitialized){
@@ -929,12 +932,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
             adView.setVisibility(View.GONE);
         }
+        //End
     }
 
     private void getAdConsentStatus(Context context){
+        //COMPILE INSTRUCTIONS: comment out the following code block
+        //Start
         ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         String[] publisherIds = {context.getResources().getString(R.string.admob_publisher_id)};
-        //consentInformation.addTestDevice("36EB1E9DFC6D82630E576163C46AD12D");
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
 
             @Override
@@ -946,7 +951,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         extras.putString("npa", "1");
                         AdRequest adRequest = new AdRequest.Builder()
                                 .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-          //                      .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                                 .build();
                         adView.loadAd(adRequest);
                     } else if (consentStatus == ConsentStatus.UNKNOWN) {
@@ -955,14 +959,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         consentForm.load();
                     } else {
                         AdRequest adRequest = new AdRequest.Builder()
-            //                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                                 .build();
                         adView.loadAd(adRequest);
                     }
                 } else {
                     //US users
                     AdRequest adRequest = new AdRequest.Builder()
-              //              .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                             .build();
                     adView.loadAd(adRequest);
                 }
@@ -975,6 +977,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 // User's consent status failed to update.
             }
         });
+        //End
         shouldUpdateConsent = false;
     }
 
@@ -1008,21 +1011,28 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                         Log.d(TAG, "consent form closed");
                         if (userPrefersAdFree){
                             Log.d(TAG, "initiating in-app purchase...");
+                            //COMPILE INSTRUCTIONS: comment out the following line, uncomment the ones below it
                             bp.purchase(MainActivity.this, "go_to_sleep_advanced");
+                            //advancedOptionsPurchased = true;
+                            //getPrefs.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
 
                         } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
                             Bundle extras = new Bundle();
                             extras.putString("npa", "1");
+                            //COMPILE INSTRUCTIONS: comment out the following code block
+                            //Start
                             AdRequest adRequest = new AdRequest.Builder()
                                     .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                                     .build();
                             adView.loadAd(adRequest);
+                            //End
                         } else {
+                            //COMPILE INSTRUCTIONS: comment out the following code block
+                            //Start
                             AdRequest adRequest = new AdRequest.Builder()
-                                    .addTestDevice("36EB1E9DFC6D82630E576163C46AD12D")
                                     .build();
                             adView.loadAd(adRequest);
+                            //End
                         }
 
                     }

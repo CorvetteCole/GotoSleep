@@ -38,10 +38,12 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     paypal = findViewById(R.id.payPalTextView);
     googlePay = findViewById(R.id.googlePayTextView);
 
-    bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
-    bp.initialize();
     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
+    //COMPILE INSTRUCTIONS: comment out the following block of code
+    //Start
+    bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
+    bp.initialize();
     donate1.setOnClickListener(view -> {
         bp.purchase(this, "donate_1");
     });
@@ -53,6 +55,7 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     donate5.setOnClickListener(view -> {
         bp.purchase(this, "donate_5");
     });
+    //End
 
     ethereum.setOnClickListener(view -> {
         ClipData clip = ClipData.newPlainText(getString(R.string.supportEthereum), "0x8eFF5600A23708EFa475Be2C18892c9c0C43373B");

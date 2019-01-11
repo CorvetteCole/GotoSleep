@@ -92,15 +92,16 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         sharedPreferences = getPreferenceManager().getSharedPreferences();
         notificationManager = (NotificationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.NOTIFICATION_SERVICE);
         usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
+
+        //COMPILE INSTRUCTIONS: Comment out the following block
+        //Start
         bp = new BillingProcessor(Objects.requireNonNull(getContext()), getResources().getString(R.string.license_key), this);
         bp.loadOwnedPurchasesFromGoogle();
         bp.initialize();
-
+        //End
 
         Log.d("PREFERENCES", rootKey + " ");
         if (rootKey == null){
-
-
 
             final Preference adsEnabledPref = this.findPreference(ADS_ENABLED_KEY);
             final Preference customNotificationsPref = this.findPreference(CUSTOM_NOTIFICATIONS_KEY);
@@ -133,44 +134,48 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                smartNotificationsPref.setEnabled(true);
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary(R.string.settingsAdvancedPurchasedSummary);
             }
-
-                ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
-                String[] publisherIds = {getContext().getResources().getString(R.string.admob_publisher_id)};
-                consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
-                    @Override
-                    public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-                        // User's consent status successfully updated.
-                        if (consentInformation.isRequestLocationInEeaOrUnknown()){
-                            GDPR.setOnPreferenceClickListener(preference -> {
-                                consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
-                                shouldUpdateConsent = true;
-                                Toast.makeText(getContext(), getString(R.string.settingsConsentPrefsClearedToast), Toast.LENGTH_SHORT).show();
-                                //toast here
-                                return false;
-                            });
-                        }  else {
-                            GDPR.setVisible(false);
-                        }
-
-
+            //COMPILE INSTRUCTIONS: comment out the following code block
+            //Start
+            ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
+            String[] publisherIds = {getContext().getResources().getString(R.string.admob_publisher_id)};
+            consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+                @Override
+                public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                    // User's consent status successfully updated.
+                    if (consentInformation.isRequestLocationInEeaOrUnknown()){
+                        GDPR.setOnPreferenceClickListener(preference -> {
+                            consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
+                            shouldUpdateConsent = true;
+                            Toast.makeText(getContext(), getString(R.string.settingsConsentPrefsClearedToast), Toast.LENGTH_SHORT).show();
+                            //toast here
+                            return false;
+                        });
+                    }  else {
+                        GDPR.setVisible(false);
                     }
 
-                    @Override
-                    public void onFailedToUpdateConsentInfo(String errorDescription) {
-                        // User's consent status failed to update.
-                    }
-                });
+
+                }
+
+                @Override
+                public void onFailedToUpdateConsentInfo(String errorDescription) {
+                    // User's consent status failed to update.
+                }
+            });
+            //End
 
 
-                final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
-                advancedPurchasePref.setOnPreferenceClickListener(preference -> {
-                    bp.purchase(getActivity(), "go_to_sleep_advanced");
+            final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
+            advancedPurchasePref.setOnPreferenceClickListener(preference -> {
+                //COMPILE INSTRUCTIONS: comment out the following line and uncomment the one below it
+                bp.purchase(getActivity(), "go_to_sleep_advanced");
+                //advancedPurchased(sharedPreferences, getPreferenceScreen());
 
 
 
 
-                    return false;
-                });
+                return false;
+            });
 
 
 
@@ -580,6 +585,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     @Override
     public void onResume(){
         Log.d("settings", "onResume called!");
+        //COMPILE INSTRUCTIONS: comment out the following line
         bp.loadOwnedPurchasesFromGoogle();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){

@@ -35,16 +35,9 @@ dependencies {
     implementation 'com.takisoft.preferencex:preferencex-colorpicker:1.0.0'
     implementation 'com.takisoft.preferencex:preferencex-datetimepicker:1.0.0'
     implementation 'com.takisoft.preferencex:preferencex-simplemenu:1.0.0'
-
-    implementation 'com.google.android.ads.consent:consent-library:1.0.7'
-    implementation 'com.google.android.gms:play-services-ads:17.1.2'
-
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.paolorotolo:appintro:v5.1.0'
     implementation 'com.google.android.material:material:1.0.0'
-
-    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
-
     //implementation "com.mikepenz:materialdrawer:6.1.1"
 
     testImplementation 'junit:junit:4.12'

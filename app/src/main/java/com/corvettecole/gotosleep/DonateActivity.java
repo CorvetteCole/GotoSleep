@@ -8,13 +8,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.corvettecole.gotosleep.R;
-import com.anjlab.android.iab.v3.BillingProcessor;
-import com.anjlab.android.iab.v3.TransactionDetails;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class DonateActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
+public class DonateActivity extends AppCompatActivity{
 
     private Button donate1;
     private Button donate3;
@@ -24,7 +21,6 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     private TextView paypal;
     private TextView googlePay;
 
-    private BillingProcessor bp;
 
     @Override
     public void onCreate(Bundle savedInstanceBundle) {
@@ -39,23 +35,6 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     googlePay = findViewById(R.id.googlePayTextView);
 
     ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
-    //COMPILE INSTRUCTIONS: comment out the following block of code
-    //Start
-    bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
-    bp.initialize();
-    donate1.setOnClickListener(view -> {
-        bp.purchase(this, "donate_1");
-    });
-
-    donate3.setOnClickListener(view -> {
-        bp.purchase(this, "donate_3");
-    });
-
-    donate5.setOnClickListener(view -> {
-        bp.purchase(this, "donate_5");
-    });
-    //End
 
     ethereum.setOnClickListener(view -> {
         ClipData clip = ClipData.newPlainText(getString(R.string.supportEthereum), "0x8eFF5600A23708EFa475Be2C18892c9c0C43373B");
@@ -73,28 +52,6 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
         clipboard.setPrimaryClip(clip);
         Toast.makeText(this, getString(R.string.supportGooglePayCopied), Toast.LENGTH_LONG).show();
     });
-
-
-
-    }
-
-    @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
-
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, Throwable error) {
-
-    }
-
-    @Override
-    public void onBillingInitialized() {
 
     }
 }

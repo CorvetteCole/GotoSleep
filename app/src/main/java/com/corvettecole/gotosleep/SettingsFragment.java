@@ -15,14 +15,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-
-import com.anjlab.android.iab.v3.BillingProcessor;
-import com.anjlab.android.iab.v3.TransactionDetails;
-import com.google.ads.consent.ConsentForm;
-import com.google.ads.consent.ConsentInfoUpdateListener;
-import com.google.ads.consent.ConsentInformation;
-import com.google.ads.consent.ConsentStatus;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +33,7 @@ import static com.corvettecole.gotosleep.MainActivity.setNotifications;
 import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
 
 
-public class SettingsFragment extends BasePreferenceFragmentCompat implements BillingProcessor.IBillingHandler {
+public class SettingsFragment extends BasePreferenceFragmentCompat {
 
     final static String NOTIF_DELAY_KEY = "pref_notificationDelay";
     final static String NOTIF_AMOUNT_KEY = "pref_numNotifications";
@@ -68,12 +60,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     private boolean smartNotificationsEnabled;
     private boolean enableAdvancedOptions;
     private boolean adsEnabled;
-    private BillingProcessor bp;
     private NotificationManager notificationManager;
     private UsageStatsManager usageStatsManager;
     private SharedPreferences sharedPreferences;
     private final String TAG = "SettingsFragment";
-    private ConsentForm consentForm;
 
     private boolean desiredSmartNotificationValue = false;
     private boolean desiredDoNotDisturbValue = false;
@@ -92,13 +82,6 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         sharedPreferences = getPreferenceManager().getSharedPreferences();
         notificationManager = (NotificationManager) Objects.requireNonNull(getActivity()).getSystemService(Context.NOTIFICATION_SERVICE);
         usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-
-        //COMPILE INSTRUCTIONS: Comment out the following block
-        //Start
-        bp = new BillingProcessor(Objects.requireNonNull(getContext()), getResources().getString(R.string.license_key), this);
-        bp.loadOwnedPurchasesFromGoogle();
-        bp.initialize();
-        //End
 
         Log.d("PREFERENCES", rootKey + " ");
         if (rootKey == null){
@@ -134,46 +117,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                smartNotificationsPref.setEnabled(true);
                getPreferenceScreen().findPreference("pref_advanced_purchase").setSummary(R.string.settingsAdvancedPurchasedSummary);
             }
-            //COMPILE INSTRUCTIONS: comment out the following code block
-            //Start
-            ConsentInformation consentInformation = ConsentInformation.getInstance(getContext());
-            String[] publisherIds = {getContext().getResources().getString(R.string.admob_publisher_id)};
-            consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
-                @Override
-                public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-                    // User's consent status successfully updated.
-                    if (consentInformation.isRequestLocationInEeaOrUnknown()){
-                        GDPR.setOnPreferenceClickListener(preference -> {
-                            consentInformation.setConsentStatus(ConsentStatus.UNKNOWN);
-                            shouldUpdateConsent = true;
-                            Toast.makeText(getContext(), getString(R.string.settingsConsentPrefsClearedToast), Toast.LENGTH_SHORT).show();
-                            //toast here
-                            return false;
-                        });
-                    }  else {
-                        GDPR.setVisible(false);
-                    }
 
-
-                }
-
-                @Override
-                public void onFailedToUpdateConsentInfo(String errorDescription) {
-                    // User's consent status failed to update.
-                }
-            });
-            //End
 
 
             final Preference advancedPurchasePref = this.findPreference("pref_advanced_purchase");
             advancedPurchasePref.setOnPreferenceClickListener(preference -> {
-                //COMPILE INSTRUCTIONS: comment out the following line and uncomment the one below it
-                bp.purchase(getActivity(), "go_to_sleep_advanced");
-                //advancedPurchased(sharedPreferences, getPreferenceScreen());
-
-
-
-
+                advancedPurchased(sharedPreferences, getPreferenceScreen());
                 return false;
             });
 
@@ -585,8 +534,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     @Override
     public void onResume(){
         Log.d("settings", "onResume called!");
-        //COMPILE INSTRUCTIONS: comment out the following line
-        bp.loadOwnedPurchasesFromGoogle();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
                 sharedPreferences.edit().putBoolean(DND_KEY, false).apply();
@@ -619,47 +567,6 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
                 Integer.parseInt(sharedPreferences.getString(NOTIF_DELAY_KEY, "10")),
                 Integer.parseInt(sharedPreferences.getString(NOTIF_AMOUNT_KEY, "1")), getContext());
         super.onPause();
-    }
-
-    @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
-        if (productId.equals("go_to_sleep_advanced")) {
-            Log.d("productPurchased", "go to sleep advanced purchased");
-            advancedPurchased(sharedPreferences, getPreferenceScreen());
-        }
-
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-        if (bp.isPurchased("go_to_sleep_advanced")) {
-            advancedPurchased(sharedPreferences, getPreferenceScreen());
-        }
-    }
-
-    @Override
-    public void onBillingError(int errorCode, Throwable error) {
-        advancedPurchasedError(sharedPreferences, getPreferenceScreen());
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (bp != null) {
-            bp.release();
-        }
-        super.onDestroy();
     }
 
 }

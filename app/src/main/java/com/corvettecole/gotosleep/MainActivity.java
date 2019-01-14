@@ -32,17 +32,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.anjlab.android.iab.v3.BillingProcessor;
-import com.anjlab.android.iab.v3.TransactionDetails;
-import com.google.ads.consent.ConsentForm;
-import com.google.ads.consent.ConsentFormListener;
-import com.google.ads.consent.ConsentInfoUpdateListener;
-import com.google.ads.consent.ConsentInformation;
-import com.google.ads.consent.ConsentStatus;
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -69,7 +58,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
+public class MainActivity extends AppCompatActivity {
 
     static final String BEDTIME_CHANNEL_ID = "bedtimeReminders";
     private static final int BACK_INTERVAL = 2000;
@@ -103,10 +92,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private int notificationDelay;
 
     private boolean advancedOptionsPurchased;
-    private BillingProcessor bp;
 
     private NotificationManager notificationManager;
-    private AdView adView;
 
     private boolean adsLoaded = false;
     private boolean adsInitialized = false;
@@ -125,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
     private boolean ratingPromptShown;
 
-    private ConsentForm consentForm;
 
     private SharedPreferences getPrefs;
 
@@ -208,56 +194,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
         if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
             rateLayout.setVisibility(View.GONE);
-            //COMPILE INSTRUCTIONS: comment out the following code block
-            //Start
-            if (adView.getVisibility() != View.VISIBLE){
-                Log.d(TAG, "re-enabling ads after rating prompt...");
-                enableDisableAds();
-            }
-            //End
         }
         Log.d(TAG, "onResume finished " + System.currentTimeMillis());
 
     }
 
-    @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
-        if (productId.equals("go_to_sleep_advanced")){
-            Log.d("productPurchased", "go to sleep advanced purchased");
-            advancedOptionsPurchased = true;
-            getPrefs.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
-        }
-    }
-
-    @Override
-    public void onPurchaseHistoryRestored() {
-
-    }
-
-    @Override
-    public void onBillingError(int errorCode, Throwable error) {
-
-    }
-
-    @Override
-    public void onBillingInitialized() {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (bp != null) {
-            bp.release();
-        }
-        super.onDestroy();
-    }
 
 
     @Override
@@ -300,7 +241,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
             setContentView(R.layout.activity_main);
-            adView = findViewById(R.id.adView); //COMPILE INSTRUCTIONS: comment out this line
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
             aboutButton = findViewById(R.id.aboutButton);
@@ -320,12 +260,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 int colorTo = getResources().getColor(R.color.indigo);
                 colorAnimations.add(ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo));
             }
-            //COMPILE INSTRUCTIONS: comment out the following block
-            //Start
-            bp = new BillingProcessor(this, getResources().getString(R.string.license_key), this);
-            bp.initialize();
-            bp.loadOwnedPurchasesFromGoogle();
-            //End
+
 
             notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
             createNotificationChannel(getBaseContext());
@@ -867,8 +802,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 settings.edit().putBoolean(DND_KEY, notificationManager.isNotificationPolicyAccessGranted()).apply();
             }
         }
-        //COMPILE INSTRUCTIONS: comment out the following line
-        advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
 
         ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
         appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
@@ -917,136 +850,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
     private void enableDisableAds(){
-        //COMPILE INSTRUCTIONS: comment out the following code block
-        //Start
-        if ((adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) || shouldUpdateConsent) {
-            Log.d(TAG, "enableDisableAds initialized");
-            if (!adsInitialized){
-                //MobileAds.initialize(this, getResources().getString(R.string.admob_key));
-                adsInitialized = true;
-            }
-            adView.setVisibility(View.VISIBLE);
-            getAdConsentStatus(this);
 
-        } else if (adView.getVisibility() != View.GONE && !adsEnabled){
-
-            adView.setVisibility(View.GONE);
-        }
-        //End
     }
 
     private void getAdConsentStatus(Context context){
-        //COMPILE INSTRUCTIONS: comment out the following code block
-        //Start
-        ConsentInformation consentInformation = ConsentInformation.getInstance(context);
-        String[] publisherIds = {context.getResources().getString(R.string.admob_publisher_id)};
-        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
 
-            @Override
-            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
-                // User's consent status successfully updated.
-                if (consentInformation.isRequestLocationInEeaOrUnknown()){
-                    if (consentStatus == ConsentStatus.NON_PERSONALIZED){
-                        Bundle extras = new Bundle();
-                        extras.putString("npa", "1");
-                        AdRequest adRequest = new AdRequest.Builder()
-                                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                                .build();
-                        adView.loadAd(adRequest);
-                    } else if (consentStatus == ConsentStatus.UNKNOWN) {
-                        consentForm = makeConsentForm(context);
-                        Log.d(TAG, "consent form loading");
-                        consentForm.load();
-                    } else {
-                        AdRequest adRequest = new AdRequest.Builder()
-                                .build();
-                        adView.loadAd(adRequest);
-                    }
-                } else {
-                    //US users
-                    AdRequest adRequest = new AdRequest.Builder()
-                            .build();
-                    adView.loadAd(adRequest);
-                }
-
-
-            }
-
-            @Override
-            public void onFailedToUpdateConsentInfo(String errorDescription) {
-                // User's consent status failed to update.
-            }
-        });
-        //End
         shouldUpdateConsent = false;
     }
 
-    private ConsentForm makeConsentForm(Context context){
-        URL privacyUrl = null;
-        try {
-            privacyUrl = new URL("https://sleep.corvettecole.com/privacy");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            // Handle error.
-        }
-        return new ConsentForm.Builder(context, privacyUrl)
-                .withListener(new ConsentFormListener() {
-                    @Override
-                    public void onConsentFormLoaded() {
-                        // Consent form loaded successfully.
-                        Log.d(TAG, "consent form loaded... showing");
-                        consentForm.show();
-
-                    }
-
-                    @Override
-                    public void onConsentFormOpened() {
-                        // Consent form was displayed.
-                        Log.d(TAG, "consent form opened");
-                    }
-
-                    @Override
-                    public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
-                        // Consent form was closed.
-                        Log.d(TAG, "consent form closed");
-                        if (userPrefersAdFree){
-                            Log.d(TAG, "initiating in-app purchase...");
-                            //COMPILE INSTRUCTIONS: comment out the following line, uncomment the ones below it
-                            bp.purchase(MainActivity.this, "go_to_sleep_advanced");
-                            //advancedOptionsPurchased = true;
-                            //getPrefs.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
-
-                        } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
-                            Bundle extras = new Bundle();
-                            extras.putString("npa", "1");
-                            //COMPILE INSTRUCTIONS: comment out the following code block
-                            //Start
-                            AdRequest adRequest = new AdRequest.Builder()
-                                    .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                                    .build();
-                            adView.loadAd(adRequest);
-                            //End
-                        } else {
-                            //COMPILE INSTRUCTIONS: comment out the following code block
-                            //Start
-                            AdRequest adRequest = new AdRequest.Builder()
-                                    .build();
-                            adView.loadAd(adRequest);
-                            //End
-                        }
-
-                    }
-
-                    @Override
-                    public void onConsentFormError(String errorDescription) {
-                        // Consent form error.
-                    }
-                })
-                .withPersonalizedAdsOption()
-                .withNonPersonalizedAdsOption()
-                .withAdFreeOption()
-                .build();
-    }
 
 
     /*

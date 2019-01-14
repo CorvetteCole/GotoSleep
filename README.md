@@ -22,7 +22,7 @@ PayPal: http://paypal.me/CGerdemann
 Google Pay: corvettecole@gmail.com
 
 # Compile Instructions (very important!)
-UPDATE: to simply compile and use the app without doing any of the below, switch to the degoogled f-droid branch here: https://github.com/CorvetteCole/GotoSleep/tree/de-googled_f-droid. The below instructions are still applicable if you wish to compile and make changes to that version for whatever reason. I will be maintaining features across both branches so PRs to either branch will make it to both.
+UPDATE: to simply compile and use the app without doing any of the below, switch to the degoogled f-droid branch here: https://github.com/CorvetteCole/GotoSleep/tree/de-googled_f-droid. The below instructions are still applicable if you wish to compile and make changes to the master branch for whatever reason. I will be maintaining features across both branches so PRs to either branch will make it to both.
 
 For obvious reasons, I left out the secret keys used in admob and the google play billing library. This makes the compiling the app as-is impossible. To solve this problem, I have gone through and put simple comments instructing what to comment out/remove throughout the app to make it compile. To find all of these, just search the app files for "COMPILE INSTRUCTIONS". All of the comments start with that little blurb to make finding them easy.
 

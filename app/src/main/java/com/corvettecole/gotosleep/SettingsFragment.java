@@ -99,11 +99,17 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
             final Preference notificationSound = this.findPreference(NOTIFICATION_SOUND_KEY);
 
 
+            //F-Droid version specific code to hide and enable certain settings from the play store version without major code base changes (allows for easier merging from base branch)
+            GDPR.setVisible(false);  //set GDPR setting to invisible since the f-droid version doesn't have anything that needs to comply with GDPR
+            adsEnabledPref.setVisible(false);
+            getPreferenceScreen().findPreference("pref_advanced_purchase").setVisible(false);
+            sharedPreferences.edit().putBoolean(ADVANCED_PURCHASED_KEY, true).apply();
+            sharedPreferences.edit().putBoolean(ADS_ENABLED_KEY, false).apply();
+
+
             advancedOptionsPurchased = sharedPreferences.getBoolean(ADVANCED_PURCHASED_KEY, false);
             adsEnabled = sharedPreferences.getBoolean(ADS_ENABLED_KEY, false);
             smartNotificationsEnabled = sharedPreferences.getBoolean(SMART_NOTIFICATIONS_KEY, false);
-
-
 
 
             if (advancedOptionsPurchased) {

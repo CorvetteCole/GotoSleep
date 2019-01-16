@@ -39,6 +39,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme_Settings);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         egg = settings.getBoolean(EGG_KEY, false);
 

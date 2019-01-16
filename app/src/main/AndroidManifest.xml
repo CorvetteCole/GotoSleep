@@ -46,9 +46,13 @@
             android:label="@string/settings"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".AboutActivity"
-            android:theme="@style/about_About.wrapper"/>
+            android:theme="@style/about_About.wrapper"
+                  android:label="@string/about"
+                  android:parentActivityName=".MainActivity"/>
         <activity android:name=".DonateActivity"
-            android:theme="@style/AppTheme.Settings"/>
+            android:theme="@style/AppTheme.Settings"
+                  android:label="@string/about"
+                  android:parentActivityName=".AboutActivity"/>
 
         <receiver
             android:name=".BedtimeNotificationReceiver"

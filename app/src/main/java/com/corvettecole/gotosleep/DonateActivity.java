@@ -48,6 +48,7 @@ public class DonateActivity extends AppCompatActivity implements BillingProcesso
     public void onCreate(Bundle savedInstanceBundle) {
     super.onCreate(savedInstanceBundle);
     setContentView(R.layout.activity_donate);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     donate1 = findViewById(R.id.donate1);
     donate3 = findViewById(R.id.donate3);

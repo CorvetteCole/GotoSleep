@@ -1,3 +1,21 @@
+/**
+ *         Go to Sleep is an open source app to manage a healthy sleep schedule
+ *         Copyright (C) 2019 Cole Gerdemann
+ *
+ *         This program is free software: you can redistribute it and/or modify
+ *         it under the terms of the GNU General Public License as published by
+ *         the Free Software Foundation, either version 3 of the License, or
+ *         (at your option) any later version.
+ *
+ *         This program is distributed in the hope that it will be useful,
+ *         but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *         GNU General Public License for more details.
+ *
+ *         You should have received a copy of the GNU General Public License
+ *         along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.corvettecole.gotosleep;
 
 import android.content.ActivityNotFoundException;
@@ -6,6 +24,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,6 +40,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme_Settings);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         egg = settings.getBoolean(EGG_KEY, false);
 
@@ -179,5 +199,15 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(aboutPage);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
+

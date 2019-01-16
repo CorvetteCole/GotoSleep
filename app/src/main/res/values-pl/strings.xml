@@ -174,5 +174,7 @@
 
     <string name="settingsNotificationChannelSummary">Większa kontrola nad powiadomieniami z tej aplikacji</string>
     <string name="settingsNotificationChannelTitle">Dodatkowe ustawienia powiadomień</string>
+    <string name="minNotificationsTitle">Zawsze wysyłaj powiadomienie</string>
+    <string name="minNotificationsSummary">Zawsze wysyłaj co najmniej jedno powiadomienie, niezależnie od aktywności</string>
 
 </resources>

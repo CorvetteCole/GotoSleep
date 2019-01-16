@@ -176,5 +176,7 @@
 
     <string name="settingsNotificationChannelSummary">More control over notifications from this app</string>
     <string name="settingsNotificationChannelTitle">Additional Notification Settings</string>
+    <string name="minNotificationsTitle">Always Send a Notification</string>
+    <string name="minNotificationsSummary">Always send at least one notification, regardless of activity</string>
 
 </resources>

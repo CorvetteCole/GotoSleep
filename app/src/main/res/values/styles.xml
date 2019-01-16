@@ -30,10 +30,17 @@
         <item name="android:statusBarColor">@color/ic_launcher_background</item>
     </style>
 
-    <style name="AppTheme.Settings" parent="AppTheme">
-        <item name="android:windowBackground">@color/colorPrimary</item>
+    <style name="AppTheme.Settings" parent="Theme.MaterialComponents">
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:navigationBarColor">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:preferenceStyle">@style/PreferenceThemeOverlay</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+
 
         <item name="android:colorAccent">@color/moonPrimary</item>
         <item name="android:colorControlActivated">@color/moonPrimary</item>

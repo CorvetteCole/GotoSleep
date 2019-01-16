@@ -1,3 +1,21 @@
+/**
+ *         Go to Sleep is an open source app to manage a healthy sleep schedule
+ *         Copyright (C) 2019 Cole Gerdemann
+ *
+ *         This program is free software: you can redistribute it and/or modify
+ *         it under the terms of the GNU General Public License as published by
+ *         the Free Software Foundation, either version 3 of the License, or
+ *         (at your option) any later version.
+ *
+ *         This program is distributed in the hope that it will be useful,
+ *         but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *         GNU General Public License for more details.
+ *
+ *         You should have received a copy of the GNU General Public License
+ *         along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.corvettecole.gotosleep;
 
 import android.annotation.SuppressLint;
@@ -11,7 +29,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -27,6 +44,7 @@ import androidx.core.app.NotificationCompat;
 
 import static android.content.Context.ALARM_SERVICE;
 import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
+import static com.corvettecole.gotosleep.MainActivity.cancelNextNotification;
 import static com.corvettecole.gotosleep.MainActivity.createNotificationChannel;
 import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
 import static com.corvettecole.gotosleep.MainActivity.notifications;
@@ -36,6 +54,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_DELAY_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.INACTIVITY_TIMER_KEY;
+import static com.corvettecole.gotosleep.SettingsFragment.SEND_ONE_NOTIFICATION;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIFICATION_SOUND_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
@@ -72,6 +91,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
     private boolean shouldEnableAdvancedOptions = false;
     private boolean notificationSoundsEnabled = false;
+    private boolean sendOneNotification = false;
     private long lastNotification;
     private UsageStatsManager usageStatsManager;
 
@@ -93,6 +113,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         userActiveMargin = Integer.parseInt(settings.getString(INACTIVITY_TIMER_KEY, "5"));
         DnD_delay = Integer.parseInt(settings.getString(DND_DELAY_KEY, "2"));
         notificationSoundsEnabled = settings.getBoolean(NOTIFICATION_SOUND_KEY, false);
+        sendOneNotification = settings.getBoolean(SEND_ONE_NOTIFICATION, false);
 
         shouldEnableAdvancedOptions = adsEnabled || advancedOptionsPurchased;
 
@@ -117,6 +138,10 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             lastNotification = System.currentTimeMillis();
         }
 
+        if (sendOneNotification && currentNotification == 1){
+            showNotification(context, getNotificationTitle(), getNotificationContent(context));
+            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
+        }
         if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) { //if any of these are not met, code will fall back to normal notifications
             //smart notification code block
             if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
@@ -126,18 +151,27 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 setNextNotification(context);
             } else {
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-                enableDoNotDisturb(context);
+                if (autoDND) {
+                    enableDoNotDisturb(context);
+                }
+                cancelNextNotification(context);
+                setNextDayNotification(context, bedtime, TAG);
             }
         }  else {
             //normal notification code block
-            showNotification(context, getNotificationTitle(), getNotificationContent(context));
+            if (!sendOneNotification) {
+                showNotification(context, getNotificationTitle(), getNotificationContent(context));
+            }
             if (currentNotification < numNotifications) {
                 setNextNotification(context);
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
             } else if (currentNotification == numNotifications) {
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+                if (autoDND) {
+                    enableDoNotDisturb(context);
+                }
+                cancelNextNotification(context);
                 setNextDayNotification(context, bedtime, TAG);
-                enableDoNotDisturb(context);
             }
         }
     }
@@ -174,21 +208,19 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     }
 
     private void enableDoNotDisturb(Context context){
-        if (autoDND) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis() + (ONE_MINUTE_MILLIS * DnD_delay));
-            Log.d(TAG, "Setting auto DND for " + DnD_delay + " minutes from now: " + calendar.getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis() + (ONE_MINUTE_MILLIS * DnD_delay));
+        Log.d(TAG, "Setting auto DND for " + DnD_delay + " minutes from now: " + calendar.getTime());
 
-            Intent intent1 = new Intent(context, AutoDoNotDisturbReceiver.class);
+        Intent intent1 = new Intent(context, AutoDoNotDisturbReceiver.class);
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    DO_NOT_DISTURB_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            } else {
-                am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            }
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                DO_NOT_DISTURB_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
 

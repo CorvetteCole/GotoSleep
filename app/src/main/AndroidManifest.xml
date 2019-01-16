@@ -42,7 +42,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Intro"/>
         <activity android:name=".SettingsActivity"
-            android:theme="@style/AppTheme.Settings"/>
+            android:theme="@style/AppTheme.Settings"
+            android:label="@string/settings"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".AboutActivity"
             android:theme="@style/about_About.wrapper"/>
         <activity android:name=".DonateActivity"

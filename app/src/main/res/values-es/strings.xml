@@ -173,4 +173,6 @@
 
     <string name="settingsNotificationChannelSummary">Más control sobre las notificaciones de esta aplicación.</string>
     <string name="settingsNotificationChannelTitle">Configuración de notificaciones adicionales</string>
+    <string name="minNotificationsTitle">Enviar siempre una notificación</string>
+    <string name="minNotificationsSummary">Siempre envíe al menos una notificación, independientemente de la actividad.</string>
 </resources>

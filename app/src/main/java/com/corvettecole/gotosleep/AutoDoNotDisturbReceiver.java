@@ -1,3 +1,21 @@
+/**
+ *         Go to Sleep is an open source app to manage a healthy sleep schedule
+ *         Copyright (C) 2019 Cole Gerdemann
+ *
+ *         This program is free software: you can redistribute it and/or modify
+ *         it under the terms of the GNU General Public License as published by
+ *         the Free Software Foundation, either version 3 of the License, or
+ *         (at your option) any later version.
+ *
+ *         This program is distributed in the hope that it will be useful,
+ *         but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *         MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *         GNU General Public License for more details.
+ *
+ *         You should have received a copy of the GNU General Public License
+ *         along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.corvettecole.gotosleep;
 
 import android.app.NotificationManager;
@@ -35,8 +53,6 @@ public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
             Toast.makeText(context, context.getString(R.string.autoDnDToast), Toast.LENGTH_SHORT).show();
         }
 
-        cancelNextNotification(context);
-        setNextDayNotification(context, bedtime, TAG);
 
         mNotificationManager.cancel(NOTIFICATION_REQUEST_CODE);
     }

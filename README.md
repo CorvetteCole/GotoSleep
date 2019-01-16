@@ -34,8 +34,6 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 # Roadmap
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
-- Enable title bar (and the back button that goes with it) to the settings screen. Some users got confused here
-
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
 - Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
@@ -49,6 +47,7 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 - Create localized screenshots for supported languages in play store listing (partially done)
 
 ### Done
+- Enable title bar (and the back button that goes with it) to the settings screen. Some users got confused here
 
 - Set auto do not disturb to false if do not disturb access is not granted, and do the same for smart notifications with usage access (they can sometimes be enabled by restoring data from the play store even if permission is not granted). There is protection to stop crashes from this but it isn't clear to the user
 

@@ -36,17 +36,13 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 # Roadmap
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
-- Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
-
-- Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
-
-- Add icons to about screen
-
-- Remove hours countdown when it is 0 possibly
+- Add prompt similar to ratings prompt if the user is using an unsupported language. Suggest that they can help contribute translations
 
 - Add dialog like the rating dialog that appears after 10 days of use or so if the user hasn't purchased the advanced options. Gently suggest that the user can purchase the advanced options to help support development of the app
 
 - Create localized screenshots for supported languages in play store listing (partially done)
+
+- Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
 ### Done
 - Enable title bar (and the back button that goes with it) to the settings screen. Some users got confused here
@@ -58,6 +54,10 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 - Change default bedtime to something slightly more sensible
 
 - Edit all icons to remove the two-tone design, make them all simple and flat
+
+## 1.2.5 (Refactoring Update):
+Boring, I know, but it does need to be done because this app doesn't really follow best practices well.
+- Refactor all files to follow the principles outlined by the Android Architecture Components (see here: https://developer.android.com/topic/libraries/architecture/)
 
 ## 1.3 (Major Feature Update):
 ### To Do
@@ -76,7 +76,11 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 ### Done
 
 ## Future Feature Suggestions:
-- Native translation contribution screen and central database to help along adoption of many languages without expensive translation services
+- Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
+
+- Add icons to about screen
+
+- Remove hours countdown when it is 0 possibly
 
 - Add sleep tracking. Perhaps as a direct competitor to Sleep as Android
 
@@ -97,4 +101,6 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 - Refactor preferences code to reduce dependence on 3rd party libraries
 
 - Add background themeing (maybe)
+### Done
+- Native translation contribution screen and central database to help along adoption of many languages without expensive translation services
 

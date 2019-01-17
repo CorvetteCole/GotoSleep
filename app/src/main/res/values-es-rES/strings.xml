@@ -90,7 +90,7 @@
     <string name="countdownMinutePluralPast">%d minutos después de la hora de acostarte</string>
     <string name="settingsAdsDisabledSummary">Los anuncios están deshabilitados, gracias por tu apoyo.</string>
     <string name="settingsAdvancedPurchasedSummary">Gracias por apoyarme!</string>
-    <string name="settingsConsentPrefsClearedToast">Preferencias de consentimiento borradas … Vuelve a la pantalla principal para editar</string>
+    <string name="settingsConsentPrefsClearedToast">Preferencias de consentimiento borradas… Vuelve a la pantalla principal para editar</string>
     <string name="settingsBedtimeSummary">La hora de acostarse es %s</string>
     <string name="settingsSmartNotificationsSummaryEnabled">Enviar notificaciones hasta que dejes de usar el teléfono</string>
     <string name="settingsAutoDnDSummarySingular">Habilite automáticamente \"No molestar\" 1 minuto después de que se envíe el último recordatorio de la hora de acostarse</string>
@@ -100,7 +100,7 @@
     <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">No molestar será activado %s minutos después del último recordatorio de la hora de acostarse enviado</string>
     <string name="settingsAutoDnDSummaryPlural">Activar automáticamente No molestar %s minutos después del último recordatorio de la hora de acostarse enviado</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) o versiones posteriores requeridas.</string>
+    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) o versiones posteriores requeridas</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 no compatible (LG no implementó el API correctamente)</string>
     <string name="settingsNotificationDelaySummary">%s minuto de retraso entre notificaciones de sueño</string>
     <string name="settingsNotificationAmountSingular">1 notificación de sueño será enviada</string>
@@ -111,8 +111,8 @@
     <string name="settingsInactivityTimerSummaryFunky">%s</string>
     <string name="settingsInactivityTimerSummaryPlural">El usuario debe estar inactivo durante %s minutos para ser considerado inactivo</string>
     <string name="settingsAdsEnabledSummary">Desbloquea opciones avanzadas sin pagar viendo anuncios (Los anuncios nunca se mostrarán fuera de la aplicación)</string>
-    <string name="settingsAdvancedPurchaseSummary">Apóyame y desbloquea todas las opciones avanzadas sin anuncios de por vida.</string>
-    <string name="settingsDnDPermDeniedToast">Acceso a no molestar no concedido, cambia la opción para intentar de nuevo </string>
+    <string name="settingsAdvancedPurchaseSummary">Apóyame y desbloquea todas las opciones avanzadas sin anuncios de por vida</string>
+    <string name="settingsDnDPermDeniedToast">Acceso a no molestar no concedido, cambia la opción para intentar de nuevo</string>
     <string name="settingsUsagePermDeniedToast">Acceso de uso no concedido, cambia la opción para intentar de nuevo</string>
     <string name="rateDialogTitle">¿Disfrutando Ve a Dormir?</string>
     <!--preference defaults-->
@@ -132,23 +132,23 @@
     <string name="notificationAmountTitle">Cantidad de Notificaciones</string>
     <string name="categoryAdvanced">Opciones Avanzadas</string>
     <string name="advancedPurchaseTitle">Desbloquea Opciones Avanzadas Libres de anuncios</string>
-    <string name="advancedPurchaseSummary">Apóyame y desbloquea todas las opciones avanzadas sin anuncios de por vida.</string>
+    <string name="advancedPurchaseSummary">Apóyame y desbloquea todas las opciones avanzadas sin anuncios de por vida</string>
     <string name="gdprTitle">Limpiar preferencias GDPR</string>
     <string name="gdprSummary">Limpia tus preferencias con respecto a la personalización</string>
     <string name="smartNotificationsTitle">Notificaciones Personalizadas</string>
-    <string name="smartNotificationsSummary">Enviar notificaciones hasta que dejes de usar tu teléfono.</string>
+    <string name="smartNotificationsSummary">Enviar notificaciones hasta que dejes de usar tu teléfono</string>
     <string name="activityMarginTitle">Reloj de Inactividad</string>
     <string name="activityMarginSummary">El usuario debe estar inactivo por 5 minutos para ser considerado inactivo</string>
     <string name="dndDelayTitle">Reloj de No Molestar Automático</string>
     <string name="dndDelaySummary">No molestar será activado 5 minutos después del último recordatorio de la hora de acostarse enviado</string>
     <string name="categoryCustomNotificationsTitle">Notificaciones Personalizadas</string>
-    <string name="categoryCustomNotificationsSummary">Personaliza tus notificaciones de sueño.</string>
+    <string name="categoryCustomNotificationsSummary">Personaliza tus notificaciones de sueño</string>
     <string name="enableAdsTitle">Habilitar Anuncios</string>
-    <string name="enableAdsSummary">Desbloquea opciones avanzadas sin pagar viendo anuncios (Los anuncios nunca se mostrarán fuera de la aplicación)</string>
+    <string name="enableAdsSummary">Desbloquea opciones avanzadas sin pagar viendo anuncios (Los anuncios nunca se mostrarán fuera de la aplicación) </string>
     <string name="SettingsNotificationSoundsTitle">Habilitar sonidos de notificación</string>
     <string name="SettingsNotificationSoundsSummary">Hacer sonido cuando se muestra una notificación</string>
-    <string name="settingsNotificationChannelSummary">Más control sobre las notificaciones de esta aplicación.</string>
+    <string name="settingsNotificationChannelSummary">Más control sobre las notificaciones de esta aplicación</string>
     <string name="settingsNotificationChannelTitle">Configuración de notificaciones adicionales</string>
     <string name="minNotificationsTitle">Enviar siempre una notificación</string>
-    <string name="minNotificationsSummary">Siempre envíe al menos una notificación, independientemente de la actividad.</string>
+    <string name="minNotificationsSummary">Siempre envíe al menos una notificación, independientemente de la actividad</string>
 </resources>

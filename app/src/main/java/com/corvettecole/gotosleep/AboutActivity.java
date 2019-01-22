@@ -130,6 +130,13 @@ public class AboutActivity extends AppCompatActivity {
             startActivity(browserIntent);
         });
 
+        Element translate = new Element();
+        translate.setTitle("Translate the app")
+                .setOnClickListener(v -> {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://crowdin.com/project/go-to-sleep"));
+                    startActivity(browserIntent);
+                });
+
         Element donate = new Element();
         donate.setTitle(getString(R.string.aboutSupport))
                 .setOnClickListener(v -> {
@@ -188,6 +195,7 @@ public class AboutActivity extends AppCompatActivity {
                 .addItem(version)
                 .addItem(github)
                 .addItem(playStore)
+                .addItem(translate)
                 .addItem(donate)
                 .addItem(website)
                 .addItem(email)

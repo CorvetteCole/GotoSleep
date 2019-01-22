@@ -151,4 +151,6 @@
     <string name="settingsNotificationChannelTitle">Configuración de notificaciones adicionales</string>
     <string name="minNotificationsTitle">Enviar siempre una notificación</string>
     <string name="minNotificationsSummary">Siempre envíe al menos una notificación, independientemente de la actividad</string>
+    <string name="translation_request">It looks like we don\'t support your language. Would you like to help translate the app?</string>
+    <string name="purchase_dialog_prompt">Help support development by purchasing the advanced options</string>
 </resources>

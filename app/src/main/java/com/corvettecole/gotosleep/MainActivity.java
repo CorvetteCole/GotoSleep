@@ -20,7 +20,6 @@ package com.corvettecole.gotosleep;
 
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
-import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -39,13 +38,12 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +64,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -91,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     static final String BEDTIME_CHANNEL_ID = "bedtimeReminders";
     private static final int BACK_INTERVAL = 2000;
+    private static final String[] supportedLanguages = {"en", "pl", "es"};
     private long backPressed;
     private Button settingsButton;
     private Button aboutButton;
@@ -130,19 +130,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private boolean adsInitialized = false;
     private boolean isAutoDoNotDisturbEnabled;
 
-    private Button rateYesButton;
-    private Button rateNoButton;
-    private TextView rateTextView;
-    private ConstraintLayout rateLayout;
+    private FrameLayout nativeDialogFrame;
 
     private boolean isRequestingFeedback = false;
     private boolean isRequestingRating = false;
 
     final static String APP_LAUNCHED_KEY = "numLaunched";
-    private int appLaunched;
+    private int appLaunchedPortrait;
     final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
 
     private boolean ratingPromptShown;
+    private boolean localizationPromptShown;
+    private boolean purchasePromptShown;
 
     private ConsentForm consentForm;
 
@@ -329,10 +328,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
             enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
-            rateLayout = findViewById(R.id.native_dialog_frame);
-            rateNoButton = findViewById(R.id.rateNoButton);
-            rateYesButton = findViewById(R.id.rateYesButton);
-            rateTextView = findViewById(R.id.rateText);
+            nativeDialogFrame = findViewById(R.id.native_dialog_frame);
+
 
             for (int i = 0; i < 10; i++){
                 int colorFrom = getResources().getColor(R.color.moonPrimary);
@@ -352,21 +349,38 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                appLaunchedPortrait++;
+                getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunchedPortrait).apply();
+
+                // if statements to choose what kind of dialog to show
+                if (Arrays.asList(supportedLanguages).contains(Locale.getDefault().getLanguage()) && !localizationPromptShown){
+                    //TODO show localization dialog
+                } else if (appLaunchedPortrait >= 8 && !ratingPromptShown){
+                    //TODO show rating dialog
+                } else if (!purchasePromptShown){
+                    //TODO show purchase dialog
+                }
+
+
+
                 //#TODO add in additional parameter requiring an amount of time to have passed
-                if (appLaunched < 8 && !ratingPromptShown) {
-                    rateLayout.setVisibility(View.GONE);
-                    Log.d(TAG, "appLaunched: " + appLaunched);
-                    getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();
+                if (appLaunchedPortrait < 8 && !ratingPromptShown) {
+                    //rateLayout.setVisibility(View.GONE);
+                    Log.d(TAG, "appLaunchedPortrait: " + appLaunchedPortrait);
+                    getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunchedPortrait + 1).apply();
                     //initiateRatingDialogue(getPrefs); //debug
                     enableDisableAds();
                 } else if (!ratingPromptShown) {
                     Log.d(TAG, "initiating rating dialogue");
                     initiateRatingDialogue();
+
                 } else {
-                    rateLayout.setVisibility(View.GONE);
+                    //rateLayout.setVisibility(View.GONE);
                     enableDisableAds();
                     //initiateRatingDialogue(getPrefs);  //debug
                 }
+            } else {
+                enableDisableAds();
             }
 
 
@@ -761,44 +775,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
     private void initiateRatingDialogue(){
-        rateLayout.setVisibility(View.VISIBLE);
-        rateLayout.invalidate();
-        Log.d(TAG, "set rateLayout to visible");
-        //initial state, TextView displays "Are you enjoying Go to Sleep?"
-
-        ((ViewGroup) findViewById(R.id.native_dialog_frame)).getLayoutTransition()
-                .enableTransitionType(LayoutTransition.CHANGING);
-
-        rateNoButton.setOnClickListener(v -> {
-            if (!isRequestingFeedback && !isRequestingRating) {
-                isRequestingFeedback = true;
-                rateTextView.setText(getString(R.string.request_feedback));
-                rateNoButton.setText(getString(R.string.no_thanks));
-                rateYesButton.setText(getString(R.string.ok_sure));
-            } else {
-                rateLayout.setVisibility(View.GONE);
-                Log.d(TAG, "ads will re-enable after onResume called");
-                adsInitialized = false;
-            }
-            getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
-        });
-
-        rateYesButton.setOnClickListener(v -> {
-            if (!isRequestingRating && !isRequestingFeedback){
-                isRequestingRating = true;
-                rateTextView.setText(getString(R.string.rating_request));
-                rateYesButton.setText(getString(R.string.ok_sure));
-                rateNoButton.setText(getString(R.string.no_thanks));
-            } else if (isRequestingFeedback){
-                sendFeedback();
-
-            } else {
-                sendToPlayStore();
-            }
-            getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
-        });
 
 
+        //TODO if rating dialog finished properly set this
+        getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
     }
 
     private void sendToPlayStore(){
@@ -890,7 +870,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
 
         ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
-        appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
+        appLaunchedPortrait = settings.getInt(APP_LAUNCHED_KEY, 0);
         egg = settings.getBoolean(EGG_KEY, false);
 
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
@@ -938,7 +918,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private void enableDisableAds(){
         //COMPILE INSTRUCTIONS: comment out the following code block
         //Start
-        if ((adsEnabled && adView.getVisibility() != View.VISIBLE && rateLayout.getVisibility() != View.VISIBLE) || shouldUpdateConsent) {
+        if ((adsEnabled && adView.getVisibility() != View.VISIBLE && nativeDialogFrame.getVisibility() != View.VISIBLE) || shouldUpdateConsent) {
             Log.d(TAG, "enableDisableAds initialized");
             if (!adsInitialized){
                 //MobileAds.initialize(this, getResources().getString(R.string.admob_key));

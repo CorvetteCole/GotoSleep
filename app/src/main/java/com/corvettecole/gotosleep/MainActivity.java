@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
             enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
-            rateLayout = findViewById(R.id.rate_layout);
+            rateLayout = findViewById(R.id.native_dialog_frame);
             rateNoButton = findViewById(R.id.rateNoButton);
             rateYesButton = findViewById(R.id.rateYesButton);
             rateTextView = findViewById(R.id.rateText);
@@ -766,7 +766,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         Log.d(TAG, "set rateLayout to visible");
         //initial state, TextView displays "Are you enjoying Go to Sleep?"
 
-        ((ViewGroup) findViewById(R.id.rate_layout)).getLayoutTransition()
+        ((ViewGroup) findViewById(R.id.native_dialog_frame)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
 
         rateNoButton.setOnClickListener(v -> {

@@ -88,7 +88,7 @@
     <string name="back_pressed">Press again to exit</string>
     <string name="sleepModeButtonToast">Set next bedtime notification to tomorrow</string>
     <string name="feedbackBodyText">Please explain your bug or feature suggestion thoroughly</string>
-	
+
     <string name="countDownHourSingular">%d hour</string>
     <string name="countdownHourFunky">%d</string>   <!-- Use for 2 hours, 3 hours, 4 hours -->
     <string name="countdownHourPlural">%d hours</string>
@@ -98,13 +98,13 @@
     <string name="countdownMinuteSingularPast">%d minute past bedtime</string>
     <string name="countdownMinuteFunkyPast">%d</string> <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
     <string name="countdownMinutePluralPast">%d minutes past bedtime</string>
-	
+
     <string name="settingsAdsDisabledSummary">Ads are disabled, thank you for your support.</string>
     <string name="settingsAdvancedPurchasedSummary">Thank you for supporting me!</string>
     <string name="settingsConsentPrefsClearedToast">Consent preferences cleared… Go back to main screen to edit</string>
     <string name="settingsBedtimeSummary">Bedtime is %s</string>
     <string name="settingsSmartNotificationsSummaryEnabled">Send notifications until you stop using your phone</string>
-	
+
     <string name="settingsAutoDnDSummarySingular">Automatically enable Do not Disturb 1 minute after the last bedtime reminder is sent</string>
     <string name="settingsDelayDnDSummarySingular">Do not Disturb will be activated 1 minute after the last notification is sent</string>
     <string name="settingsDelayDnDSummaryFunky">%s</string> <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
@@ -113,12 +113,12 @@
     <string name="settingsAutoDnDSummaryPlural">Automatically enable do not disturb %s minutes after the last bedtime reminder is sent</string>
     <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) and up required</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 is not compatible (LG didn\'t implement the API correctly)</string>
-	
+
     <string name="settingsNotificationDelaySummary">%s minute delay between sleep notifications</string>
     <string name="settingsNotificationAmountSingular">1 sleep reminder will be sent</string>
     <string name="settingsNotificationAmountFunky">%s</string>
     <string name="settingsNotificationAmountPlural">%s sleep reminders will be sent</string>
-	
+
     <string name="settingsInactivityTimerSummarySingular">User must be inactive for 1 minute to be considered inactive</string>
     <!-- Use for any amount of minutes past 4  -->
     <string name="settingsInactivityTimerSummaryFunky">%s</string>
@@ -178,5 +178,8 @@
     <string name="settingsNotificationChannelTitle">Additional Notification Settings</string>
     <string name="minNotificationsTitle">Always Send a Notification</string>
     <string name="minNotificationsSummary">Always send at least one notification, regardless of activity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/native_dialog_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
+    android:layout_gravity="center"
     android:animateLayoutChanges="true"
     android:background="@drawable/feedback_outline"
-    android:elevation="8dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:elevation="8dp">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/rateNoButton"
@@ -36,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rateText"
         app:layout_constraintVertical_bias="0.0"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/rateYesButton"
@@ -62,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/rateText"
         app:layout_constraintVertical_bias="0.0"
         app:strokeColor="@color/colorPrimaryLight"
-        app:strokeWidth="1dp"/>
+        app:strokeWidth="1dp" />
 
     <TextView
         android:id="@+id/rateText"
@@ -72,7 +73,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/product_sans_regular"
-        android:maxLines="1"
+        android:maxLines="4"
         android:shadowColor="@color/colorPrimaryLight"
         android:shadowDx="2"
         android:shadowDy="2"
@@ -87,7 +88,7 @@
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRate"
@@ -97,6 +98,6 @@
 
         app:layout_constraintGuide_percent=".5"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

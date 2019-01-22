@@ -38,6 +38,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -86,7 +87,7 @@ import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler{
+public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler, NativeDialogPrompt.OnFragmentInteractionListener {
 
     static final String BEDTIME_CHANNEL_ID = "bedtimeReminders";
     private static final int BACK_INTERVAL = 2000;
@@ -137,7 +138,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     final static String APP_LAUNCHED_KEY = "numLaunched";
     private int appLaunchedPortrait;
-    final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
+
+    final static String RATING_PROMPT_SHOWN_KEY = "rate_shown";
+    final static String PURCHASE_PROMPT_SHOWN_KEY = "purchase_prompt_shown";
+    final static String LOCALIZATION_PROMPT_SHOWN_KEY = "localization_prompt_shown";
 
     private boolean ratingPromptShown;
     private boolean localizationPromptShown;
@@ -224,8 +228,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if (!adsInitialized || shouldUpdateConsent) {
             enableDisableAds();
         }
-        if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
-            rateLayout.setVisibility(View.GONE);
+        if ((ratingPromptShown || purchasePromptShown || localizationPromptShown) && nativeDialogFrame.getVisibility() == View.VISIBLE) {
+            //#TODO nativeDialogFrame.setVisibility(View.GONE);
+
             //COMPILE INSTRUCTIONS: comment out the following code block
             //Start
             if (adView.getVisibility() != View.VISIBLE){
@@ -313,10 +318,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //this is needed to stop weird back button stuff
             finish();
         } else {
-
-
-
-
+            //runs when the intro slides launch mainActivity again
             setContentView(R.layout.activity_main);
             adView = findViewById(R.id.adView); //COMPILE INSTRUCTIONS: comment out this line
             settingsButton = findViewById(R.id.settingsButton);
@@ -347,47 +349,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             createNotificationChannel(getBaseContext());
             loadPreferences();
 
+            initializeDialogs();
+            enableDisableAds();
 
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                appLaunchedPortrait++;
-                getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunchedPortrait).apply();
-
-                // if statements to choose what kind of dialog to show
-                if (Arrays.asList(supportedLanguages).contains(Locale.getDefault().getLanguage()) && !localizationPromptShown){
-                    //TODO show localization dialog
-                } else if (appLaunchedPortrait >= 8 && !ratingPromptShown){
-                    //TODO show rating dialog
-                } else if (!purchasePromptShown){
-                    //TODO show purchase dialog
-                }
-
-
-
-                //#TODO add in additional parameter requiring an amount of time to have passed
-                if (appLaunchedPortrait < 8 && !ratingPromptShown) {
-                    //rateLayout.setVisibility(View.GONE);
-                    Log.d(TAG, "appLaunchedPortrait: " + appLaunchedPortrait);
-                    getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunchedPortrait + 1).apply();
-                    //initiateRatingDialogue(getPrefs); //debug
-                    enableDisableAds();
-                } else if (!ratingPromptShown) {
-                    Log.d(TAG, "initiating rating dialogue");
-                    initiateRatingDialogue();
-
-                } else {
-                    //rateLayout.setVisibility(View.GONE);
-                    enableDisableAds();
-                    //initiateRatingDialogue(getPrefs);  //debug
-                }
-            } else {
-                enableDisableAds();
-            }
-
-
-
-
-
-            //runs when the intro slides launch mainActivity again
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
             final Intent about = new Intent(MainActivity.this, AboutActivity.class);
 
@@ -428,8 +392,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             aboutButton.setOnClickListener(view -> startActivity(about));
 
 
-
-
             contentMain.setOnClickListener(v -> {
                 if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
                     settingsButton.setVisibility(View.INVISIBLE);
@@ -441,6 +403,58 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             });
 
             Log.d(TAG, "onCreate finished " + System.currentTimeMillis());
+        }
+    }
+
+    private void initializeDialogs() {
+        final String TAG = "initializeDialogs";
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            appLaunchedPortrait++;
+            getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunchedPortrait).apply();
+
+            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+            SharedPreferences.Editor e = getPrefs.edit();
+            NativeDialogPrompt nativeDialogPrompt;
+            // if statements to choose what kind of dialog to show
+            /*
+            if (Arrays.asList(supportedLanguages).contains(Locale.getDefault().getLanguage()) && !localizationPromptShown){
+                nativeDialogPrompt = NativeDialogPrompt.newInstance(
+                        new String[][]{{"https://crowdin.com/project/go-to-sleep"}},
+                        new String[][]{{"dismiss"}},
+                        new String[][]{{getString(R.string.translation_request)}}
+                );
+                e.putBoolean(LOCALIZATION_PROMPT_SHOWN_KEY, true).apply();
+            } else if (appLaunchedPortrait >= 8 && !ratingPromptShown){
+                nativeDialogPrompt = NativeDialogPrompt.newInstance(
+                        new String[][]{{"branch1"}, {Uri.parse("market://details?id=" + getApplicationContext().getPackageName()).toString()}, {sendFeedback()}},
+                        new String[][]{{"branch2"}, {"dismiss"}, {"dismiss"}},
+                        new String[][]{{getString(R.string.rating_prompt)}, {getString(R.string.rating_request)}, {getString(R.string.request_feedback)}}
+                );
+                e.putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
+            } else if (appLaunchedPortrait >= 14 && !purchasePromptShown){
+                nativeDialogPrompt = NativeDialogPrompt.newInstance(
+                        new String[][]{{new Intent(MainActivity.this, SettingsActivity.class).toUri(0)}},
+                        new String[][]{{"dismiss"}},
+                        new String[][]{{"If you are enjoying the app, please consider supporting me by purchasing the advanced options"}}
+                );
+                e.putBoolean(PURCHASE_PROMPT_SHOWN_KEY, true).apply();
+            } else {
+                nativeDialogFrame.setVisibility(View.GONE);
+                e.apply();
+                return;
+            }
+            */
+            e.apply();
+            nativeDialogPrompt = NativeDialogPrompt.newInstance(
+                    new String[][]{{new Intent(MainActivity.this, SettingsActivity.class).toUri(0)}},
+                    new String[][]{{"dismiss"}},
+                    new String[][]{{"You can help support development by purchasing the advanced options"}}
+            );
+            loadPreferences();
+            nativeDialogFrame.setVisibility(View.VISIBLE);
+            Log.d(TAG,"launching nativeDialogPrompt");
+            transaction.replace(R.id.native_dialog_frame, nativeDialogPrompt);
+            transaction.commit();
         }
     }
 
@@ -788,6 +802,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         if (getPackageManager().queryIntentActivities(rateAppIntent, 0).size() > 0)
         {
             startActivity(rateAppIntent);
+            rateAppIntent.toString();
         }
         else
         {
@@ -795,20 +810,14 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         }
     }
 
-    private void sendFeedback(){
+    private String sendFeedback(){
         String subject = "Go to Sleep Feedback";
         String bodyText = getString(R.string.feedbackBodyText);
         String mailto = "mailto:corvettecole@gmail.com" +
                 "?subject=" + Uri.encode(subject) +
                 "&body=" + Uri.encode(bodyText);
 
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse(mailto));
-        try {
-            startActivity(emailIntent);
-        } catch (ActivityNotFoundException e) {
-            //TODO: Handle case where no email app is available
-        }
+        return mailto;
     }
 
     static void setNotifications(boolean nextDay, boolean notificationsEnabled, int[] bedtime, int notificationDelay, int numNotifications, Context context) {
@@ -869,6 +878,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         //COMPILE INSTRUCTIONS: comment out the following line
         advancedOptionsPurchased = bp.isPurchased("go_to_sleep_advanced");
 
+        purchasePromptShown = settings.getBoolean(PURCHASE_PROMPT_SHOWN_KEY, false);
+        localizationPromptShown = settings.getBoolean(LOCALIZATION_PROMPT_SHOWN_KEY, false);
         ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
         appLaunchedPortrait = settings.getInt(APP_LAUNCHED_KEY, 0);
         egg = settings.getBoolean(EGG_KEY, false);
@@ -1192,6 +1203,13 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(String string) {
+        if (string.equalsIgnoreCase("advanced")){
+            bp.purchase(MainActivity.this, "go_to_sleep_advanced");
         }
     }
 }

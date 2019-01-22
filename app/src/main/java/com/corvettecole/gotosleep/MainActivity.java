@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     final static String APP_LAUNCHED_KEY = "numLaunched";
     private int appLaunched;
     final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
+
     private boolean ratingPromptShown;
 
     private ConsentForm consentForm;

@@ -36,6 +36,11 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 # Roadmap
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
+Boring, I know, but it does need to be done because this app doesn't really follow best practices well.
+- Refactor all files to follow the principles outlined by the Android Architecture Components (see here: https://developer.android.com/topic/libraries/architecture/)
+
+See the branch dialog-prompt-rewrite for an example of how I am refactoring the app. I'm going to make it very readable and easy to contribute and mainatin
+
 - Add prompt similar to ratings prompt if the user is using an unsupported language. Suggest that they can help contribute translations
 
 - Add dialog like the rating dialog that appears after 10 days of use or so if the user hasn't purchased the advanced options. Gently suggest that the user can purchase the advanced options to help support development of the app
@@ -54,10 +59,6 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 - Change default bedtime to something slightly more sensible
 
 - Edit all icons to remove the two-tone design, make them all simple and flat
-
-## 1.2.5 (Refactoring Update):
-Boring, I know, but it does need to be done because this app doesn't really follow best practices well.
-- Refactor all files to follow the principles outlined by the Android Architecture Components (see here: https://developer.android.com/topic/libraries/architecture/)
 
 ## 1.3 (Major Feature Update):
 ### To Do

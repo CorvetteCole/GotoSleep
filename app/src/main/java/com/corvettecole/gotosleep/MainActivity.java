@@ -163,6 +163,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private ArrayList<ValueAnimator> colorAnimations = new ArrayList<>();
 
+    private NativeDialogPrompt nativeDialogPrompt;
+
     /*private UsageStatsManager usageStatsManager;
     private Button usageButton;
     private int userActiveMargin;
@@ -416,8 +418,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             SharedPreferences.Editor e = getPrefs.edit();
             NativeDialogPrompt nativeDialogPrompt;
             // if statements to choose what kind of dialog to show
-            /*
-            if (Arrays.asList(supportedLanguages).contains(Locale.getDefault().getLanguage()) && !localizationPromptShown){
+            Log.d(TAG, Locale.getDefault().getLanguage());
+            if (!Arrays.asList(supportedLanguages).contains(Locale.getDefault().getLanguage()) && !localizationPromptShown){
                 nativeDialogPrompt = NativeDialogPrompt.newInstance(
                         new String[][]{{"https://crowdin.com/project/go-to-sleep"}},
                         new String[][]{{"dismiss"}},
@@ -428,14 +430,18 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 nativeDialogPrompt = NativeDialogPrompt.newInstance(
                         new String[][]{{"branch1"}, {Uri.parse("market://details?id=" + getApplicationContext().getPackageName()).toString()}, {sendFeedback()}},
                         new String[][]{{"branch2"}, {"dismiss"}, {"dismiss"}},
-                        new String[][]{{getString(R.string.rating_prompt)}, {getString(R.string.rating_request)}, {getString(R.string.request_feedback)}}
+                        new String[][]{{getString(R.string.rating_prompt)}, {getString(R.string.rating_request)}, {getString(R.string.request_feedback)}},
+                        new String[][]{{getString(R.string.yes)}, {getString(R.string.ok_sure)}, {getString(R.string.ok_sure)}},
+                        new String[][]{{getString(R.string.no)},{getString(R.string.no_thanks)},{getString(R.string.no_thanks)}}
                 );
                 e.putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
-            } else if (appLaunchedPortrait >= 14 && !purchasePromptShown){
+            } else if (appLaunchedPortrait >= 14 && !purchasePromptShown && !advancedOptionsPurchased){
                 nativeDialogPrompt = NativeDialogPrompt.newInstance(
-                        new String[][]{{new Intent(MainActivity.this, SettingsActivity.class).toUri(0)}},
+                        new String[][]{{"purchase:advanced"}},
                         new String[][]{{"dismiss"}},
-                        new String[][]{{"If you are enjoying the app, please consider supporting me by purchasing the advanced options"}}
+                        new String[][]{{getString(R.string.purchase_dialog_prompt)}},
+                        new String[][]{{getString(R.string.ok_sure)}},
+                        new String[][]{{getString(R.string.no_thanks)}}
                 );
                 e.putBoolean(PURCHASE_PROMPT_SHOWN_KEY, true).apply();
             } else {
@@ -443,13 +449,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
                 e.apply();
                 return;
             }
-            */
-            e.apply();
-            nativeDialogPrompt = NativeDialogPrompt.newInstance(
-                    new String[][]{{new Intent(MainActivity.this, SettingsActivity.class).toUri(0)}},
-                    new String[][]{{"dismiss"}},
-                    new String[][]{{"You can help support development by purchasing the advanced options"}}
-            );
+            this.nativeDialogPrompt = nativeDialogPrompt;
             loadPreferences();
             nativeDialogFrame.setVisibility(View.VISIBLE);
             Log.d(TAG,"launching nativeDialogPrompt");
@@ -783,16 +783,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         colorAnimation.start();
-    }
-
-
-
-
-    private void initiateRatingDialogue(){
-
-
-        //TODO if rating dialog finished properly set this
-        getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
     }
 
     private void sendToPlayStore(){
@@ -1210,6 +1200,10 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public void onFragmentInteraction(String string) {
         if (string.equalsIgnoreCase("advanced")){
             bp.purchase(MainActivity.this, "go_to_sleep_advanced");
+        } else if (string.equalsIgnoreCase("dismissed")){
+            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+            transaction.remove(nativeDialogPrompt);
+            transaction.commit();
         }
     }
 }

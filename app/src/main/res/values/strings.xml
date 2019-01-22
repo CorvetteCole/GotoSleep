@@ -179,8 +179,7 @@
     <string name="minNotificationsTitle">Always Send a Notification</string>
     <string name="minNotificationsSummary">Always send at least one notification, regardless of activity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="translation_request">It looks like we don\'t support your language. Would you like to help translate the app?</string>
+    <string name="purchase_dialog_prompt">Help support development by purchasing the advanced options</string>
 
 </resources>

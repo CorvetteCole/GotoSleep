@@ -14,9 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.util.Arrays;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 
@@ -38,12 +35,16 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
     private static final String ARG_NO_ACTIONS = "no_actions";
 
     private static final String ARG_DIALOG_TEXTS = "dialog_texts";
+    private static final String ARG_YES_TEXTS = "yes_texts";
+    private static final String ARG_NO_TEXTS = "no_texts";
 
     private static final String TAG = "NativeDialogPrompt";
 
     private String[][] mYesActions;
     private String[][] mNoActions;
     private String[][] mDialogTexts;
+    private String[][] mYesTexts;
+    private String[][] mNoTexts;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,6 +56,8 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
     private int dialogPromptLevel = 0;
     private int dialogPromptBranch = 0;
 
+    boolean mCustomButtonTexts = false;
+
     public NativeDialogPrompt() {
         // Required empty public constructor
     }
@@ -63,8 +66,12 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param yesActions Link to open if user says yes. "dismiss" will close the prompt, "nextLevel" will go to the next prompt level, "branch1" will go to the specified branch
-     * @param noActions Link to open if users says no. "dismiss" will close the prompt, "nextLevel" will go to the next prompt level,  "branch1" will go to the specified branch
+     * @param yesActions Link to open if user says yes. "dismiss" will close the prompt,
+     *                   "nextLevel" will go to the next prompt level, "branch1" will go to the specified branch,
+     *                   "purchase:$id" will issue a callback to the parent activity interface with the parameter as the id
+     * @param noActions Link to open if users says no. "dismiss" will close the prompt,
+     *                  "nextLevel" will go to the next prompt level,  "branch1" will go to the specified branch,
+     *                  "purchase:$id" will issue a callback to the parent activity interface with the parameter as the id
      * @return A new instance of fragment NativeDialogPrompt.
      */
     public static NativeDialogPrompt newInstance(String[][] yesActions, String[][] noActions, String[][] dialogTexts) {
@@ -77,6 +84,18 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
         return fragment;
     }
 
+    public static NativeDialogPrompt newInstance(String[][] yesActions, String[][] noActions, String[][] dialogTexts, String[][] yesTexts, String[][] noTexts) {
+        NativeDialogPrompt fragment = new NativeDialogPrompt();
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_YES_ACTIONS, yesActions);
+        args.putSerializable(ARG_NO_ACTIONS, noActions);
+        args.putSerializable(ARG_DIALOG_TEXTS, dialogTexts);
+        args.putSerializable(ARG_NO_TEXTS, noTexts);
+        args.putSerializable(ARG_YES_TEXTS, yesTexts);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +104,12 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
             mYesActions = (String[][]) getArguments().getSerializable(ARG_YES_ACTIONS);
             mNoActions = (String[][]) getArguments().getSerializable(ARG_NO_ACTIONS);
             mDialogTexts = (String[][]) getArguments().getSerializable(ARG_DIALOG_TEXTS);
+
+            mYesTexts = (String[][]) getArguments().getSerializable(ARG_YES_TEXTS);
+            mNoTexts = (String[][]) getArguments().getSerializable(ARG_NO_TEXTS);
+            if (mYesTexts != null){
+                mCustomButtonTexts = true;
+            }
         }
     }
 
@@ -107,26 +132,26 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
         ((ViewGroup) view.findViewById(R.id.native_dialog_layout)).getLayoutTransition()
                 .enableTransitionType(LayoutTransition.CHANGING);
 
-        dialogYesButton.setText(getString(R.string.yes));
-        dialogNoButton.setText(getString(R.string.no));
-
-        dialogTextView.setText(mDialogTexts[dialogPromptBranch][dialogPromptLevel]);
+        updateDialogText(dialogPromptBranch, dialogPromptLevel);
 
         dialogNoButton.setOnClickListener(v -> {
 
 
             if (mNoActions[dialogPromptBranch][dialogPromptLevel].contains("dismiss")) {
-                //TODO additional dismiss action (heads up to MainActivity)
-                dialogLayout.setVisibility(View.GONE);
+                transmitToActivity("dismissed");
             } else if (!(mNoActions[dialogPromptBranch][dialogPromptLevel].contains("nextLevel") || mNoActions[dialogPromptBranch][dialogPromptLevel].contains("branch"))){
-                try {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mNoActions[dialogPromptBranch][dialogPromptLevel]));
-                    startActivity(browserIntent);
-                } catch (Exception e){
-                    Log.e(TAG, "ERROR PARSING URI: " + e.toString());
-                    Toast.makeText(getContext(), "ERROR PARSING INTENT", Toast.LENGTH_LONG).show();
+                if (mNoActions[dialogPromptBranch][dialogPromptLevel].contains("purchase:")){
+                    transmitToActivity(mNoActions[dialogPromptBranch][dialogPromptLevel].substring(mNoActions[dialogPromptBranch][dialogPromptLevel].indexOf("purchase:") + "purchase:".length()));
+                } else {
+                    try {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mNoActions[dialogPromptBranch][dialogPromptLevel]));
+                        startActivity(browserIntent);
+                    } catch (Exception e) {
+                        Log.e(TAG, "ERROR PARSING URI: " + e.toString());
+                        Toast.makeText(getContext(), "Parsing Error", Toast.LENGTH_LONG).show();
+                    }
                 }
-                dialogLayout.setVisibility(View.GONE);
+                transmitToActivity("dismissed");
             }
 
             if (mNoActions[dialogPromptBranch][dialogPromptLevel].contains("nextLevel") || mNoActions[dialogPromptBranch][dialogPromptLevel].contains("branch")){
@@ -149,20 +174,20 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
         dialogYesButton.setOnClickListener(v -> {
 
             if (mYesActions[dialogPromptBranch][dialogPromptLevel].contains("dismiss")) {
-                //TODO additional dismiss action (heads up to MainActivity)
-                dialogLayout.setVisibility(View.GONE);
+                transmitToActivity("dismissed");
             } else if (!(mYesActions[dialogPromptBranch][dialogPromptLevel].contains("nextLevel") || mYesActions[dialogPromptBranch][dialogPromptLevel].contains("branch"))){
-                try {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mYesActions[dialogPromptBranch][dialogPromptLevel]));
-                    startActivity(browserIntent);
-                } catch (Exception e){
-                    //TODO figure out a better way of making an adaptable purchase request system (i.e. action array has like purchase:(id) and then parse out the id
-                    Log.e(TAG, "ERROR PARSING URI: " + e.toString());
-                    Toast.makeText(getContext(), "ERROR PARSING INTENT", Toast.LENGTH_LONG).show();
-                    onPurchaseWanted("advanced");
+                if (mYesActions[dialogPromptBranch][dialogPromptLevel].contains("purchase:")){
+                    transmitToActivity(mYesActions[dialogPromptBranch][dialogPromptLevel].substring(mYesActions[dialogPromptBranch][dialogPromptLevel].indexOf("purchase:") + "purchase:".length()));
+                } else {
+                    try {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mYesActions[dialogPromptBranch][dialogPromptLevel]));
+                        startActivity(browserIntent);
+                    } catch (Exception e) {
+                        Log.e(TAG, "ERROR PARSING URI: " + e.toString());
+                        Toast.makeText(getContext(), "Parsing Error", Toast.LENGTH_LONG).show();
+                    }
                 }
-                dialogLayout.setVisibility(View.GONE);
-
+                transmitToActivity("dismissed");
             }
 
             if (mYesActions[dialogPromptBranch][dialogPromptLevel].contains("nextLevel") || mYesActions[dialogPromptBranch][dialogPromptLevel].contains("branch")){
@@ -182,19 +207,19 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
     }
 
     private void updateDialogText(int dialogPromptBranch, int dialogPromptLevel){
-
         dialogTextView.setText(mDialogTexts[dialogPromptBranch][dialogPromptLevel]);
-        //TODO make a button text array for yes and no buttons
-        dialogYesButton.setText(getString(R.string.ok_sure));
-        dialogNoButton.setText(getString(R.string.no_thanks));
-
+        if (mCustomButtonTexts){
+            dialogYesButton.setText(mYesTexts[dialogPromptBranch][dialogPromptLevel]);
+            dialogNoButton.setText(mNoTexts[dialogPromptBranch][dialogPromptLevel]);
+        }
     }
 
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onPurchaseWanted(String purchase) {
+    public void transmitToActivity(String string) {
+        Log.d(TAG, string);
         if (mListener != null) {
-            mListener.onFragmentInteraction(purchase);
+            mListener.onFragmentInteraction(string);
         }
     }
 
@@ -212,7 +237,7 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
- //       mListener = null;
+        mListener = null;
     }
 
     /**

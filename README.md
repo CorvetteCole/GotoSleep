@@ -37,7 +37,9 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 Boring, I know, but it does need to be done because this app doesn't really follow best practices well.
 - Refactor all files to follow the principles outlined by the Android Architecture Components (see here: https://developer.android.com/topic/libraries/architecture/)
 
-See the branch NativeDialogPrompt file for an example of how I am refactoring the app. I'm going to make it very readable and easy to contribute and maintain
+See the NativeDialogPrompt file for an example of how I am refactoring the app. I'm going to make it very readable and easy to contribute and maintain. Additionally, code refactoring is being worked on in the "code-refactor" branch before being pushed to master.
+
+- Convert notifications to using OneTimeWorkRequests (they are apparently way more reliable than alarms)
 
 - Create localized screenshots for supported languages in play store listing (partially done)
 

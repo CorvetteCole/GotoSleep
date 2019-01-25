@@ -138,41 +138,37 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             lastNotification = System.currentTimeMillis();
         }
 
-        if (sendOneNotification && currentNotification == 1){
-            showNotification(context, getNotificationTitle(), getNotificationContent(context));
-            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
-        } else {
-            if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) { //if any of these are not met, code will fall back to normal notifications
-                //smart notification code block
-                if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
-                    showNotification(context, getNotificationTitle(), getNotificationContent(context));
-                    settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
-                    settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
-                    setNextNotification(context);
-                } else {
-                    settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-                    if (autoDND) {
-                        enableDoNotDisturb(context);
-                    }
-                    cancelNextNotification(context);
-                    setNextDayNotification(context, bedtime, TAG);
-                }
+        if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) { //if any of these are not met, code will fall back to normal notifications
+            //smart notification code block
+            if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
+                showNotification(context, getNotificationTitle(), getNotificationContent(context));
+                settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
+                setNextNotification(context);
+            } else if (sendOneNotification && currentNotification == 1){
+                showNotification(context, getNotificationTitle(), getNotificationContent(context));
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
             } else {
-                //normal notification code block
-                if (!sendOneNotification) {
-                    showNotification(context, getNotificationTitle(), getNotificationContent(context));
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+                if (autoDND) {
+                    enableDoNotDisturb(context);
                 }
-                if (currentNotification < numNotifications) {
-                    setNextNotification(context);
-                    settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
-                } else if (currentNotification == numNotifications) {
-                    settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-                    if (autoDND) {
-                        enableDoNotDisturb(context);
-                    }
-                    cancelNextNotification(context);
-                    setNextDayNotification(context, bedtime, TAG);
+                cancelNextNotification(context);
+                setNextDayNotification(context, bedtime, TAG);
+            }
+        } else {
+            //normal notification code block
+            showNotification(context, getNotificationTitle(), getNotificationContent(context));
+            if (currentNotification < numNotifications) {
+                setNextNotification(context);
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
+            } else if (currentNotification == numNotifications) {
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
+                if (autoDND) {
+                    enableDoNotDisturb(context);
                 }
+                cancelNextNotification(context);
+                setNextDayNotification(context, bedtime, TAG);
             }
         }
     }

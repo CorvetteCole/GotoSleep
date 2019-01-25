@@ -49,6 +49,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
@@ -479,6 +480,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
         } else {
            startCustomNotificationsScreen();
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.categoryCustomNotificationsTitle));
         }
     }
 
@@ -504,6 +506,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
     }
 
     private void startCustomNotificationsScreen(){
+
 
         final Preference notification1 = this.findPreference(NOTIFICATION_1_KEY);
         final Preference notification2 = this.findPreference(NOTIFICATION_2_KEY);
@@ -607,6 +610,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
         Log.d("settings", "onResume called!");
         //COMPILE INSTRUCTIONS: comment out the following line
         bp.loadOwnedPurchasesFromGoogle();
+
+        if (rootKey == null){
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.settings));
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){
                 sharedPreferences.edit().putBoolean(DND_KEY, false).apply();

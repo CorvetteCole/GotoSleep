@@ -116,8 +116,7 @@
             android:key="pref_customNotifications_category"
             android:title="@string/categoryCustomNotificationsTitle"
             android:summary="@string/categoryCustomNotificationsSummary">
-            <PreferenceCategory
-                android:title="@string/categoryCustomNotificationsTitle">
+
             <EditTextPreference
                 android:inputType="text"
                 android:key="pref_notification1"
@@ -148,7 +147,7 @@
                 android:title=" "
                 android:defaultValue="@string/notification5"
                 android:summary="@string/notification5"/>
-            </PreferenceCategory>
+
         </PreferenceScreen>
         <SwitchPreference
             android:defaultValue="false"

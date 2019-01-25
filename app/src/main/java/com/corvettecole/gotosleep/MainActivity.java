@@ -72,26 +72,32 @@ import java.util.Locale;
 import java.util.Objects;
 
 import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
-import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
+import static com.corvettecole.gotosleep.utilities.Constants.ADS_ENABLED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ADVANCED_PURCHASED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.APP_LAUNCHED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.BACK_INTERVAL;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.BUTTON_HIDE_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.CURRENT_NOTIFICATION_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DND_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.LOCALIZATION_PROMPT_SHOWN_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_AMOUNT_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_DELAY_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.PURCHASE_PROMPT_SHOWN_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.RATING_PROMPT_SHOWN_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.supportedLanguages;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.createNotificationChannel;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotifications;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler, NativeDialogPrompt.OnFragmentInteractionListener {
 
-    static final String BEDTIME_CHANNEL_ID = "bedtimeReminders";
-    private static final int BACK_INTERVAL = 2000;
-    private static final String[] supportedLanguages = {"en", "pl", "es"};
+
     private long backPressed;
     private Button settingsButton;
     private Button aboutButton;
@@ -111,13 +117,12 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private boolean isFirstStart;
     private boolean isSecondStart;
     private boolean adsEnabled;
-    static int bedtimePastTrigger = 8;
-    static boolean buttonHide = false;
+
     private final String TAG = "MainActivity";
     private boolean notificationsEnabled;
 
-    static String[] notifications = new String[5];
-    private static int currentNotification;
+    private String[] notifications = new String[5];
+    private int currentNotification;
     private int numNotifications;
     private int notificationDelay;
 
@@ -136,12 +141,11 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     private boolean isRequestingFeedback = false;
     private boolean isRequestingRating = false;
 
-    final static String APP_LAUNCHED_KEY = "numLaunched";
+
     private int appLaunchedPortrait;
 
-    final static String RATING_PROMPT_SHOWN_KEY = "rate_shown";
-    final static String PURCHASE_PROMPT_SHOWN_KEY = "purchase_prompt_shown";
-    final static String LOCALIZATION_PROMPT_SHOWN_KEY = "localization_prompt_shown";
+    static int bedtimePastTrigger = 8;
+    static boolean buttonHide = false;
 
     private boolean ratingPromptShown;
     private boolean localizationPromptShown;
@@ -155,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private boolean sleepModeEnabled = false;
 
-    static boolean editBedtimeClicked = false;
+    private boolean editBedtimeClicked = false;
 
     private boolean egg = false;
 
@@ -471,20 +475,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
             //moon.setColorFilter(getResources().getColor(R.color.moonPrimary));
         }
         egg = temp;
-    }
-
-    static void cancelNextNotification(Context context){
-        Intent firstNotification = new Intent(context, BedtimeNotificationReceiver.class);
-        PendingIntent firstPendingIntent = PendingIntent.getBroadcast(context,
-                FIRST_NOTIFICATION_ALARM_REQUEST_CODE, firstNotification, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent nextNotification = new Intent(context, BedtimeNotificationReceiver.class);
-        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context,
-                NEXT_NOTIFICATION_ALARM_REQUEST_CODE, nextNotification, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.cancel(firstPendingIntent);
-        am.cancel(nextPendingIntent);
     }
 
     private void setEgg(){
@@ -810,35 +800,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         return mailto;
     }
 
-    static void setNotifications(boolean nextDay, boolean notificationsEnabled, int[] bedtime, int notificationDelay, int numNotifications, Context context) {
-        if (notificationsEnabled) {
-            Calendar bedtimeCalendar = getBedtimeCal(bedtime);
 
-            if (nextDay){
-                bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
-            } else if (bedtimeCalendar.getTimeInMillis() < System.currentTimeMillis()){
-                bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
-            }
-
-            int errorMargin = 30;
-            if (currentNotification != 1){
-                if (abs(System.currentTimeMillis() - bedtimeCalendar.getTimeInMillis()) > ((notificationDelay * numNotifications + errorMargin) * 60000 )){
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-                    currentNotification = 1;
-                }
-            }
-
-            Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
-            } else {
-                am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
-            }
-        }
-    }
 
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -879,42 +841,9 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
 
 
-    static int[] parseBedtime(String bedtime){
-        int bedtimeHour = Integer.parseInt(bedtime.substring(0, bedtime.indexOf(":")));
-        int bedtimeMin = Integer.parseInt(bedtime.substring(bedtime.indexOf(":") + 1, bedtime.length()));
-        return new int[]{bedtimeHour, bedtimeMin};
-    }
 
-    static Calendar getBedtimeCal (int[] bedtime){
-        String TAG = "getBedtimeCal";
-        Log.d(TAG, "bedtime[0], bedtime[1] " + bedtime[0] + "," + bedtime[1]);
-        Calendar calendar = Calendar.getInstance();
-        //calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, bedtime[0]);
-        calendar.set(Calendar.MINUTE, bedtime[1]);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar;
-    }
 
-    static void createNotificationChannel(Context context) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = context.getString(R.string.channel_name);
-            String description = context.getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(BEDTIME_CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            channel.setBypassDnd(true);
-            channel.enableLights(true);
-            //channel.enableVibration(true);
-            channel.setLightColor(Color.BLUE);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
+
 
     private void enableDisableAds(){
         //COMPILE INSTRUCTIONS: comment out the following code block

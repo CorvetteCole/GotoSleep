@@ -39,7 +39,7 @@ Boring, I know, but it does need to be done because this app doesn't really foll
 
 See the NativeDialogPrompt file for an example of how I am refactoring the app. I'm going to make it very readable and easy to contribute and maintain. Additionally, code refactoring is being worked on in the "code-refactor" branch before being pushed to master.
 
-- Convert notifications to using OneTimeWorkRequests (they are apparently way more reliable than alarms)
+- Convert notifications to using OneTimeWorkRequests and PeriodicWorkRequests (they are apparently way more reliable than alarms)
 
 - Create localized screenshots for supported languages in play store listing (partially done)
 

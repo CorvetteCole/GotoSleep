@@ -43,7 +43,7 @@
     <string name="eggDisable5">nienawidzisz zabawy</string>
     <string name="eggDisable6">nie bądź nudny</string>
     <string name="eggDisable7">dlaczego jesteś taki?</string>
-    <string name="eggDisable8">wow</string>
+    <string name="eggDisable8">Wow</string>
     <string name="eggDisable9">jajko wyłączone</string>
     <string name="aboutGitHub">Odwiedź GitHub</string>
     <string name="aboutRate">Oceń aplikację</string>
@@ -137,7 +137,7 @@
     <string name="gdprSummary">Wyczyść swoje preferencje dotyczące personalizacji reklam</string>
     <string name="smartNotificationsTitle">Inteligentne powiadomienia</string>
     <string name="smartNotificationsSummary">Wysyłaj powiadomienia, aż przestaniesz korzystać z telefonu</string>
-    <string name="activityMarginTitle">Inactivity Timer</string>
+    <string name="activityMarginTitle">Timer braku aktywności</string>
     <string name="activityMarginSummary">Użytkownik musi być nieaktywny przez 5 minut, aby być uznanym za nieaktywnego</string>
     <string name="dndDelayTitle">Automatyczny timer Nie przeszkadzać</string>
     <string name="dndDelaySummary">Funkcja Nie Przeszkadzać zostanie aktywowana 2 minuty po wysłaniu ostatniego powiadomienia</string>
@@ -151,6 +151,6 @@
     <string name="settingsNotificationChannelTitle">Dodatkowe ustawienia powiadomień</string>
     <string name="minNotificationsTitle">Zawsze wysyłaj powiadomienie</string>
     <string name="minNotificationsSummary">Zawsze wysyłaj co najmniej jedno powiadomienie, niezależnie od aktywności</string>
-    <string name="translation_request">It looks like we don\'t support your language. Would you like to help translate the app?</string>
-    <string name="purchase_dialog_prompt">Help support development by purchasing the advanced options</string>
+    <string name="translation_request">Wygląda na to, że nie wspierany twojego języka. Chciałbyś pomóc nam przetłumaczyć aplikację?</string>
+    <string name="purchase_dialog_prompt">Wspomóż rozwój apki poprzez zakup rozszerzonych opcji</string>
 </resources>

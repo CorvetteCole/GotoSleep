@@ -1,11 +1,16 @@
 # GotoSleep
 I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. Ironically, programming the app that was meant to help me not stay up too late kept me up more times than it helped me sleep but I am extremely satisfied with the end product. There are definitely things that need improvement (please don't look at SettingsFragment, it is a nightmare. That is the next thing on my to-do list for next release), but overall it turned out very nice. I encourage you to look at the source code of this app and see if you can improve anything. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project.
 
+[<img src="https://f-droid.org/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.corvettecole.gotosleep/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep)
+
 If you do contribute to or help translate this app, email me at corvettecole@gmail.com with proof and I will give you a promo code to unlock advanced options in the app for free.
 
 Help translate the app: https://crowdin.com/project/go-to-sleep
-
-You can download this project on the Google Play Store: https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep
 
 Visit my website: https://corvettecole.com
 

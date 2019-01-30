@@ -10,7 +10,7 @@
     <string name="channel_description">Nukkumaanmenoaika ilmoitukset muistuttavat sinua nukkumaanmenosta.</string>
     <string name="notification1">Aika mennä nukkumaan</string>
     <string name="notification2">Miksi olet vielä hereillä?</string>
-    <string name="notification3">Vieläkö käytät puhelintasi?</string>
+    <string name="notification3">Oletko tosissasi vielä puhelimellasi?</string>
     <string name="notification4">Sinun pitäisi olla nukkumassa</string>
     <string name="notification5">Tulet katumaan tätä</string>
     <string name="sleep_message">miksi et ole nukkumassa?</string>
@@ -151,6 +151,6 @@
     <string name="settingsNotificationChannelTitle">Lisäilmoitusasetukset</string>
     <string name="minNotificationsTitle">Näytä aina ilmoitus</string>
     <string name="minNotificationsSummary">Näytä aina vähintään yksi ilmoitus, aktiivisuudesta riippumatta</string>
-    <string name="translation_request">Näyttää siltä ettemme tue kieltäsi. Haluatko auttaa sovelluksen kääntämisessä?</string>
+    <string name="translation_request">Näyttää siltä ettemme tue kieltäsi. Haluaisitko auttaa sovelluksen kääntämisessä?</string>
     <string name="purchase_dialog_prompt">Tue sovelluksen kehitystä ostamalla lisäominaisuuksia</string>
 </resources>

@@ -920,6 +920,7 @@ public class MainActivity extends AppCompatActivity implements NativeDialogPromp
     @Override
     public void onFragmentInteraction(String string) {
         if (string.equalsIgnoreCase("advanced")){
+            // normally an action would be performed in the Play Store version.
         } else if (string.equalsIgnoreCase("dismissed")){
             FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
             transaction.remove(nativeDialogPrompt);

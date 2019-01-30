@@ -100,7 +100,7 @@
     <string name="settingsAutoDnDSummaryFunky">Automatycznie włącz funkcje Nie Przeszkadzać %s minuty po wysłaniu ostatniego przypomnienia</string>
     <string name="settingsDelayDnDSummaryPlural">Funkcja Nie Przeszkadzać zostanie aktywowana %s minut po wysłaniu ostatniego powiadomienia</string>
     <string name="settingsAutoDnDSummaryPlural">Automatycznie włącz funkcje Nie Przeszkadzać %s minut po wysłaniu ostatniego przypomnienia</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) albo wyższy jest wymagane</string>
+    <string name="settingsAutoDnDLowAndroidVersionMessage">Android 6.0 (Marshmallow) albo wyższy jest wymagane</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 nie jest kompatybilny (LG nie implementowało poprawnie interfejsu API)</string>
     <string name="settingsNotificationDelaySummary">%s minutowe opóźnienie między powiadomieniami o porze snu</string>
     <string name="settingsNotificationAmountSingular">1 przypomnienie o porze snu zostanie wysłane</string>

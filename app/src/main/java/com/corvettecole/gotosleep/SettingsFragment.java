@@ -348,7 +348,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat implements Bi
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
-                this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnDLowAndroidVersonMessage);
+                this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnDLowAndroidVersionMessage);
             } else if (android.os.Build.MANUFACTURER.equalsIgnoreCase("lg") && android.os.Build.MODEL.equalsIgnoreCase("g4")){
                 this.findPreference(DND_KEY).setEnabled(false);
                 this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnD_LG_G4_message);

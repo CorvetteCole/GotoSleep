@@ -100,7 +100,7 @@
     <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">Bitte nicht stören wird %s Minuten nach der letzten Benachrichtigung aktiviert</string>
     <string name="settingsAutoDnDSummaryPlural">Aktviere Bitte nicht stören automatisch %s Minuten nach der Schlafenszeit Erinnerung</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) und höher wird benötigt</string>
+    <string name="settingsAutoDnDLowAndroidVersionMessage">Android 6.0 (Marshmallow) und höher wird benötigt</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 ist nicht kompatibel (LG hat die API nicht richtig implementiert)</string>
     <string name="settingsNotificationDelaySummary">%s minütiges Schlaf Benachrichtigungsintervall</string>
     <string name="settingsNotificationAmountSingular">Eine Schlaferinnerungen wird gesendet</string>

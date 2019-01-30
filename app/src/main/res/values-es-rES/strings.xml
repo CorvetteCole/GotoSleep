@@ -100,7 +100,7 @@
     <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">No molestar será activado %s minutos después del último recordatorio de la hora de acostarse enviado</string>
     <string name="settingsAutoDnDSummaryPlural">Activar automáticamente No molestar %s minutos después del último recordatorio de la hora de acostarse enviado</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) o versiones posteriores requeridas</string>
+    <string name="settingsAutoDnDLowAndroidVersionMessage">Android 6.0 (Marshmallow) o versiones posteriores requeridas</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 no compatible (LG no implementó el API correctamente)</string>
     <string name="settingsNotificationDelaySummary">%s minuto de retraso entre notificaciones de sueño</string>
     <string name="settingsNotificationAmountSingular">1 notificación de sueño será enviada</string>

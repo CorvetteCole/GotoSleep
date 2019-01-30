@@ -100,7 +100,7 @@
     <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">Älä häiritse -tila otetaan käyttöön %s minuuttia viimeisen nukkumaanmenoaika ilmoituksen jälkeen</string>
     <string name="settingsAutoDnDSummaryPlural">Ota Älä häiritse -tila käyttöön automaattisesti %s minuuttia viimeisen nukkumaanmenoaika ilmoituksen jälkeen</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) tai uudempi vaaditaan</string>
+    <string name="settingsAutoDnDLowAndroidVersionMessage">Android 6.0 (Marshmallow) tai uudempi vaaditaan</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 ei ole yhteensopiva (LG ei lisännyt API tukea oikein)</string>
     <string name="settingsNotificationDelaySummary">%s minuutin tauko ilmoitusten välissä</string>
     <string name="settingsNotificationAmountSingular">1 muistutus näytetään</string>

@@ -99,8 +99,8 @@
     <!-- Use for 2 minutes, 3 minutes, 4 minutes  -->
     <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">Non disturbare verrà attivato %s minuti dopo l\'ultima notifica inviata</string>
-    <string name="settingsAutoDnDSummaryPlural">Attiva automaticamente Non disturbare %s minuti dopo l\'invio dell\'ultimo avviso dell\'ora di andare a dormire%s</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">È richiesto Android Marshmallow (6.0) o più recente</string>
+    <string name="settingsAutoDnDSummaryPlural">Attiva automaticamente Non disturbare %s minuti dopo l\'invio dell\'ultimo avviso dell\'ora di andare a dormire</string>
+    <string name="settingsAutoDnDLowAndroidVersionMessage">È richiesto Android Marshmallow (6.0) o più recente</string>
     <string name="settingsAutoDnD_LG_G4_message">L\'LG G4 non è compatibile (LG non ha implementato l\'API correttamente)</string>
     <string name="settingsNotificationDelaySummary">Intervallo di %s minuti tra notifiche di andare a dormire</string>
     <string name="settingsNotificationAmountSingular">1 promemoria di andare a dormire verrà inviato</string>

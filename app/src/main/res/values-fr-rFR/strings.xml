@@ -100,7 +100,7 @@
     <string name="settingsAutoDnDSummaryFunky">%s</string>
     <string name="settingsDelayDnDSummaryPlural">Le mode \"ne pas déranger\" sera activé %s minutes après que la dernière notification soit envoyée</string>
     <string name="settingsAutoDnDSummaryPlural">Activer automatiquement le mode \"ne pas déranger\" %s minutes après l\'envoi du dernier rappel</string>
-    <string name="settingsAutoDnDLowAndroidVersonMessage">Android 6.0 (Marshmallow) et supérieur requis</string>
+    <string name="settingsAutoDnDLowAndroidVersionMessage">Android 6.0 (Marshmallow) et supérieur requis</string>
     <string name="settingsAutoDnD_LG_G4_message">LG G4 n’est pas compatible (LG n’a pas implémenté correctement l’API)</string>
     <string name="settingsNotificationDelaySummary">%s minutes d\'intervalle entre les notifications</string>
     <string name="settingsNotificationAmountSingular">1 rappel d\'aller se coucher sera envoyé</string>

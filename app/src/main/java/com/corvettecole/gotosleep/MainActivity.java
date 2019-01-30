@@ -84,7 +84,7 @@ import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotif
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NativeDialogPrompt.OnFragmentInteractionListener {
 
 
     private long backPressed;
@@ -920,7 +920,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onFragmentInteraction(String string) {
         if (string.equalsIgnoreCase("advanced")){
-            bp.purchase(MainActivity.this, "go_to_sleep_advanced");
         } else if (string.equalsIgnoreCase("dismissed")){
             FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
             transaction.remove(nativeDialogPrompt);

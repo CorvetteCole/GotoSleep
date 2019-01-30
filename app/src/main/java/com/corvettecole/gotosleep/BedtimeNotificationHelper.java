@@ -31,13 +31,13 @@ import android.util.Log;
 import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
-import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
-import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
-import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.CURRENT_NOTIFICATION_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ONE_DAY_MILLIS;
 
 public class BedtimeNotificationHelper extends BroadcastReceiver {
 

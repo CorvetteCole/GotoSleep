@@ -30,12 +30,10 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NOTIFICATION_REQUEST_CODE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.setNextDayNotification;
-import static com.corvettecole.gotosleep.MainActivity.cancelNextNotification;
-import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
-import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
-import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_REQUEST_CODE;
 
 public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
 

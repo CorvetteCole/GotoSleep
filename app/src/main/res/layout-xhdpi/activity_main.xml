@@ -202,109 +202,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/rate_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/native_dialog_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:animateLayoutChanges="true"
-        android:background="@drawable/feedback_outline"
-        android:elevation="8dp"
-        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/settingsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enableSleepModeButton">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/rateNoButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
 
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/product_sans_regular"
-            android:includeFontPadding="true"
-            android:text="@string/no"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/accentPrimaryDark"
-            android:textSize="20sp"
-            app:cornerRadius="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineRate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rateText"
-            app:layout_constraintVertical_bias="0.0"
-            app:strokeColor="@color/colorPrimaryLight"
-            app:strokeWidth="1dp"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/rateYesButton"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/product_sans_regular"
-            android:includeFontPadding="true"
-            android:text="@string/yes"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/accentPrimaryDark"
-            android:textSize="20sp"
-            app:cornerRadius="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guidelineRate"
-            app:layout_constraintTop_toBottomOf="@+id/rateText"
-            app:layout_constraintVertical_bias="0.0"
-            app:strokeColor="@color/colorPrimaryLight"
-            app:strokeWidth="1dp"/>
-
-        <TextView
-            android:id="@+id/rateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="@font/product_sans_regular"
-            android:maxLines="1"
-            android:shadowColor="@color/colorPrimaryLight"
-            android:shadowDx="2"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:text="@string/rateDialogTitle"
-            android:textAlignment="center"
-            android:textColor="@color/accentPrimary"
-            android:textSize="20sp"
-            app:autoSizeMaxTextSize="30sp"
-            app:autoSizeMinTextSize="16sp"
-            app:autoSizeStepGranularity="2sp"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineRate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-
-            app:layout_constraintGuide_percent=".5"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

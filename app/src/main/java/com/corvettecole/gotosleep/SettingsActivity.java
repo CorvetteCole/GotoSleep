@@ -19,6 +19,7 @@
 package com.corvettecole.gotosleep;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.takisoft.preferencex.PreferenceFragmentCompat;
@@ -45,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
 
     @Override
     public boolean onPreferenceStartScreen(androidx.preference.PreferenceFragmentCompat caller, PreferenceScreen pref) {
+        final String TAG = "onPreferenceStartScreen";
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
         args.putString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT, pref.getKey());
@@ -56,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         ft.addToBackStack(pref.getKey());
         ft.commitAllowingStateLoss();
 
+        Log.d(TAG, pref + "");
         return true;
     }
 
@@ -69,4 +72,10 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+    }
+
 }

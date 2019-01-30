@@ -41,39 +41,37 @@ import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
-import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
-import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
-import static com.corvettecole.gotosleep.MainActivity.setNotifications;
 import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
+import static com.corvettecole.gotosleep.utilities.Constants.ADDITIONAL_NOTIFICATION_SETTINGS_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ADS_ENABLED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ADVANCED_PURCHASED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_CHANNEL_ID;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.CUSTOM_NOTIFICATIONS_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DND_DELAY_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DND_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.GDPR_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.INACTIVITY_TIMER_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_1_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_2_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_3_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_4_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_5_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_SOUND_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_AMOUNT_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_DELAY_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.SMART_NOTIFICATIONS_KEY;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotifications;
 
 
 public class SettingsFragment extends BasePreferenceFragmentCompat {
-
-    final static String NOTIF_DELAY_KEY = "pref_notificationDelay";
-    final static String NOTIF_AMOUNT_KEY = "pref_numNotifications";
-    final static String NOTIF_ENABLE_KEY = "pref_notificationsEnabled";
-    final static String BEDTIME_KEY = "pref_bedtime";
-    final static String DND_KEY = "pref_autoDoNotDisturb";
-    final static String BUTTON_HIDE_KEY = "pref_buttonHide";
-    final static String NOTIFICATION_1_KEY = "pref_notification1";
-    final static String NOTIFICATION_2_KEY = "pref_notification2";
-    final static String NOTIFICATION_3_KEY = "pref_notification3";
-    final static String NOTIFICATION_4_KEY = "pref_notification4";
-    final static String NOTIFICATION_5_KEY = "pref_notification5";
-    final static String CUSTOM_NOTIFICATIONS_KEY = "pref_customNotifications_category";
-    final static String SMART_NOTIFICATIONS_KEY = "pref_smartNotifications";
-    final static String ADS_ENABLED_KEY = "pref_adsEnabled";
-    final static String ADVANCED_PURCHASED_KEY = "advanced_options_purchased";
-    final static String INACTIVITY_TIMER_KEY = "pref_activityMargin";
-    final static String GDPR_KEY = "pref_gdpr";
-    final static String DND_DELAY_KEY = "pref_dndDelay";
-    final static String NOTIFICATION_SOUND_KEY = "pref_notificationSound";
-    final static String ADDITIONAL_NOTIFICATION_SETTINGS_KEY = "pref_notificationChannel";
-    final static String SEND_ONE_NOTIFICATION = "pref_sendOneNotification";
 
     private boolean advancedOptionsPurchased;
     private boolean smartNotificationsEnabled;
@@ -304,7 +302,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 this.findPreference(DND_KEY).setEnabled(false);
-                this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnDLowAndroidVersonMessage);
+                this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnDLowAndroidVersionMessage);
             } else if (android.os.Build.MANUFACTURER.equalsIgnoreCase("lg") && android.os.Build.MODEL.equalsIgnoreCase("g4")){
                 this.findPreference(DND_KEY).setEnabled(false);
                 this.findPreference(DND_KEY).setSummary(R.string.settingsAutoDnD_LG_G4_message);
@@ -433,6 +431,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
 
         } else {
            startCustomNotificationsScreen();
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.categoryCustomNotificationsTitle));
         }
     }
 
@@ -458,6 +457,7 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
     }
 
     private void startCustomNotificationsScreen(){
+
 
         final Preference notification1 = this.findPreference(NOTIFICATION_1_KEY);
         final Preference notification2 = this.findPreference(NOTIFICATION_2_KEY);
@@ -559,6 +559,10 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
     @Override
     public void onResume(){
         Log.d("settings", "onResume called!");
+
+        if (rootKey == null){
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(getString(R.string.settings));
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (sharedPreferences.getBoolean(DND_KEY, false) && !notificationManager.isNotificationPolicyAccessGranted()){

@@ -20,7 +20,6 @@ package com.corvettecole.gotosleep;
 
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
-import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -39,13 +38,13 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,31 +54,39 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
 import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.CURRENT_NOTIFICATION_KEY;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
-import static com.corvettecole.gotosleep.BedtimeNotificationReceiver.ONE_DAY_MILLIS;
-import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.BUTTON_HIDE_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
+import static com.corvettecole.gotosleep.utilities.Constants.ADS_ENABLED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ADVANCED_PURCHASED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.APP_LAUNCHED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.BACK_INTERVAL;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.BUTTON_HIDE_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.CURRENT_NOTIFICATION_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DND_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.LOCALIZATION_PROMPT_SHOWN_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_AMOUNT_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_DELAY_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_ENABLE_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.PURCHASE_PROMPT_SHOWN_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.RATING_PROMPT_SHOWN_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.supportedLanguages;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.createNotificationChannel;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotifications;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
 public class MainActivity extends AppCompatActivity {
 
-    static final String BEDTIME_CHANNEL_ID = "bedtimeReminders";
-    private static final int BACK_INTERVAL = 2000;
+
     private long backPressed;
     private Button settingsButton;
     private Button aboutButton;
@@ -99,13 +106,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean isFirstStart;
     private boolean isSecondStart;
     private boolean adsEnabled;
-    static int bedtimePastTrigger = 8;
-    static boolean buttonHide = false;
+
     private final String TAG = "MainActivity";
     private boolean notificationsEnabled;
 
-    static String[] notifications = new String[5];
-    private static int currentNotification;
+    private String[] notifications = new String[5];
+    private int currentNotification;
     private int numNotifications;
     private int notificationDelay;
 
@@ -117,18 +123,20 @@ public class MainActivity extends AppCompatActivity {
     private boolean adsInitialized = false;
     private boolean isAutoDoNotDisturbEnabled;
 
-    private Button rateYesButton;
-    private Button rateNoButton;
-    private TextView rateTextView;
-    private ConstraintLayout rateLayout;
+    private FrameLayout nativeDialogFrame;
 
     private boolean isRequestingFeedback = false;
     private boolean isRequestingRating = false;
 
-    final static String APP_LAUNCHED_KEY = "numLaunched";
-    private int appLaunched;
-    final static String RATING_PROMPT_SHOWN_KEY = "rateShown";
+
+    private int appLaunchedPortrait;
+
+    static int bedtimePastTrigger = 8;
+    static boolean buttonHide = false;
+
     private boolean ratingPromptShown;
+    private boolean localizationPromptShown;
+    private boolean purchasePromptShown;
 
 
     private SharedPreferences getPrefs;
@@ -137,13 +145,15 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean sleepModeEnabled = false;
 
-    static boolean editBedtimeClicked = false;
+    private boolean editBedtimeClicked = false;
 
     private boolean egg = false;
 
     private int colorFadeDuration = 6000;
 
     private ArrayList<ValueAnimator> colorAnimations = new ArrayList<>();
+
+    private NativeDialogPrompt nativeDialogPrompt;
 
     /*private UsageStatsManager usageStatsManager;
     private Button usageButton;
@@ -210,8 +220,8 @@ public class MainActivity extends AppCompatActivity {
         if (!adsInitialized || shouldUpdateConsent) {
             enableDisableAds();
         }
-        if (ratingPromptShown && rateLayout.getVisibility() == View.VISIBLE) {
-            rateLayout.setVisibility(View.GONE);
+        if ((ratingPromptShown || purchasePromptShown || localizationPromptShown) && nativeDialogFrame.getVisibility() == View.VISIBLE) {
+            //#TODO nativeDialogFrame.setVisibility(View.GONE);
         }
         Log.d(TAG, "onResume finished " + System.currentTimeMillis());
 
@@ -254,10 +264,7 @@ public class MainActivity extends AppCompatActivity {
             //this is needed to stop weird back button stuff
             finish();
         } else {
-
-
-
-
+            //runs when the intro slides launch mainActivity again
             setContentView(R.layout.activity_main);
             settingsButton = findViewById(R.id.settingsButton);
             editBedtimeButton = findViewById(R.id.bedtimeSetButton);
@@ -268,10 +275,8 @@ public class MainActivity extends AppCompatActivity {
             sleepMessage = findViewById(R.id.sleepMessage);
             contentMain = findViewById(R.id.content_main_layout);
             enableSleepmodeButton = findViewById(R.id.enableSleepModeButton);
-            rateLayout = findViewById(R.id.rate_layout);
-            rateNoButton = findViewById(R.id.rateNoButton);
-            rateYesButton = findViewById(R.id.rateYesButton);
-            rateTextView = findViewById(R.id.rateText);
+            nativeDialogFrame = findViewById(R.id.native_dialog_frame);
+
 
             for (int i = 0; i < 10; i++){
                 int colorFrom = getResources().getColor(R.color.moonPrimary);
@@ -284,30 +289,9 @@ public class MainActivity extends AppCompatActivity {
             createNotificationChannel(getBaseContext());
             loadPreferences();
 
+            initializeDialogs();
+            enableDisableAds();
 
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                //#TODO add in additional parameter requiring an amount of time to have passed
-                if (appLaunched < 8 && !ratingPromptShown) {
-                    rateLayout.setVisibility(View.GONE);
-                    Log.d(TAG, "appLaunched: " + appLaunched);
-                    getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunched + 1).apply();
-                    //initiateRatingDialogue(getPrefs); //debug
-                    enableDisableAds();
-                } else if (!ratingPromptShown) {
-                    Log.d(TAG, "initiating rating dialogue");
-                    initiateRatingDialogue();
-                } else {
-                    rateLayout.setVisibility(View.GONE);
-                    enableDisableAds();
-                    //initiateRatingDialogue(getPrefs);  //debug
-                }
-            }
-
-
-
-
-
-            //runs when the intro slides launch mainActivity again
             final Intent settings = new Intent(MainActivity.this, SettingsActivity.class);
             final Intent about = new Intent(MainActivity.this, AboutActivity.class);
 
@@ -348,8 +332,6 @@ public class MainActivity extends AppCompatActivity {
             aboutButton.setOnClickListener(view -> startActivity(about));
 
 
-
-
             contentMain.setOnClickListener(v -> {
                 if (settingsButton.getVisibility() == View.VISIBLE && buttonHide) {
                     settingsButton.setVisibility(View.INVISIBLE);
@@ -361,6 +343,38 @@ public class MainActivity extends AppCompatActivity {
             });
 
             Log.d(TAG, "onCreate finished " + System.currentTimeMillis());
+        }
+    }
+
+    private void initializeDialogs() {
+        final String TAG = "initializeDialogs";
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            appLaunchedPortrait++;
+            getPrefs.edit().putInt(APP_LAUNCHED_KEY, appLaunchedPortrait).apply();
+
+            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+            SharedPreferences.Editor e = getPrefs.edit();
+            NativeDialogPrompt nativeDialogPrompt;
+            // if statements to choose what kind of dialog to show
+            Log.d(TAG, Locale.getDefault().getLanguage());
+            if (!Arrays.asList(supportedLanguages).contains(Locale.getDefault().getLanguage()) && !localizationPromptShown){
+                nativeDialogPrompt = NativeDialogPrompt.newInstance(
+                        new String[][]{{"https://crowdin.com/project/go-to-sleep"}},
+                        new String[][]{{"dismiss"}},
+                        new String[][]{{getString(R.string.translation_request)}}
+                );
+                e.putBoolean(LOCALIZATION_PROMPT_SHOWN_KEY, true).apply();
+            } else {
+                nativeDialogFrame.setVisibility(View.GONE);
+                e.apply();
+                return;
+            }
+            this.nativeDialogPrompt = nativeDialogPrompt;
+            loadPreferences();
+            nativeDialogFrame.setVisibility(View.VISIBLE);
+            Log.d(TAG,"launching nativeDialogPrompt");
+            transaction.replace(R.id.native_dialog_frame, nativeDialogPrompt);
+            transaction.commit();
         }
     }
 
@@ -377,20 +391,6 @@ public class MainActivity extends AppCompatActivity {
             //moon.setColorFilter(getResources().getColor(R.color.moonPrimary));
         }
         egg = temp;
-    }
-
-    static void cancelNextNotification(Context context){
-        Intent firstNotification = new Intent(context, BedtimeNotificationReceiver.class);
-        PendingIntent firstPendingIntent = PendingIntent.getBroadcast(context,
-                FIRST_NOTIFICATION_ALARM_REQUEST_CODE, firstNotification, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Intent nextNotification = new Intent(context, BedtimeNotificationReceiver.class);
-        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context,
-                NEXT_NOTIFICATION_ALARM_REQUEST_CODE, nextNotification, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.cancel(firstPendingIntent);
-        am.cancel(nextPendingIntent);
     }
 
     private void setEgg(){
@@ -691,50 +691,6 @@ public class MainActivity extends AppCompatActivity {
         colorAnimation.start();
     }
 
-
-
-
-    private void initiateRatingDialogue(){
-        rateLayout.setVisibility(View.VISIBLE);
-        rateLayout.invalidate();
-        Log.d(TAG, "set rateLayout to visible");
-        //initial state, TextView displays "Are you enjoying Go to Sleep?"
-
-        ((ViewGroup) findViewById(R.id.rate_layout)).getLayoutTransition()
-                .enableTransitionType(LayoutTransition.CHANGING);
-
-        rateNoButton.setOnClickListener(v -> {
-            if (!isRequestingFeedback && !isRequestingRating) {
-                isRequestingFeedback = true;
-                rateTextView.setText(getString(R.string.request_feedback));
-                rateNoButton.setText(getString(R.string.no_thanks));
-                rateYesButton.setText(getString(R.string.ok_sure));
-            } else {
-                rateLayout.setVisibility(View.GONE);
-                Log.d(TAG, "ads will re-enable after onResume called");
-                adsInitialized = false;
-            }
-            getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
-        });
-
-        rateYesButton.setOnClickListener(v -> {
-            if (!isRequestingRating && !isRequestingFeedback){
-                isRequestingRating = true;
-                rateTextView.setText(getString(R.string.rating_request));
-                rateYesButton.setText(getString(R.string.ok_sure));
-                rateNoButton.setText(getString(R.string.no_thanks));
-            } else if (isRequestingFeedback){
-                sendFeedback();
-
-            } else {
-                sendToPlayStore();
-            }
-            getPrefs.edit().putBoolean(RATING_PROMPT_SHOWN_KEY, true).apply();
-        });
-
-
-    }
-
     private void sendToPlayStore(){
         final Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
         final Intent rateAppIntent = new Intent(Intent.ACTION_VIEW, uri);
@@ -742,6 +698,7 @@ public class MainActivity extends AppCompatActivity {
         if (getPackageManager().queryIntentActivities(rateAppIntent, 0).size() > 0)
         {
             startActivity(rateAppIntent);
+            rateAppIntent.toString();
         }
         else
         {
@@ -749,51 +706,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void sendFeedback(){
+    private String sendFeedback(){
         String subject = "Go to Sleep Feedback";
         String bodyText = getString(R.string.feedbackBodyText);
         String mailto = "mailto:corvettecole@gmail.com" +
                 "?subject=" + Uri.encode(subject) +
                 "&body=" + Uri.encode(bodyText);
 
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse(mailto));
-        try {
-            startActivity(emailIntent);
-        } catch (ActivityNotFoundException e) {
-            //TODO: Handle case where no email app is available
-        }
+        return mailto;
     }
 
-    static void setNotifications(boolean nextDay, boolean notificationsEnabled, int[] bedtime, int notificationDelay, int numNotifications, Context context) {
-        if (notificationsEnabled) {
-            Calendar bedtimeCalendar = getBedtimeCal(bedtime);
 
-            if (nextDay){
-                bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
-            } else if (bedtimeCalendar.getTimeInMillis() < System.currentTimeMillis()){
-                bedtimeCalendar.setTimeInMillis(bedtimeCalendar.getTimeInMillis() + ONE_DAY_MILLIS);
-            }
-
-            int errorMargin = 30;
-            if (currentNotification != 1){
-                if (abs(System.currentTimeMillis() - bedtimeCalendar.getTimeInMillis()) > ((notificationDelay * numNotifications + errorMargin) * 60000 )){
-                    PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
-                    currentNotification = 1;
-                }
-            }
-
-            Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
-            } else {
-                am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
-            }
-        }
-    }
 
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -821,8 +744,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        purchasePromptShown = settings.getBoolean(PURCHASE_PROMPT_SHOWN_KEY, false);
+        localizationPromptShown = settings.getBoolean(LOCALIZATION_PROMPT_SHOWN_KEY, false);
         ratingPromptShown = settings.getBoolean(RATING_PROMPT_SHOWN_KEY, false);
-        appLaunched = settings.getInt(APP_LAUNCHED_KEY, 0);
+        appLaunchedPortrait = settings.getInt(APP_LAUNCHED_KEY, 0);
         egg = settings.getBoolean(EGG_KEY, false);
 
         settings.edit().putBoolean(ADVANCED_PURCHASED_KEY, advancedOptionsPurchased).apply();
@@ -830,42 +755,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    static int[] parseBedtime(String bedtime){
-        int bedtimeHour = Integer.parseInt(bedtime.substring(0, bedtime.indexOf(":")));
-        int bedtimeMin = Integer.parseInt(bedtime.substring(bedtime.indexOf(":") + 1, bedtime.length()));
-        return new int[]{bedtimeHour, bedtimeMin};
-    }
 
-    static Calendar getBedtimeCal (int[] bedtime){
-        String TAG = "getBedtimeCal";
-        Log.d(TAG, "bedtime[0], bedtime[1] " + bedtime[0] + "," + bedtime[1]);
-        Calendar calendar = Calendar.getInstance();
-        //calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, bedtime[0]);
-        calendar.set(Calendar.MINUTE, bedtime[1]);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar;
-    }
 
-    static void createNotificationChannel(Context context) {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = context.getString(R.string.channel_name);
-            String description = context.getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(BEDTIME_CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            channel.setBypassDnd(true);
-            channel.enableLights(true);
-            //channel.enableVibration(true);
-            channel.setLightColor(Color.BLUE);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
+
 
     private void enableDisableAds(){
 
@@ -1022,6 +914,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(String string) {
+        if (string.equalsIgnoreCase("advanced")){
+            bp.purchase(MainActivity.this, "go_to_sleep_advanced");
+        } else if (string.equalsIgnoreCase("dismissed")){
+            FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+            transaction.remove(nativeDialogPrompt);
+            transaction.commit();
         }
     }
 }

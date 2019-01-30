@@ -1,11 +1,16 @@
 # GotoSleep
 I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. Ironically, programming the app that was meant to help me not stay up too late kept me up more times than it helped me sleep but I am extremely satisfied with the end product. There are definitely things that need improvement (please don't look at SettingsFragment, it is a nightmare. That is the next thing on my to-do list for next release), but overall it turned out very nice. I encourage you to look at the source code of this app and see if you can improve anything. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project.
 
+[<img src="https://f-droid.org/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.corvettecole.gotosleep/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep)
+
 If you do contribute to or help translate this app, email me at corvettecole@gmail.com with proof and I will give you a promo code to unlock advanced options in the app for free.
 
 Help translate the app: https://crowdin.com/project/go-to-sleep
-
-You can download this project on the Google Play Store: https://play.google.com/store/apps/details?id=com.corvettecole.gotosleep
 
 Visit my website: https://corvettecole.com
 
@@ -29,26 +34,27 @@ UPDATE: to simply compile and use the app without doing any of the below, switch
 For obvious reasons, I left out the secret keys used in admob and the google play billing library. This makes the compiling the app as-is impossible. To solve this problem, I have gone through and put simple comments instructing what to comment out/remove throughout the app to make it compile. To find all of these, just search the app files for "COMPILE INSTRUCTIONS". All of the comments start with that little blurb to make finding them easy.
 
 # Things to Investigate
-- Perhaps create branch of this repo that can be compiled from source without any special instructions and use it to submit the app to F-droid
-
 - Look in to developing an iOS version of the app. Light surveying has shown high demand for this app
 
 # Roadmap
 ## 1.2.+ (Quality of Life Updates):
 ### To Do
-- Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
+Boring, I know, but it does need to be done because this app doesn't really follow best practices well.
+- Refactor all files to follow the principles outlined by the Android Architecture Components (see here: https://developer.android.com/topic/libraries/architecture/)
 
-- Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
+See the NativeDialogPrompt file for an example of how I am refactoring the app. I'm going to make it very readable and easy to contribute and maintain. Additionally, code refactoring is being worked on in the "code-refactor" branch before being pushed to master.
 
-- Add icons to about screen
-
-- Remove hours countdown when it is 0 possibly
-
-- Add dialog like the rating dialog that appears after 10 days of use or so if the user hasn't purchased the advanced options. Gently suggest that the user can purchase the advanced options to help support development of the app
+- Convert notifications to using OneTimeWorkRequests and PeriodicWorkRequests (they are apparently way more reliable than alarms)
 
 - Create localized screenshots for supported languages in play store listing (partially done)
 
+- Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
+
 ### Done
+- Add prompt similar to ratings prompt if the user is using an unsupported language. Suggest that they can help contribute translations
+
+- Add dialog like the rating dialog that appears after 10 days of use or so if the user hasn't purchased the advanced options. Gently suggest that the user can purchase the advanced options to help support development of the app
+
 - Enable title bar (and the back button that goes with it) to the settings screen. Some users got confused here
 
 - Set auto do not disturb to false if do not disturb access is not granted, and do the same for smart notifications with usage access (they can sometimes be enabled by restoring data from the play store even if permission is not granted). There is protection to stop crashes from this but it isn't clear to the user
@@ -76,7 +82,11 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 ### Done
 
 ## Future Feature Suggestions:
-- Native translation contribution screen and central database to help along adoption of many languages without expensive translation services
+- Put this in somewhere... (https://www.reddit.com/r/Android/comments/9zvei4/i_just_released_my_opensource_app_to_help_you/eacdemo/)
+
+- Add icons to about screen
+
+- Remove hours countdown when it is 0 possibly
 
 - Add sleep tracking. Perhaps as a direct competitor to Sleep as Android
 
@@ -97,4 +107,6 @@ For obvious reasons, I left out the secret keys used in admob and the google pla
 - Refactor preferences code to reduce dependence on 3rd party libraries
 
 - Add background themeing (maybe)
+### Done
+- Native translation contribution screen and central database to help along adoption of many languages without expensive translation services
 

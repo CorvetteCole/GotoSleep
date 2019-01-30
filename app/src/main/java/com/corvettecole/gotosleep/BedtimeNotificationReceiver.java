@@ -43,37 +43,39 @@ import java.util.Locale;
 import androidx.core.app.NotificationCompat;
 
 import static android.content.Context.ALARM_SERVICE;
-import static com.corvettecole.gotosleep.MainActivity.BEDTIME_CHANNEL_ID;
-import static com.corvettecole.gotosleep.MainActivity.cancelNextNotification;
-import static com.corvettecole.gotosleep.MainActivity.createNotificationChannel;
-import static com.corvettecole.gotosleep.MainActivity.getBedtimeCal;
-import static com.corvettecole.gotosleep.MainActivity.notifications;
-import static com.corvettecole.gotosleep.MainActivity.parseBedtime;
-import static com.corvettecole.gotosleep.SettingsFragment.ADS_ENABLED_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.BEDTIME_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.DND_DELAY_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.DND_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.INACTIVITY_TIMER_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.SEND_ONE_NOTIFICATION;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIFICATION_SOUND_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_AMOUNT_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.NOTIF_DELAY_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.ADVANCED_PURCHASED_KEY;
-import static com.corvettecole.gotosleep.SettingsFragment.SMART_NOTIFICATIONS_KEY;
 import static com.corvettecole.gotosleep.SettingsFragment.isUsageAccessGranted;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
+import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
+import static com.corvettecole.gotosleep.utilities.Constants.ADS_ENABLED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ADVANCED_PURCHASED_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_CHANNEL_ID;
+import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.CURRENT_NOTIFICATION_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DND_DELAY_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DND_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.DO_NOT_DISTURB_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.DO_NOT_DISTURB_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.INACTIVITY_TIMER_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.LAST_NOTIFICATION_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.LAUNCH_APP_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_SOUND_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_AMOUNT_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIF_DELAY_KEY;
+import static com.corvettecole.gotosleep.utilities.Constants.ONE_DAY_MILLIS;
+import static com.corvettecole.gotosleep.utilities.Constants.ONE_HOUR_MILLIS;
+import static com.corvettecole.gotosleep.utilities.Constants.ONE_MINUTE_MILLIS;
+import static com.corvettecole.gotosleep.utilities.Constants.SEND_ONE_NOTIFICATION;
+import static com.corvettecole.gotosleep.utilities.Constants.SMART_NOTIFICATIONS_KEY;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.createNotificationChannel;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNextDayNotification;
 
 public class BedtimeNotificationReceiver extends BroadcastReceiver {
 
-    static final int FIRST_NOTIFICATION_ALARM_REQUEST_CODE = 1;
-    static final int NOTIFICATION_REQUEST_CODE = 2;
-    static final int DO_NOT_DISTURB_REQUEST_CODE = 3;
-    static final int DO_NOT_DISTURB_ALARM_REQUEST_CODE = 4;
-    static final int NEXT_NOTIFICATION_ALARM_REQUEST_CODE = 5;
-    static final int LAUNCH_APP_REQUEST_CODE = 6;
-    static final String LAST_NOTIFICATION_KEY = "lastNotificationTime";
-    static final long ONE_MINUTE_MILLIS = 60000;
-    static final long ONE_DAY_MILLIS = 86400000;
-    static final long ONE_HOUR_MILLIS = 3600000;
+
     private int DnD_delay = 2; //in minutes
 
     private Calendar bedtime;
@@ -87,13 +89,13 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
     private boolean userActive = true;
     private final String TAG = "bedtimeNotifReceiver";
     private int currentNotification;
-    static final String CURRENT_NOTIFICATION_KEY = "current_notification";
 
     private boolean shouldEnableAdvancedOptions = false;
     private boolean notificationSoundsEnabled = false;
     private boolean sendOneNotification = false;
     private long lastNotification;
     private UsageStatsManager usageStatsManager;
+    private String[] notifications = new String[5];
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -138,10 +140,6 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
             lastNotification = System.currentTimeMillis();
         }
 
-        if (sendOneNotification && currentNotification == 1){
-            showNotification(context, getNotificationTitle(), getNotificationContent(context));
-            settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
-        }
         if (isUsageAccessGranted(context) && smartNotifications && shouldEnableAdvancedOptions) { //if any of these are not met, code will fall back to normal notifications
             //smart notification code block
             if (isUserActive(lastNotification, System.currentTimeMillis()) && (System.currentTimeMillis() - bedtime.getTimeInMillis() < 6 * ONE_HOUR_MILLIS)) {
@@ -149,6 +147,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
                 setNextNotification(context);
+            } else if (sendOneNotification && currentNotification == 1){
+                showNotification(context, getNotificationTitle(), getNotificationContent(context));
+                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
             } else {
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
                 if (autoDND) {
@@ -157,11 +158,9 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 cancelNextNotification(context);
                 setNextDayNotification(context, bedtime, TAG);
             }
-        }  else {
+        } else {
             //normal notification code block
-            if (!sendOneNotification) {
-                showNotification(context, getNotificationTitle(), getNotificationContent(context));
-            }
+            showNotification(context, getNotificationTitle(), getNotificationContent(context));
             if (currentNotification < numNotifications) {
                 setNextNotification(context);
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
@@ -347,22 +346,7 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
         }
     }
 
-    static void setNextDayNotification(Context context, Calendar bedtime, String TAG){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(bedtime.getTimeInMillis() + ONE_DAY_MILLIS);
-        Log.d(TAG, "Setting notification for tomorrow");
 
-        Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        } else {
-            am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        }
-    }
 
 
 }

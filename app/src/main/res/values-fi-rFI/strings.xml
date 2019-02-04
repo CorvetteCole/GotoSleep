@@ -10,7 +10,7 @@
     <string name="channel_description">Nukkumaanmenoaika ilmoitukset muistuttavat sinua nukkumaanmenosta.</string>
     <string name="notification1">Aika mennä nukkumaan</string>
     <string name="notification2">Miksi olet vielä hereillä?</string>
-    <string name="notification3">Oletko tosissasi vielä puhelimellasi?</string>
+    <string name="notification3">Vieläkö käytät puhelintasi?</string>
     <string name="notification4">Sinun pitäisi olla nukkumassa</string>
     <string name="notification5">Tulet katumaan tätä</string>
     <string name="sleep_message">miksi et ole nukkumassa?</string>

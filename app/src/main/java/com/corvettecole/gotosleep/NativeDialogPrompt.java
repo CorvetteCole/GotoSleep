@@ -1,11 +1,11 @@
 package com.corvettecole.gotosleep;
 
 import android.animation.LayoutTransition;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -215,7 +215,6 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
     }
 
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void transmitToActivity(String string) {
         Log.d(TAG, string);
         if (mListener != null) {
@@ -251,7 +250,6 @@ public class NativeDialogPrompt extends androidx.fragment.app.Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(String string);
     }
 }

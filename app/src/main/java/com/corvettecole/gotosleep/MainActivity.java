@@ -21,25 +21,17 @@ package com.corvettecole.gotosleep;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -71,6 +63,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
 import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
 import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
 import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
@@ -92,8 +87,6 @@ import static com.corvettecole.gotosleep.utilities.Constants.supportedLanguages;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.createNotificationChannel;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotifications;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
 
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler, NativeDialogPrompt.OnFragmentInteractionListener {
 
@@ -801,7 +794,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     }
 
 
-
+    // #TODO this code should not be in this UI activity, migrate to ViewModel...
     private void loadPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         Log.d("MainActivity", "Load Preferences Ran");

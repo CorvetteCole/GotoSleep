@@ -48,6 +48,10 @@ See the NativeDialogPrompt file for an example of how I am refactoring the app. 
 
 - Create localized screenshots for supported languages in play store listing (partially done)
 
+- Rewrite settings to use a custom layout vs Android settings library
+
+- Put app settings in categories to make it more intuitive
+
 - Change summaries for settings disabled by other settings to reflect why they are disabled (for example if auto do not disturb is disabled, change the summary of the interval setting to something like "auto do not disturb is disabled")
 
 ### Done
@@ -70,10 +74,6 @@ See the NativeDialogPrompt file for an example of how I am refactoring the app. 
 - Add separare bedtimes for weekdays and weekends (perhaps have an interface like the clock app which lets you add bedtimes much like alarms. Then have the ability to select which days it is active)
 
 - Revamp custom notifications screen, allow user to have infinite custom notifications. Also instead of having like "Notification 1, Notification 2" have a header saying custom notifications and simply list them, allowing more to fit on screen
-
-- Refactor settingsFragment code (things are called way more often than they need to be)
-
-- Put app settings in categories to make it more intuitive
 
 - Add app shortcut for go to sleep early feature
 

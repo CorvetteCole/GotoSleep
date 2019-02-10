@@ -45,8 +45,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
+import androidx.work.WorkManager;
 
-import static com.corvettecole.gotosleep.MainActivity.shouldUpdateConsent;
 import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
 import static com.corvettecole.gotosleep.utilities.Constants.ADDITIONAL_NOTIFICATION_SETTINGS_KEY;
 import static com.corvettecole.gotosleep.utilities.Constants.ADS_ENABLED_KEY;
@@ -591,6 +591,12 @@ public class SettingsFragment extends BasePreferenceFragmentCompat {
 
     @Override
     public void onPause(){
+        try {
+            androidx.work.Configuration configuration = new androidx.work.Configuration.Builder().build();
+            WorkManager.initialize(getContext(), configuration);
+        } catch (IllegalStateException e) {
+            Log.e("WorkManagerException", e.toString());
+        }
         setNotifications(false, sharedPreferences.getBoolean(NOTIF_ENABLE_KEY, false),
                 parseBedtime(sharedPreferences.getString(BEDTIME_KEY, "22:00")),
                 Integer.parseInt(sharedPreferences.getString(NOTIF_DELAY_KEY, "10")),

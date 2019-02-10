@@ -45,5 +45,5 @@ public class Constants {
     public static final String ADDITIONAL_NOTIFICATION_SETTINGS_KEY = "pref_notificationChannel";
     public static final String SEND_ONE_NOTIFICATION = "pref_sendOneNotification";
 
-
+    public static final String workTag = "notificationWork";
 }

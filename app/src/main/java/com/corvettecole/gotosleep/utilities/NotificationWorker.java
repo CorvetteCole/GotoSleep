@@ -59,6 +59,7 @@ import static com.corvettecole.gotosleep.utilities.Constants.SEND_ONE_NOTIFICATI
 import static com.corvettecole.gotosleep.utilities.Constants.SMART_NOTIFICATIONS_KEY;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNextDayNotification;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotification;
 
 public class NotificationWorker extends Worker {
 
@@ -285,9 +286,7 @@ public class NotificationWorker extends Worker {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis() + notificationDelay * 60000);
         Log.d(TAG, "Setting next notification in " + notificationDelay + " minutes");
-
-        NotificationUtils notificationUtils = new NotificationUtils();
-        notificationUtils.setNotification(NEXT_NOTIFICATION_ALARM_REQUEST_CODE, calendar.getTimeInMillis());
+        setNotification(NEXT_NOTIFICATION_ALARM_REQUEST_CODE, calendar.getTimeInMillis());
     }
 
     private String getNotificationContent(Context context) {

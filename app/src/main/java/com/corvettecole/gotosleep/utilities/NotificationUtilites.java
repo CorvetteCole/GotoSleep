@@ -16,6 +16,10 @@ import com.corvettecole.gotosleep.R;
 
 import java.util.Calendar;
 
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
 import static android.content.Context.ALARM_SERVICE;
 import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
 import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_CHANNEL_ID;
@@ -23,6 +27,7 @@ import static com.corvettecole.gotosleep.utilities.Constants.CURRENT_NOTIFICATIO
 import static com.corvettecole.gotosleep.utilities.Constants.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.utilities.Constants.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.utilities.Constants.ONE_DAY_MILLIS;
+import static com.corvettecole.gotosleep.utilities.Constants.workTag;
 import static java.lang.Math.abs;
 
 public class NotificationUtilites {
@@ -78,8 +83,7 @@ public class NotificationUtilites {
 
             //TODO Comment below and use NotificationUtils
 
-            NotificationUtils notificationUtils = new NotificationUtils();
-            notificationUtils.setNotification(FIRST_NOTIFICATION_ALARM_REQUEST_CODE, bedtimeCalendar.getTimeInMillis());
+            setNotification(FIRST_NOTIFICATION_ALARM_REQUEST_CODE, bedtimeCalendar.getTimeInMillis());
 
 //            Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
 //            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
@@ -111,6 +115,18 @@ public class NotificationUtilites {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public static void setNotification(int requestCode, long delayInMillis) {
+        // Store DBEventID to pass it to the PendingIntent and open the appropriate event page on notification click
+        Data inputData = new Data.Builder().putInt(workTag, requestCode).build();
+        // we then retrieve it inside the NotifyWorker with:
+        // final int DBEventID = getInputData().getInt(DBEventIDTag, ERROR_VALUE);
+
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .addTag(workTag)
+                .build();
+        WorkManager.getInstance().enqueue(notificationWork);
     }
 
 }

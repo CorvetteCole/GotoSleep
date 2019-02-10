@@ -76,15 +76,20 @@ public class NotificationUtilites {
                 }
             }
 
-            Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                    FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
-            } else {
-                am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
-            }
+            //TODO Comment below and use NotificationUtils
+
+            NotificationUtils notificationUtils = new NotificationUtils();
+            notificationUtils.setNotification(FIRST_NOTIFICATION_ALARM_REQUEST_CODE, bedtimeCalendar.getTimeInMillis());
+
+//            Intent intent1 = new Intent(context, BedtimeNotificationReceiver.class);
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+//                    FIRST_NOTIFICATION_ALARM_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+//            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
+//            } else {
+//                am.setExact(AlarmManager.RTC_WAKEUP, bedtimeCalendar.getTimeInMillis(), pendingIntent);
+//            }
         }
     }
 

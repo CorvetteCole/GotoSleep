@@ -21,25 +21,17 @@ package com.corvettecole.gotosleep;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -49,8 +41,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +49,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.work.WorkManager;
 
 import static com.corvettecole.gotosleep.AboutActivity.EGG_KEY;
 import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCal;
@@ -81,10 +75,10 @@ import static com.corvettecole.gotosleep.utilities.Constants.supportedLanguages;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.createNotificationChannel;
 import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNotifications;
-import static java.lang.Math.abs;
-import static java.lang.Math.min;
 
 public class MainActivity extends AppCompatActivity implements NativeDialogPrompt.OnFragmentInteractionListener {
+
+    private boolean workManagerInitialized = false;
 
 
     private long backPressed;
@@ -201,6 +195,13 @@ public class MainActivity extends AppCompatActivity implements NativeDialogPromp
         Log.d(TAG, "onResume called " + System.currentTimeMillis());
 
         loadPreferences();
+
+        try {
+            androidx.work.Configuration configuration = new androidx.work.Configuration.Builder().build();
+            WorkManager.initialize(this, configuration);
+        } catch (IllegalStateException e) {
+            Log.e("workManagerException", e.toString());
+        }
 
         setNotifications(false, notificationsEnabled, bedtime, notificationDelay, numNotifications, this); //Warning: takes a long time to execute (55ms!)
 

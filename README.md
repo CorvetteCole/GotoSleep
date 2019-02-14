@@ -20,7 +20,7 @@ View the privacy policy: https://sleep.corvettecole.com/privacy
 
 View the credits: https://sleep.corvettecole.com/credits
 
-## Donate to me
+## Support me
 
 Ethereum address: 0x8eFF5600A23708EFa475Be2C18892c9c0C43373B
 

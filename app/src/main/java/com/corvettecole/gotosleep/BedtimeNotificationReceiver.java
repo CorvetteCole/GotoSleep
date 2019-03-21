@@ -147,10 +147,10 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 settings.edit().putLong(LAST_NOTIFICATION_KEY, System.currentTimeMillis()).apply();
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
                 setNextNotification(context);
-            } else if (sendOneNotification && currentNotification == 1){
-                showNotification(context, getNotificationTitle(), getNotificationContent(context));
-                settings.edit().putInt(CURRENT_NOTIFICATION_KEY, currentNotification + 1).apply();
             } else {
+                if (sendOneNotification && currentNotification == 1){
+                    showNotification(context, getNotificationTitle(), getNotificationContent(context));
+                }
                 settings.edit().putInt(CURRENT_NOTIFICATION_KEY, 1).apply();
                 if (autoDND) {
                     enableDoNotDisturb(context);
@@ -288,7 +288,8 @@ public class BedtimeNotificationReceiver extends BroadcastReceiver {
                 Log.e(TAG, e + "");
             }
         }
-        int min = Math.round(difference/60000); //divide time in milliseconds by 60 000 to get minutes
+        int min = (int) Math.round(((double) difference / 60000)); //divide time in milliseconds by 60 000 to get minutes
+
 
 
         Log.d(TAG, "currentNotification: " + currentNotification);

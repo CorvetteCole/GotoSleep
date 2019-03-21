@@ -4,7 +4,7 @@ public class Constants {
 
     public static final String BEDTIME_CHANNEL_ID = "bedtimeReminders";
     public static final int BACK_INTERVAL = 2000;
-    public static final String[] supportedLanguages = {"en", "pl", "es", "de", "it", "fi", "fr"};
+    public static final String[] supportedLanguages = {"en", "pl", "es", "de", "it", "fi", "fr", "cs", "el", "fi", "pt", "sv"};
 
     public static final String APP_LAUNCHED_KEY = "numLaunched";
     public static final String RATING_PROMPT_SHOWN_KEY = "rate_shown";

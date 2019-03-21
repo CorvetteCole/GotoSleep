@@ -22,6 +22,7 @@ import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_CHANNEL_ID;
 import static com.corvettecole.gotosleep.utilities.Constants.CURRENT_NOTIFICATION_KEY;
 import static com.corvettecole.gotosleep.utilities.Constants.FIRST_NOTIFICATION_ALARM_REQUEST_CODE;
 import static com.corvettecole.gotosleep.utilities.Constants.NEXT_NOTIFICATION_ALARM_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_REQUEST_CODE;
 import static com.corvettecole.gotosleep.utilities.Constants.ONE_DAY_MILLIS;
 import static java.lang.Math.abs;
 
@@ -39,6 +40,9 @@ public class NotificationUtilites {
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         am.cancel(firstPendingIntent);
         am.cancel(nextPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(NOTIFICATION_REQUEST_CODE);
     }
 
     public static void setNextDayNotification(Context context, Calendar bedtime, String TAG){

@@ -34,6 +34,8 @@ import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.getBedtimeCa
 import static com.corvettecole.gotosleep.utilities.BedtimeUtilities.parseBedtime;
 import static com.corvettecole.gotosleep.utilities.Constants.BEDTIME_KEY;
 import static com.corvettecole.gotosleep.utilities.Constants.NOTIFICATION_REQUEST_CODE;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.cancelNextNotification;
+import static com.corvettecole.gotosleep.utilities.NotificationUtilites.setNextDayNotification;
 
 public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
 
@@ -53,5 +55,7 @@ public class AutoDoNotDisturbReceiver extends BroadcastReceiver {
 
 
         mNotificationManager.cancel(NOTIFICATION_REQUEST_CODE);
+        cancelNextNotification(context);
+        setNextDayNotification(context, bedtime, TAG);
     }
 }

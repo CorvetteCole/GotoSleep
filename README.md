@@ -1,3 +1,7 @@
+# HEADS UP
+I have temporarily taken this app off of the Play Store. I will be rewriting it in Flutter eventually for iOS and Android
+
+
 # GotoSleep
 I created this open-source, mostly ad-free app not for money but because I saw a problem that needed solving. Ironically, programming the app that was meant to help me not stay up too late kept me up more times than it helped me sleep but I am extremely satisfied with the end product. There are definitely things that need improvement (please don't look at SettingsFragment, it is a nightmare. That is the next thing on my to-do list for next release), but overall it turned out very nice. I encourage you to look at the source code of this app and see if you can improve anything. I would be thrilled if even one person compiled my code from scratch and tried to contribute to this project.
 
